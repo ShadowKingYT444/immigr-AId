@@ -1,0 +1,1741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fill Documents - Immigr-Aid.ai</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #ffffff;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px 0;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .tagline {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+        
+        /* Language Selector */
+        .language-selector {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .language-selector select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+        
+        /* Progress Bar */
+        .progress-container {
+            margin-bottom: 30px;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #ecf0f1;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3498db, #2ecc71);
+            width: 75%;
+            transition: width 0.3s ease;
+        }
+        
+        .progress-text {
+            text-align: center;
+            margin-top: 10px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        /* Step Header */
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .step-number {
+            background: #3498db;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .step-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        /* AI Helper */
+        .ai-helper {
+            background: #e8f4fd;
+            border: 1px solid #3498db;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .ai-helper-title {
+            font-weight: 600;
+            color: #2980b9;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .ai-helper-text {
+            color: #2c3e50;
+            font-size: 0.9rem;
+        }
+        
+        /* Document Support Panel */
+        .document-support {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .document-support-title {
+            font-weight: 600;
+            color: #856404;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .document-support-content {
+            color: #856404;
+            font-size: 0.9rem;
+        }
+        
+        /* Form Sections */
+        .form-section {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .form-group {
+            position: relative;
+        }
+        
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #2c3e50;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+        
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        /* Field Help */
+        .field-help {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            padding: 12px;
+            margin-top: 8px;
+            font-size: 0.85rem;
+            color: #6c757d;
+            display: none;
+        }
+        
+        .field-help.show {
+            display: block;
+            animation: slideDown 0.3s ease-out;
+        }
+        
+        .help-trigger {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            font-size: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding-right: 40px;
+        }
+        
+        /* Navigation Buttons */
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            gap: 20px;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+        
+        .btn-primary {
+            background: #3498db;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #2980b9;
+        }
+        
+        .btn-secondary {
+            background: #95a5a6;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #7f8c8d;
+        }
+        
+        .btn-success {
+            background: #27ae60;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #229954;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .navigation-buttons {
+                flex-direction: column;
+            }
+        }
+        
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Document Preview */
+        .document-preview {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .document-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .form-field {
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: #f9f9f9;
+        }
+        
+        .form-field label {
+            font-weight: 500;
+            color: #2c3e50;
+            margin-bottom: 5px;
+            display: block;
+        }
+        
+        .form-field input,
+        .form-field select,
+        .form-field textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+        
+        .form-field textarea {
+            min-height: 60px;
+            resize: vertical;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Language Selector -->
+        <div class="language-selector">
+            <label for="languageSelect">🌍</label>
+            <select id="languageSelect">
+                <option value="en">English</option>
+                <option value="es">Español</option>
+                <option value="zh">中文</option>
+                <option value="ar">العربية</option>
+                <option value="hi">हिन्दी</option>
+                <option value="pt">Português</option>
+                <option value="ru">Русский</option>
+                <option value="fr">Français</option>
+                <option value="vi">Tiếng Việt</option>
+                <option value="ko">한국어</option>
+            </select>
+        </div>
+        
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">Immigr-Aid.ai</div>
+            <div class="tagline" data-translate="tagline">Your Personal AI Immigration Assistant</div>
+        </div>
+        
+        <!-- Progress Bar -->
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+            <div class="progress-text" data-translate="step3">Step 3 of 3</div>
+        </div>
+        
+        <!-- Step Header -->
+        <div class="step-header">
+            <div class="step-number">3</div>
+            <div class="step-title" data-translate="fillDocuments">Fill Out Your Documents</div>
+        </div>
+        
+        <!-- AI Helper -->
+        <div class="ai-helper">
+            <div class="ai-helper-title">
+                🤖 <span data-translate="aiAssistant">AI Assistant</span>
+            </div>
+            <div class="ai-helper-text" id="aiHelperText" data-translate="aiHelperDefault">
+                I'll help you fill out your immigration documents accurately. All instructions will be in your selected language.
+            </div>
+        </div>
+        
+        <!-- Document Support Panel -->
+        <div class="document-support" id="documentSupport">
+            <div class="document-support-title">
+                📋 <span data-translate="documentSupport">Document Support</span>
+            </div>
+            <div class="document-support-content" id="documentSupportContent">
+                <p data-translate="documentSupportText">I'll guide you through each field with specific help and requirements in your language.</p>
+                <ul class="support-checklist" id="supportChecklist">
+                    <li data-translate="helpTip1">Click the ? button next to any field for detailed help</li>
+                    <li data-translate="helpTip2">All required fields are marked with *</li>
+                    <li data-translate="helpTip3">I'll validate your information as you type</li>
+                    <li data-translate="helpTip4">Your progress is saved automatically</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Document Preview -->
+        <div class="document-preview" id="documentPreview">
+            <div class="document-title" id="documentTitle" data-translate="documentTitle">Immigration Application Form</div>
+            <div id="documentContent">
+                <!-- Document content will be loaded here -->
+            </div>
+        </div>
+        
+        <!-- Navigation Buttons -->
+        <div class="navigation-buttons">
+            <button class="btn btn-secondary" onclick="goBack()" data-translate="back">Back</button>
+            <button class="btn btn-primary" onclick="saveProgress()" data-translate="saveProgress">Save Progress</button>
+            <button class="btn btn-success" onclick="submitApplication()" data-translate="submitApplication">Submit Application</button>
+        </div>
+    </div>
+    
+    <script>
+        let currentLanguage = 'en';
+        let selectedFormType = 'citizenship';
+        
+        // Comprehensive translations for EVERY text element
+        const translations = {
+            en: {
+                tagline: "Your Personal AI Immigration Assistant",
+                step3: "Step 3 of 3",
+                fillDocuments: "Fill Out Your Documents",
+                aiAssistant: "AI Assistant",
+                aiHelperDefault: "I'll help you fill out your immigration documents accurately. All instructions will be in your selected language.",
+                documentSupport: "Document Support",
+                documentSupportText: "I'll guide you through each field with specific help and requirements in your language.",
+                helpTip1: "Click the ? button next to any field for detailed help",
+                helpTip2: "All required fields are marked with *",
+                helpTip3: "I'll validate your information as you type",
+                helpTip4: "Your progress is saved automatically",
+                documentTitle: "Immigration Application Form",
+                back: "Back",
+                saveProgress: "Save Progress",
+                submitApplication: "Submit Application",
+                
+                // Form field labels and placeholders
+                formType: "Form Type",
+                applicantName: "Full Name",
+                dateOfBirth: "Date of Birth",
+                countryOfBirth: "Country of Birth",
+                alienNumber: "Alien Registration Number (A-Number)",
+                greenCardNumber: "Green Card Number",
+                dateOfPermanentResidence: "Date Became Permanent Resident",
+                currentAddress: "Current Address",
+                phoneNumber: "Phone Number",
+                emailAddress: "Email Address",
+                maritalStatus: "Marital Status",
+                spouseName: "Spouse Name",
+                children: "Children Information",
+                employmentHistory: "Employment History",
+                travelHistory: "Travel History",
+                criminalHistory: "Criminal History",
+                englishProficiency: "English Proficiency",
+                civicsKnowledge: "Civics Knowledge",
+                
+                // Placeholders
+                enterFullName: "Enter your full legal name",
+                selectCountry: "Select Country",
+                enterANumber: "A-123456789",
+                enterGreenCardNumber: "123456789",
+                enterCompleteAddress: "Enter your complete current address",
+                enterPhoneNumber: "(555) 123-4567",
+                enterEmail: "your.email@example.com",
+                selectStatus: "Select Status",
+                enterSpouseName: "Enter spouse's full name",
+                listChildren: "List all children with names, dates of birth, and countries of birth",
+                listEmployment: "List your employment history for the last 5 years",
+                listTravel: "List all trips outside the US in the last 5 years",
+                discloseCriminal: "Disclose any arrests, citations, or convictions",
+                selectLevel: "Select Level",
+                
+                // Options
+                single: "Single",
+                married: "Married",
+                divorced: "Divorced",
+                widowed: "Widowed",
+                nativeSpeaker: "Native Speaker",
+                fluent: "Fluent",
+                good: "Good",
+                fair: "Fair",
+                basic: "Basic",
+                excellent: "Excellent",
+                needsStudy: "Needs Study",
+                
+                // AI Help Messages
+                aiHelp: "AI Help:",
+                aiHelpName: "Enter your legal first and last name exactly as it appears on your birth certificate or passport. Don't use nicknames or shortened versions.",
+                aiHelpBirth: "Enter your exact date of birth as shown on your birth certificate. Use MM/DD/YYYY format.",
+                aiHelpCountry: "Select the country where you were born. This should match your birth certificate exactly.",
+                aiHelpANumber: "Enter your Alien Registration Number (A-Number) exactly as it appears on your Green Card. Format: A-123456789",
+                aiHelpGreenCard: "Enter your Green Card number exactly as it appears on your card. This is usually 9 digits.",
+                aiHelpResidence: "Enter the date you became a permanent resident. This is usually found on your Green Card.",
+                aiHelpAddress: "Enter your complete current address including street number, apartment/unit number, city, state, ZIP code, and country if outside US.",
+                aiHelpPhone: "Enter your current phone number where USCIS can reach you. Include area code and use US format: (555) 123-4567",
+                aiHelpEmail: "Enter a valid email address where USCIS can send you updates about your case. Check this email regularly.",
+                aiHelpMarital: "Select your current marital status. This affects your eligibility requirements.",
+                aiHelpSpouse: "If you are married, enter your spouse's full legal name exactly as it appears on their birth certificate or passport.",
+                aiHelpChildren: "List all your children with their full names, dates of birth, and countries of birth. Include stepchildren and adopted children.",
+                aiHelpEmployment: "List all jobs you've had in the last 5 years including employer name, job title, start and end dates, and address.",
+                aiHelpTravel: "List all trips you've taken outside the US in the last 5 years including destination, departure date, return date, and purpose.",
+                aiHelpCriminal: "Disclose any arrests, citations, or convictions. Include traffic violations that resulted in fines over $500 or jail time.",
+                aiHelpEnglish: "Select your English proficiency level. You'll need to pass an English test during your interview.",
+                aiHelpCivics: "Select your knowledge of US history and government. You'll need to pass a civics test during your interview.",
+                
+                // Success/Error Messages
+                progressSaved: "Progress saved successfully!",
+                applicationSubmitted: "Application submitted successfully! You will receive a confirmation email shortly.",
+                pleaseFillRequired: "Please fill in all required fields marked with *",
+                pageTranslated: "Page translated to",
+                
+                // AI Processing Messages
+                aiProcessing1: "AI is validating your information...",
+                aiProcessing2: "AI is checking for common errors...",
+                aiProcessing3: "AI is generating your application...",
+                aiProcessing4: "AI is preparing submission...",
+                
+                // Form-specific additional fields
+                entryDate: "Date of Entry to US",
+                ageAtEntry: "Age at Entry",
+                continuousResidence: "Continuous Residence Since June 15, 2007",
+                educationStatus: "Education Status",
+                schoolName: "School Name",
+                currentStatus: "Current Immigration Status",
+                employmentCategory: "Employment Category",
+                employerName: "Current Employer Name",
+                jobTitle: "Job Title",
+                employerAddress: "Employer Address",
+                previousEmployment: "Previous Employment",
+                travelPurpose: "Purpose of Travel",
+                destinationCountry: "Destination Country",
+                departureDate: "Intended Departure Date",
+                returnDate: "Intended Return Date",
+                emergencyContact: "Emergency Contact Information",
+                petitionerName: "Petitioner Name (Your Name)",
+                petitionerDateOfBirth: "Petitioner Date of Birth",
+                petitionerCitizenship: "Petitioner Citizenship Status",
+                beneficiaryName: "Beneficiary Name (Relative's Name)",
+                beneficiaryDateOfBirth: "Beneficiary Date of Birth",
+                beneficiaryCountryOfBirth: "Beneficiary Country of Birth",
+                relationship: "Relationship to Beneficiary",
+                marriageDate: "Marriage Date",
+                marriageLocation: "Marriage Location",
+                petitionerAddress: "Petitioner Address",
+                beneficiaryAddress: "Beneficiary Address",
+                petitionerPhone: "Petitioner Phone Number",
+                beneficiaryPhone: "Beneficiary Phone Number",
+                petitionerEmail: "Petitioner Email Address",
+                beneficiaryEmail: "Beneficiary Email Address",
+                relationshipEvidence: "Relationship Evidence",
+                financialSupport: "Financial Support Documentation",
+                supportingDocuments: "Documentos de Respaldo",
+                
+                // Spanish translations for all form fields
+                formType: "Tipo de Formulario",
+                applicantName: "Nombre Completo",
+                dateOfBirth: "Fecha de Nacimiento",
+                countryOfBirth: "País de Nacimiento",
+                alienNumber: "Número de Registro de Extranjero (A-Number)",
+                greenCardNumber: "Número de Tarjeta Verde",
+                dateOfPermanentResidence: "Fecha de Residencia Permanente",
+                currentAddress: "Dirección Actual",
+                phoneNumber: "Número de Teléfono",
+                emailAddress: "Dirección de Correo Electrónico",
+                maritalStatus: "Estado Civil",
+                spouseName: "Nombre del Cónyuge",
+                children: "Información de Hijos",
+                employmentHistory: "Historial de Empleo",
+                travelHistory: "Historial de Viajes",
+                criminalHistory: "Historial Criminal",
+                englishProficiency: "Competencia en Inglés",
+                civicsKnowledge: "Conocimiento Cívico",
+                
+                // Spanish placeholders
+                enterFullName: "Ingrese su nombre legal completo",
+                selectCountry: "Seleccionar País",
+                enterANumber: "A-123456789",
+                enterGreenCardNumber: "123456789",
+                enterCompleteAddress: "Ingrese su dirección actual completa",
+                enterPhoneNumber: "(555) 123-4567",
+                enterEmail: "su.correo@ejemplo.com",
+                selectStatus: "Seleccionar Estado",
+                enterSpouseName: "Ingrese el nombre completo del cónyuge",
+                listChildren: "Liste todos los hijos con nombres, fechas de nacimiento y países de nacimiento",
+                listEmployment: "Liste su historial de empleo de los últimos 5 años",
+                listTravel: "Liste todos los viajes fuera de EE.UU. en los últimos 5 años",
+                discloseCriminal: "Revele cualquier arresto, citación o condena",
+                selectLevel: "Seleccionar Nivel",
+                
+                // Spanish options
+                single: "Soltero",
+                married: "Casado",
+                divorced: "Divorciado",
+                widowed: "Viudo",
+                nativeSpeaker: "Hablante Nativo",
+                fluent: "Fluido",
+                good: "Bueno",
+                fair: "Regular",
+                basic: "Básico",
+                excellent: "Excelente",
+                needsStudy: "Necesita Estudiar",
+                
+                // Spanish AI Help Messages
+                aiHelp: "Ayuda IA:",
+                aiHelpName: "Ingrese su nombre legal completo exactamente como aparece en su certificado de nacimiento o pasaporte. No use apodos o versiones abreviadas.",
+                aiHelpBirth: "Ingrese su fecha de nacimiento exacta como se muestra en su certificado de nacimiento. Use formato MM/DD/AAAA.",
+                aiHelpCountry: "Seleccione el país donde nació. Esto debe coincidir exactamente con su certificado de nacimiento.",
+                aiHelpANumber: "Ingrese su Número de Registro de Extranjero (A-Number) exactamente como aparece en su Tarjeta Verde. Formato: A-123456789",
+                aiHelpGreenCard: "Ingrese el número de su Tarjeta Verde exactamente como aparece en su tarjeta. Generalmente son 9 dígitos.",
+                aiHelpResidence: "Ingrese la fecha en que se convirtió en residente permanente. Esto generalmente se encuentra en su Tarjeta Verde.",
+                aiHelpAddress: "Ingrese su dirección actual completa incluyendo número de calle, apartamento/unidad, ciudad, estado, código postal y país si está fuera de EE.UU.",
+                aiHelpPhone: "Ingrese su número de teléfono actual donde USCIS puede contactarlo. Incluya código de área y use formato estadounidense: (555) 123-4567",
+                aiHelpEmail: "Ingrese una dirección de correo electrónico válida donde USCIS puede enviarle actualizaciones sobre su caso. Revise este correo regularmente.",
+                aiHelpMarital: "Seleccione su estado civil actual. Esto afecta sus requisitos de elegibilidad.",
+                aiHelpSpouse: "Si está casado, ingrese el nombre legal completo de su cónyuge exactamente como aparece en su certificado de nacimiento o pasaporte.",
+                aiHelpChildren: "Liste todos sus hijos con sus nombres completos, fechas de nacimiento y países de nacimiento. Incluya hijastros e hijos adoptados.",
+                aiHelpEmployment: "Liste todos los trabajos que ha tenido en los últimos 5 años incluyendo nombre del empleador, título del trabajo, fechas de inicio y fin, y dirección.",
+                aiHelpTravel: "Liste todos los viajes que ha tomado fuera de EE.UU. en los últimos 5 años incluyendo destino, fecha de salida, fecha de regreso y propósito.",
+                aiHelpCriminal: "Revele cualquier arresto, citación o condena. Incluya violaciones de tráfico que resultaron en multas de más de $500 o tiempo en cárcel.",
+                aiHelpEnglish: "Seleccione su nivel de competencia en inglés. Necesitará aprobar una prueba de inglés durante su entrevista.",
+                aiHelpCivics: "Seleccione su conocimiento de la historia y gobierno de EE.UU. Necesitará aprobar una prueba cívica durante su entrevista.",
+                
+                // Spanish Success/Error Messages
+                progressSaved: "¡Progreso guardado exitosamente!",
+                applicationSubmitted: "¡Solicitud enviada exitosamente! Recibirá un correo de confirmación pronto.",
+                pleaseFillRequired: "Por favor complete todos los campos requeridos marcados con *",
+                pageTranslated: "Página traducida a",
+                
+                // Spanish AI Processing Messages
+                aiProcessing1: "IA está validando su información...",
+                aiProcessing2: "IA está verificando errores comunes...",
+                aiProcessing3: "IA está generando su solicitud...",
+                aiProcessing4: "IA está preparando el envío...",
+                
+                // Spanish form-specific additional fields
+                entryDate: "Fecha de Entrada a EE.UU.",
+                ageAtEntry: "Edad al Entrar",
+                continuousResidence: "Residencia Continua Desde el 15 de Junio de 2007",
+                educationStatus: "Estado de Educación",
+                schoolName: "Nombre de la Escuela",
+                currentStatus: "Estado Migratorio Actual",
+                employmentCategory: "Categoría de Empleo",
+                employerName: "Nombre del Empleador Actual",
+                jobTitle: "Título del Trabajo",
+                employerAddress: "Dirección del Empleador",
+                previousEmployment: "Empleo Anterior",
+                travelPurpose: "Propósito del Viaje",
+                destinationCountry: "País de Destino",
+                departureDate: "Fecha de Salida Prevista",
+                returnDate: "Fecha de Regreso Prevista",
+                emergencyContact: "Información de Contacto de Emergencia",
+                petitionerName: "Nombre del Peticionario (Su Nombre)",
+                petitionerDateOfBirth: "Fecha de Nacimiento del Peticionario",
+                petitionerCitizenship: "Estado de Ciudadanía del Peticionario",
+                beneficiaryName: "Nombre del Beneficiario (Nombre del Familiar)",
+                beneficiaryDateOfBirth: "Fecha de Nacimiento del Beneficiario",
+                beneficiaryCountryOfBirth: "País de Nacimiento del Beneficiario",
+                relationship: "Relación con el Beneficiario",
+                marriageDate: "Fecha de Matrimonio",
+                marriageLocation: "Ubicación del Matrimonio",
+                petitionerAddress: "Dirección del Peticionario",
+                beneficiaryAddress: "Dirección del Beneficiario",
+                petitionerPhone: "Número de Teléfono del Peticionario",
+                beneficiaryPhone: "Número de Teléfono del Beneficiario",
+                petitionerEmail: "Correo Electrónico del Peticionario",
+                beneficiaryEmail: "Correo Electrónico del Beneficiario",
+                relationshipEvidence: "Evidencia de Relación",
+                financialSupport: "Documentación de Apoyo Financiero",
+                supportingDocuments: "Documentos de Respaldo",
+                
+                // Form-specific translations
+                citizenship: {
+                    title: "Citizenship Application (Form N-400)",
+                    aiHelper: "I'll help you fill out the citizenship application accurately. Make sure to provide accurate information about your residence and immigration history.",
+                    supportText: "Citizenship Application Support - I'll guide you through each field with specific help and requirements.",
+                    supportTip1: "You must be a permanent resident for 5 years (or 3 if married to US citizen)",
+                    supportTip2: "Continuous residence and physical presence required",
+                    supportTip3: "Good moral character evidence required",
+                    supportTip4: "English and civics test preparation needed"
+                },
+                daca: {
+                    title: "DACA Application (Form I-821D)",
+                    aiHelper: "I'll help you fill out the DACA application accurately. Make sure to provide detailed information about your entry to the US and continuous residence since 2007.",
+                    supportText: "DACA Application Support - I'll guide you through each field with specific help and requirements.",
+                    supportTip1: "DACA requires continuous residence since June 15, 2007",
+                    supportTip2: "You must have arrived before age 16",
+                    supportTip3: "Evidence of education or military service required",
+                    supportTip4: "No significant misdemeanors or felonies"
+                },
+                work: {
+                    title: "Work Permit Application (Form I-765)",
+                    aiHelper: "I'll help you fill out the work permit application. You'll need to provide your current immigration status and employment information.",
+                    supportText: "Work Permit Application Support - I'll guide you through each field with specific help and requirements.",
+                    supportTip1: "You need a valid immigration status",
+                    supportTip2: "Employment authorization may be required",
+                    supportTip3: "Current employment information needed",
+                    supportTip4: "Supporting documents required"
+                },
+                travel: {
+                    title: "Travel Document Application (Form I-131)",
+                    aiHelper: "I'll help you fill out the travel document application. You'll need to explain your travel purpose and provide supporting evidence.",
+                    supportText: "Travel Document Application Support - I'll guide you through each field with specific help and requirements.",
+                    supportTip1: "You need a valid reason for travel",
+                    supportTip2: "Supporting evidence is required",
+                    supportTip3: "Travel dates must be specified",
+                    supportTip4: "Emergency contact information needed"
+                },
+                family: {
+                    title: "Family Petition (Form I-130)",
+                    aiHelper: "I'll help you fill out the family petition. You'll need to provide detailed information about your relationship and supporting evidence.",
+                    supportText: "Family Petition Support - I'll guide you through each field with specific help and requirements.",
+                    supportTip1: "You must be a US citizen or permanent resident",
+                    supportTip2: "Relationship evidence is required",
+                    supportTip3: "Financial support documentation needed",
+                    supportTip4: "Beneficiary information required"
+                }
+            },
+            es: {
+                tagline: "Tu Asistente Personal de IA para Inmigración",
+                step3: "Paso 3 de 3",
+                fillDocuments: "Completar Sus Documentos",
+                aiAssistant: "Asistente IA",
+                aiHelperDefault: "Te ayudo a completar tus documentos de inmigración con precisión. Todas las instrucciones estarán en tu idioma seleccionado.",
+                documentSupport: "Soporte de Documentos",
+                documentSupportText: "Te guiaré a través de cada campo con ayuda específica y requisitos en tu idioma.",
+                helpTip1: "Haz clic en el botón ? junto a cualquier campo para obtener ayuda detallada",
+                helpTip2: "Todos los campos requeridos están marcados con *",
+                helpTip3: "Validaré tu información mientras escribes",
+                helpTip4: "Tu progreso se guarda automáticamente",
+                documentTitle: "Formulario de Solicitud de Inmigración",
+                back: "Atrás",
+                saveProgress: "Guardar Progreso",
+                submitApplication: "Enviar Solicitud",
+                citizenship: {
+                    title: "Solicitud de Ciudadanía (Formulario N-400)",
+                    aiHelper: "Te ayudo a completar la solicitud de ciudadanía con precisión. Asegúrate de proporcionar información precisa sobre tu residencia e historial de inmigración.",
+                    supportText: "Soporte de Solicitud de Ciudadanía - Te guiaré a través de cada campo con ayuda específica y requisitos.",
+                    supportTip1: "Debes ser residente permanente por 5 años (o 3 si estás casado con ciudadano estadounidense)",
+                    supportTip2: "Se requiere residencia continua y presencia física",
+                    supportTip3: "Se requiere evidencia de buen carácter moral",
+                    supportTip4: "Se necesita preparación para pruebas de inglés y civismo"
+                },
+                daca: {
+                    title: "Solicitud DACA (Formulario I-821D)",
+                    aiHelper: "Te ayudo a completar la solicitud DACA con precisión. Asegúrate de proporcionar información detallada sobre tu entrada a los EE.UU. y residencia continua desde 2007.",
+                    supportText: "Soporte de Solicitud DACA - Te guiaré a través de cada campo con ayuda específica y requisitos.",
+                    supportTip1: "DACA requiere residencia continua desde el 15 de junio de 2007",
+                    supportTip2: "Debes haber llegado antes de los 16 años",
+                    supportTip3: "Se requiere evidencia de educación o servicio militar",
+                    supportTip4: "No delitos menores significativos o delitos graves"
+                },
+                work: {
+                    title: "Solicitud de Permiso de Trabajo (Formulario I-765)",
+                    aiHelper: "Te ayudo a completar la solicitud de permiso de trabajo. Necesitarás proporcionar tu estado migratorio actual e información de empleo.",
+                    supportText: "Soporte de Solicitud de Permiso de Trabajo - Te guiaré a través de cada campo con ayuda específica y requisitos.",
+                    supportTip1: "Necesitas un estado migratorio válido",
+                    supportTip2: "Puede requerirse autorización de empleo",
+                    supportTip3: "Se necesita información de empleo actual",
+                    supportTip4: "Se requieren documentos de respaldo"
+                },
+                travel: {
+                    title: "Solicitud de Documento de Viaje (Formulario I-131)",
+                    aiHelper: "Te ayudo a completar la solicitud de documento de viaje. Necesitarás explicar el propósito de tu viaje y proporcionar evidencia de respaldo.",
+                    supportText: "Soporte de Solicitud de Documento de Viaje - Te guiaré a través de cada campo con ayuda específica y requisitos.",
+                    supportTip1: "Necesitas una razón válida para viajar",
+                    supportTip2: "Se requiere evidencia de respaldo",
+                    supportTip3: "Las fechas de viaje deben especificarse",
+                    supportTip4: "Se necesita información de contacto de emergencia"
+                },
+                family: {
+                    title: "Petición Familiar (Formulario I-130)",
+                    aiHelper: "Te ayudo a completar la petición familiar. Necesitarás proporcionar información detallada sobre tu relación y evidencia de respaldo.",
+                    supportText: "Soporte de Petición Familiar - Te guiaré a través de cada campo con ayuda específica y requisitos.",
+                    supportTip1: "Debes ser ciudadano estadounidense o residente permanente",
+                    supportTip2: "Se requiere evidencia de relación",
+                    supportTip3: "Se necesita documentación de apoyo financiero",
+                    supportTip4: "Se requiere información del beneficiario"
+                }
+            },
+            zh: {
+                tagline: "您的个人AI移民助手",
+                step3: "第3步，共3步",
+                fillDocuments: "填写您的文件",
+                aiAssistant: "AI助手",
+                aiHelperDefault: "我将帮助您准确填写移民文件。所有说明都将使用您选择的语言。",
+                documentSupport: "文件支持",
+                documentSupportText: "我将用您选择的语言指导您完成每个字段的具体帮助和要求。",
+                helpTip1: "点击任何字段旁边的？按钮获取详细帮助",
+                helpTip2: "所有必填字段都用*标记",
+                helpTip3: "我将在您输入时验证您的信息",
+                helpTip4: "您的进度会自动保存",
+                documentTitle: "移民申请表",
+                back: "返回",
+                saveProgress: "保存进度",
+                submitApplication: "提交申请",
+                citizenship: {
+                    title: "入籍申请（表格N-400）",
+                    aiHelper: "我将帮助您准确填写入籍申请。请确保提供关于您的居住和移民历史的准确信息。",
+                    supportText: "入籍申请支持 - 我将指导您完成每个字段的具体帮助和要求。",
+                    supportTip1: "您必须是永久居民5年（或与美国公民结婚3年）",
+                    supportTip2: "需要连续居住和实际存在",
+                    supportTip3: "需要良好道德品质证明",
+                    supportTip4: "需要英语和公民考试准备"
+                },
+                daca: {
+                    title: "DACA申请（表格I-821D）",
+                    aiHelper: "我将帮助您准确填写DACA申请。请确保提供关于您进入美国以及自2007年以来连续居住的详细信息。",
+                    supportText: "DACA申请支持 - 我将指导您完成每个字段的具体帮助和要求。",
+                    supportTip1: "DACA要求自2007年6月15日以来连续居住",
+                    supportTip2: "您必须在16岁之前到达",
+                    supportTip3: "需要教育或军事服务证明",
+                    supportTip4: "无重大轻罪或重罪"
+                },
+                work: {
+                    title: "工作许可申请（表格I-765）",
+                    aiHelper: "我将帮助您填写工作许可申请。您需要提供当前的移民身份和就业信息。",
+                    supportText: "工作许可申请支持 - 我将指导您完成每个字段的具体帮助和要求。",
+                    supportTip1: "您需要有效的移民身份",
+                    supportTip2: "可能需要就业授权",
+                    supportTip3: "需要当前就业信息",
+                    supportTip4: "需要支持文件"
+                },
+                travel: {
+                    title: "旅行文件申请（表格I-131）",
+                    aiHelper: "我将帮助您填写旅行文件申请。您需要解释您的旅行目的并提供支持证据。",
+                    supportText: "旅行文件申请支持 - 我将指导您完成每个字段的具体帮助和要求。",
+                    supportTip1: "您需要有效的旅行理由",
+                    supportTip2: "需要支持证据",
+                    supportTip3: "必须指定旅行日期",
+                    supportTip4: "需要紧急联系信息"
+                },
+                family: {
+                    title: "家庭请愿（表格I-130）",
+                    aiHelper: "我将帮助您填写家庭请愿。您需要提供关于您关系的详细信息和支持证据。",
+                    supportText: "家庭请愿支持 - 我将指导您完成每个字段的具体帮助和要求。",
+                    supportTip1: "您必须是美国公民或永久居民",
+                    supportTip2: "需要关系证明",
+                    supportTip3: "需要经济支持文件",
+                    supportTip4: "需要受益人信息"
+                }
+            }
+        };
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeLanguageSelector();
+            detectFormType();
+            loadDocumentTemplate();
+            loadSavedData();
+        });
+        
+        function initializeLanguageSelector() {
+            const languageSelect = document.getElementById('languageSelect');
+            languageSelect.addEventListener('change', function() {
+                currentLanguage = this.value;
+                translatePage();
+            });
+        }
+        
+        function detectFormType() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const formType = urlParams.get('form');
+            
+            if (formType) {
+                selectedFormType = formType;
+                localStorage.setItem('selectedFormType', formType);
+            } else {
+                selectedFormType = localStorage.getItem('selectedFormType') || 'citizenship';
+            }
+            
+            updateFormForType(selectedFormType);
+        }
+        
+        function updateFormForType(formType) {
+            const aiHelperText = document.getElementById('aiHelperText');
+            const documentSupportContent = document.getElementById('documentSupportContent');
+            const documentTitle = document.getElementById('documentTitle');
+            
+            const formTranslations = translations[currentLanguage][formType];
+            
+            if (formTranslations) {
+                aiHelperText.textContent = formTranslations.aiHelper;
+                documentSupportContent.innerHTML = `
+                    <p>${formTranslations.supportText}</p>
+                    <ul class="support-checklist">
+                        <li data-translate="helpTip1">Click the ? button next to any field for detailed help</li>
+                        <li data-translate="helpTip2">All required fields are marked with *</li>
+                        <li data-translate="helpTip3">I'll validate your information as you type</li>
+                        <li data-translate="helpTip4">Your progress is saved automatically</li>
+                        <li>${formTranslations.supportTip1}</li>
+                        <li>${formTranslations.supportTip2}</li>
+                        <li>${formTranslations.supportTip3}</li>
+                        <li>${formTranslations.supportTip4}</li>
+                    </ul>
+                `;
+                documentTitle.textContent = formTranslations.title;
+            }
+        }
+        
+        function loadDocumentTemplate() {
+            const documentContent = document.getElementById('documentContent');
+            
+            switch(selectedFormType) {
+                case 'citizenship':
+                    loadCitizenshipForm();
+                    break;
+                case 'daca':
+                    loadDACAForm();
+                    break;
+                case 'work':
+                    loadWorkPermitForm();
+                    break;
+                case 'travel':
+                    loadTravelDocumentForm();
+                    break;
+                case 'family':
+                    loadFamilyPetitionForm();
+                    break;
+                default:
+                    loadCitizenshipForm();
+            }
+        }
+        
+        function loadCitizenshipForm() {
+            const documentContent = document.getElementById('documentContent');
+            documentContent.innerHTML = `
+                <div class="form-field">
+                    <label for="formType">Form Type *</label>
+                    <select id="formType" required>
+                        <option value="N-400">N-400 - Application for Naturalization</option>
+                    </select>
+                </div>
+                
+                <div class="form-field">
+                    <label for="applicantName">Full Name *</label>
+                    <input type="text" id="applicantName" required placeholder="Enter your full legal name">
+                </div>
+                
+                <div class="form-field">
+                    <label for="dateOfBirth">Date of Birth *</label>
+                    <input type="date" id="dateOfBirth" required>
+                </div>
+                
+                <div class="form-field">
+                    <label for="countryOfBirth">Country of Birth *</label>
+                    <select id="countryOfBirth" required>
+                        <option value="">Select Country</option>
+                        <option value="Mexico">Mexico</option>
+                        <option value="China">China</option>
+                        <option value="India">India</option>
+                        <option value="Philippines">Philippines</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                
+                <div class="form-field">
+                    <label for="alienNumber">Alien Registration Number (A-Number) *</label>
+                    <input type="text" id="alienNumber" required placeholder="A-123456789">
+                </div>
+                
+                <div class="form-field">
+                    <label for="greenCardNumber">Green Card Number *</label>
+                    <input type="text" id="greenCardNumber" required placeholder="123456789">
+                </div>
+                
+                <div class="form-field">
+                    <label for="dateOfPermanentResidence">Date Became Permanent Resident *</label>
+                    <input type="date" id="dateOfPermanentResidence" required>
+                </div>
+                
+                <div class="form-field">
+                    <label for="currentAddress">Current Address *</label>
+                    <textarea id="currentAddress" required placeholder="Enter your complete current address"></textarea>
+                </div>
+                
+                <div class="form-field">
+                    <label for="phoneNumber">Phone Number *</label>
+                    <input type="tel" id="phoneNumber" required placeholder="(555) 123-4567">
+                </div>
+                
+                <div class="form-field">
+                    <label for="emailAddress">Email Address *</label>
+                    <input type="email" id="emailAddress" required placeholder="your.email@example.com">
+                </div>
+                
+                <div class="form-field">
+                    <label for="maritalStatus">Marital Status *</label>
+                    <select id="maritalStatus" required>
+                        <option value="">Select Status</option>
+                        <option value="Single">Single</option>
+                        <option value="Married">Married</option>
+                        <option value="Divorced">Divorced</option>
+                        <option value="Widowed">Widowed</option>
+                    </select>
+                </div>
+                
+                <div class="form-field">
+                    <label for="spouseName">Spouse Name (if applicable)</label>
+                    <input type="text" id="spouseName" placeholder="Enter spouse's full name">
+                </div>
+                
+                <div class="form-field">
+                    <label for="children">Children Information</label>
+                    <textarea id="children" placeholder="List all children with names, dates of birth, and countries of birth"></textarea>
+                </div>
+                
+                <div class="form-field">
+                    <label for="employmentHistory">Employment History (Last 5 Years) *</label>
+                    <textarea id="employmentHistory" required placeholder="List your employment history for the last 5 years"></textarea>
+                </div>
+                
+                <div class="form-field">
+                    <label for="travelHistory">Travel History (Last 5 Years) *</label>
+                    <textarea id="travelHistory" required placeholder="List all trips outside the US in the last 5 years"></textarea>
+                </div>
+                
+                <div class="form-field">
+                    <label for="criminalHistory">Criminal History</label>
+                    <textarea id="criminalHistory" placeholder="Disclose any arrests, citations, or convictions"></textarea>
+                </div>
+                
+                <div class="form-field">
+                    <label for="englishProficiency">English Proficiency *</label>
+                    <select id="englishProficiency" required>
+                        <option value="">Select Level</option>
+                        <option value="Native">Native Speaker</option>
+                        <option value="Fluent">Fluent</option>
+                        <option value="Good">Good</option>
+                        <option value="Fair">Fair</option>
+                        <option value="Basic">Basic</option>
+                    </select>
+                </div>
+                
+                <div class="form-field">
+                    <label for="civicsKnowledge">Civics Knowledge *</label>
+                    <select id="civicsKnowledge" required>
+                        <option value="">Select Level</option>
+                        <option value="Excellent">Excellent</option>
+                        <option value="Good">Good</option>
+                        <option value="Fair">Fair</option>
+                        <option value="Needs Study">Needs Study</option>
+                    </select>
+                </div>
+            `;
+        }
+        
+        function loadDACAForm() {
+            const documentContent = document.getElementById('documentContent');
+            documentContent.innerHTML = `
+                <div class="form-field">
+                    <label for="formType">Form Type *</label>
+                    <select id="formType" required>
+                        <option value="I-821D">I-821D - Consideration of Deferred Action for Childhood Arrivals</option>
+                    </select>
+                </div>
+                
+                <div class="form-field">
+                    <label for="applicantName">Full Name *</label>
+                    <input type="text" id="applicantName" required placeholder="Enter your full legal name">
+                </div>
+                
+                <div class="form-field">
+                    <label for="dateOfBirth">Date of Birth *</label>
+                    <input type="date" id="dateOfBirth" required>
+                </div>
+                
+                <div class="form-field">
+                    <label for="countryOfBirth">Country of Birth *</label>
+                    <select id="countryOfBirth" required>
+                        <option value="">Select Country</option>
+                        <option value="Mexico">Mexico</option>
+                        <option value="El Salvador">El Salvador</option>
+                        <option value="Guatemala">Guatemala</option>
+                        <option value="Honduras">Honduras</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                
+                <div class="form-field">
+                    <label for="entryDate">Date of Entry to US *</label>
+                    <input type="date" id="entryDate" required>
+                </div>
+                
+                <div class="form-field">
+                    <label for="ageAtEntry">Age at Entry *</label>
+                    <input type="number" id="ageAtEntry" required placeholder="Age when you entered the US">
+                </div>
+                
+                <div class="form-field">
+                    <label for="continuousResidence">Continuous Residence Since June 15, 2007 *</label>
+                    <textarea id="continuousResidence" required placeholder="Provide evidence of continuous residence since June 15, 2007"></textarea>
+                </div>
+                
+                <div class="form-field">
+                    <label for="educationStatus">Education Status *</label>
+                    <select id="educationStatus" required>
+                        <option value="">Select Status</option>
+                        <option value="High School Graduate">High School Graduate</option>
+                        <option value="GED">GED</option>
+                        <option value="Currently Enrolled">Currently Enrolled</option>
+                        <option value="Honorably Discharged Veteran">Honorably Discharged Veteran</option>
+                    </select>
+                </div>
+                
+                <div class="form-field">
+                    <label for="schoolName">School Name</label>
+                    <input type="text" id="schoolName" placeholder="Name of current or last school attended">
+                </div>
+                
+                <div class="form-field">
+                    <label for="currentAddress">Current Address *</label>
+                    <textarea id="currentAddress" required placeholder="Enter your complete current address"></textarea>
+                </div>
+                
+                <div class="form-field">
+                    <label for="phoneNumber">Phone Number *</label>
+                    <input type="tel" id="phoneNumber" required placeholder="(555) 123-4567">
+                </div>
+                
+                <div class="form-field">
+                    <label for="emailAddress">Email Address *</label>
+                    <input type="email" id="emailAddress" required placeholder="your.email@example.com">
+                </div>
+                
+                <div class="form-field">
+                    <label for="criminalHistory">Criminal History</label>
+                    <textarea id="criminalHistory" placeholder="Disclose any arrests, citations, or convictions"></textarea>
+                </div>
+                
+                <div class="form-field">
+                    <label for="supportingDocuments">Supporting Documents</label>
+                    <textarea id="supportingDocuments" placeholder="List all supporting documents you will submit"></textarea>
+                </div>
+            `;
+        }
+        
+        function loadWorkPermitForm() {
+            const documentContent = document.getElementById('documentContent');
+            documentContent.innerHTML = `
+                <div class="form-field">
+                    <label for="formType">Form Type *</label>
+                    <select id="formType" required>
+                        <option value="I-765">I-765 - Application for Employment Authorization</option>
+                    </select>
+                </div>
+                
+                <div class="form-field">
+                    <label for="applicantName">Full Name *</label>
+                    <input type="text" id="applicantName" required placeholder="Enter your full legal name">
+                </div>
+                
+                <div class="form-field">
+                    <label for="dateOfBirth">Date of Birth *</label>
+                    <input type="date" id="dateOfBirth" required>
+                </div>
+                
+                <div class="form-field">
+                    <label for="countryOfBirth">Country of Birth *</label>
+                    <select id="countryOfBirth" required>
+                        <option value="">Select Country</option>
+                        <option value="Mexico">Mexico</option>
+                        <option value="China">China</option>
+                        <option value="India">India</option>
+                        <option value="Philippines">Philippines</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                
+                <div class="form-field">
+                    <label for="alienNumber">Alien Registration Number (A-Number)</label>
+                    <input type="text" id="alienNumber" placeholder="A-123456789">
+                </div>
+                
+                <div class="form-field">
+                    <label for="currentStatus">Current Immigration Status *</label>
+                    <select id="currentStatus" required>
+                        <option value="">Select Status</option>
+                        <option value="F-1 Student">F-1 Student</option>
+                        <option value="H-1B Worker">H-1B Worker</option>
+                        <option value="L-1 Intracompany Transferee">L-1 Intracompany Transferee</option>
+                        <option value="O-1 Extraordinary Ability">O-1 Extraordinary Ability</option>
+                        <option value="Asylum Applicant">Asylum Applicant</option>
+                        <option value="Refugee">Refugee</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                
+                <div class="form-field">
+                    <label for="employmentCategory">Employment Category *</label>
+                    <select id="employmentCategory" required>
+                        <option value="">Select Category</option>
+                        <option value="c8">(c)(8) - Asylum Applicant</option>
+                        <option value="c9">(c)(9) - Adjustment Applicant</option>
+                        <option value="c10">(c)(10) - Suspension of Deportation</option>
+                        <option value="c16">(c)(16) - Refugee</option>
+                        <option value="c18">(c)(18) - Withholding of Removal</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                
+                <div class="form-field">
+                    <label for="currentAddress">Current Address *</label>
+                    <textarea id="currentAddress" required placeholder="Enter your complete current address"></textarea>
+                </div>
+                
+                <div class="form-field">
+                    <label for="phoneNumber">Phone Number *</label>
+                    <input type="tel" id="phoneNumber" required placeholder="(555) 123-4567">
+                </div>
+                
+                <div class="form-field">
+                    <label for="emailAddress">Email Address *</label>
+                    <input type="email" id="emailAddress" required placeholder="your.email@example.com">
+                </div>
+                
+                <div class="form-field">
+                    <label for="employerName">Current Employer Name</label>
+                    <input type="text" id="employerName" placeholder="Name of current employer">
+                </div>
+                
+                <div class="form-field">
+                    <label for="jobTitle">Job Title</label>
+                    <input type="text" id="jobTitle" placeholder="Your current job title">
+                </div>
+                
+                <div class="form-field">
+                    <label for="employerAddress">Employer Address</label>
+                    <textarea id="employerAddress" placeholder="Complete address of current employer"></textarea>
+                </div>
+                
+                <div class="form-field">
+                    <label for="previousEmployment">Previous Employment (Last 5 Years)</label>
+                    <textarea id="previousEmployment" placeholder="List your previous employment for the last 5 years"></textarea>
+                </div>
+                
+                <div class="form-field">
+                    <label for="supportingDocuments">Supporting Documents</label>
+                    <textarea id="supportingDocuments" placeholder="List all supporting documents you will submit"></textarea>
+                </div>
+            `;
+        }
+        
+        function loadTravelDocumentForm() {
+            const documentContent = document.getElementById('documentContent');
+            documentContent.innerHTML = `
+                <div class="form-field">
+                    <label for="formType">Form Type *</label>
+                    <select id="formType" required>
+                        <option value="I-131">I-131 - Application for Travel Document</option>
+                    </select>
+                </div>
+                
+                <div class="form-field">
+                    <label for="applicantName">Full Name *</label>
+                    <input type="text" id="applicantName" required placeholder="Enter your full legal name">
+                </div>
+                
+                <div class="form-field">
+                    <label for="dateOfBirth">Date of Birth *</label>
+                    <input type="date" id="dateOfBirth" required>
+                </div>
+                
+                <div class="form-field">
+                    <label for="countryOfBirth">Country of Birth *</label>
+                    <select id="countryOfBirth" required>
+                        <option value="">Select Country</option>
+                        <option value="Mexico">Mexico</option>
+                        <option value="China">China</option>
+                        <option value="India">India</option>
+                        <option value="Philippines">Philippines</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                
+                <div class="form-field">
+                    <label for="alienNumber">Alien Registration Number (A-Number)</label>
+                    <input type="text" id="alienNumber" placeholder="A-123456789">
+                </div>
+                
+                <div class="form-field">
+                    <label for="currentStatus">Current Immigration Status *</label>
+                    <select id="currentStatus" required>
+                        <option value="">Select Status</option>
+                        <option value="Asylum Applicant">Asylum Applicant</option>
+                        <option value="Refugee">Refugee</option>
+                        <option value="Temporary Protected Status">Temporary Protected Status</option>
+                        <option value="Adjustment Applicant">Adjustment Applicant</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                
+                <div class="form-field">
+                    <label for="travelPurpose">Purpose of Travel *</label>
+                    <textarea id="travelPurpose" required placeholder="Explain the purpose of your travel"></textarea>
+                </div>
+                
+                <div class="form-field">
+                    <label for="destinationCountry">Destination Country *</label>
+                    <input type="text" id="destinationCountry" required placeholder="Country you plan to visit">
+                </div>
+                
+                <div class="form-field">
+                    <label for="departureDate">Intended Departure Date *</label>
+                    <input type="date" id="departureDate" required>
+                </div>
+                
+                <div class="form-field">
+                    <label for="returnDate">Intended Return Date *</label>
+                    <input type="date" id="returnDate" required>
+                </div>
+                
+                <div class="form-field">
+                    <label for="currentAddress">Current Address *</label>
+                    <textarea id="currentAddress" required placeholder="Enter your complete current address"></textarea>
+                </div>
+                
+                <div class="form-field">
+                    <label for="phoneNumber">Phone Number *</label>
+                    <input type="tel" id="phoneNumber" required placeholder="(555) 123-4567">
+                </div>
+                
+                <div class="form-field">
+                    <label for="emailAddress">Email Address *</label>
+                    <input type="email" id="emailAddress" required placeholder="your.email@example.com">
+                </div>
+                
+                <div class="form-field">
+                    <label for="emergencyContact">Emergency Contact Information *</label>
+                    <textarea id="emergencyContact" required placeholder="Name, relationship, phone number, and address of emergency contact"></textarea>
+                </div>
+                
+                <div class="form-field">
+                    <label for="supportingDocuments">Supporting Documents</label>
+                    <textarea id="supportingDocuments" placeholder="List all supporting documents you will submit"></textarea>
+                </div>
+            `;
+        }
+        
+        function loadFamilyPetitionForm() {
+            const documentContent = document.getElementById('documentContent');
+            documentContent.innerHTML = `
+                <div class="form-field">
+                    <label for="formType">Form Type *</label>
+                    <select id="formType" required>
+                        <option value="I-130">I-130 - Petition for Alien Relative</option>
+                    </select>
+                </div>
+                
+                <div class="form-field">
+                    <label for="petitionerName">Petitioner Name (Your Name) *</label>
+                    <input type="text" id="petitionerName" required placeholder="Enter your full legal name">
+                </div>
+                
+                <div class="form-field">
+                    <label for="petitionerDateOfBirth">Petitioner Date of Birth *</label>
+                    <input type="date" id="petitionerDateOfBirth" required>
+                </div>
+                
+                <div class="form-field">
+                    <label for="petitionerCitizenship">Petitioner Citizenship Status *</label>
+                    <select id="petitionerCitizenship" required>
+                        <option value="">Select Status</option>
+                        <option value="US Citizen">US Citizen</option>
+                        <option value="Permanent Resident">Permanent Resident</option>
+                    </select>
+                </div>
+                
+                <div class="form-field">
+                    <label for="beneficiaryName">Beneficiary Name (Relative's Name) *</label>
+                    <input type="text" id="beneficiaryName" required placeholder="Enter relative's full legal name">
+                </div>
+                
+                <div class="form-field">
+                    <label for="beneficiaryDateOfBirth">Beneficiary Date of Birth *</label>
+                    <input type="date" id="beneficiaryDateOfBirth" required>
+                </div>
+                
+                <div class="form-field">
+                    <label for="beneficiaryCountryOfBirth">Beneficiary Country of Birth *</label>
+                    <select id="beneficiaryCountryOfBirth" required>
+                        <option value="">Select Country</option>
+                        <option value="Mexico">Mexico</option>
+                        <option value="China">China</option>
+                        <option value="India">India</option>
+                        <option value="Philippines">Philippines</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                
+                <div class="form-field">
+                    <label for="relationship">Relationship to Beneficiary *</label>
+                    <select id="relationship" required>
+                        <option value="">Select Relationship</option>
+                        <option value="Spouse">Spouse</option>
+                        <option value="Parent">Parent</option>
+                        <option value="Child">Child</option>
+                        <option value="Sibling">Sibling</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                
+                <div class="form-field">
+                    <label for="marriageDate">Marriage Date (if applicable)</label>
+                    <input type="date" id="marriageDate">
+                </div>
+                
+                <div class="form-field">
+                    <label for="marriageLocation">Marriage Location (if applicable)</label>
+                    <input type="text" id="marriageLocation" placeholder="City, State, Country">
+                </div>
+                
+                <div class="form-field">
+                    <label for="petitionerAddress">Petitioner Address *</label>
+                    <textarea id="petitionerAddress" required placeholder="Enter your complete current address"></textarea>
+                </div>
+                
+                <div class="form-field">
+                    <label for="beneficiaryAddress">Beneficiary Address *</label>
+                    <textarea id="beneficiaryAddress" required placeholder="Enter beneficiary's complete current address"></textarea>
+                </div>
+                
+                <div class="form-field">
+                    <label for="petitionerPhone">Petitioner Phone Number *</label>
+                    <input type="tel" id="petitionerPhone" required placeholder="(555) 123-4567">
+                </div>
+                
+                <div class="form-field">
+                    <label for="beneficiaryPhone">Beneficiary Phone Number *</label>
+                    <input type="tel" id="beneficiaryPhone" required placeholder="(555) 123-4567">
+                </div>
+                
+                <div class="form-field">
+                    <label for="petitionerEmail">Petitioner Email Address *</label>
+                    <input type="email" id="petitionerEmail" required placeholder="your.email@example.com">
+                </div>
+                
+                <div class="form-field">
+                    <label for="beneficiaryEmail">Beneficiary Email Address *</label>
+                    <input type="email" id="beneficiaryEmail" required placeholder="beneficiary.email@example.com">
+                </div>
+                
+                <div class="form-field">
+                    <label for="relationshipEvidence">Relationship Evidence *</label>
+                    <textarea id="relationshipEvidence" required placeholder="Describe evidence of your relationship (marriage certificate, birth certificate, etc.)"></textarea>
+                </div>
+                
+                <div class="form-field">
+                    <label for="financialSupport">Financial Support Documentation</label>
+                    <textarea id="financialSupport" placeholder="Describe your financial ability to support the beneficiary"></textarea>
+                </div>
+                
+                <div class="form-field">
+                    <label for="supportingDocuments">Supporting Documents</label>
+                    <textarea id="supportingDocuments" placeholder="List all supporting documents you will submit"></textarea>
+                </div>
+            `;
+        }
+        
+        function translatePage() {
+            const elements = document.querySelectorAll('[data-translate]');
+            elements.forEach(element => {
+                const key = element.getAttribute('data-translate');
+                const translation = translations[currentLanguage][key];
+                if (translation) {
+                    element.textContent = translation;
+                }
+            });
+            
+            // Translate all form fields dynamically
+            translateFormFields();
+            
+            // Update form-specific content
+            updateFormForType(selectedFormType);
+            
+            showNotification(`${translations[currentLanguage].pageTranslated} ${currentLanguage.toUpperCase()}`, 'success');
+        }
+        
+        function translateFormFields() {
+            const formFields = document.querySelectorAll('.form-field');
+            formFields.forEach(field => {
+                const label = field.querySelector('label');
+                const input = field.querySelector('input, select, textarea');
+                
+                if (label && input) {
+                    const fieldId = input.id;
+                    const labelText = translations[currentLanguage][fieldId];
+                    const placeholderText = translations[currentLanguage]['enter' + fieldId.charAt(0).toUpperCase() + fieldId.slice(1)];
+                    
+                    if (labelText) {
+                        label.textContent = labelText + (input.required ? ' *' : '');
+                    }
+                    
+                    if (placeholderText && input.placeholder) {
+                        input.placeholder = placeholderText;
+                    }
+                    
+                    // Translate select options
+                    if (input.tagName === 'SELECT') {
+                        const options = input.querySelectorAll('option');
+                        options.forEach(option => {
+                            const optionKey = option.value.toLowerCase().replace(/\s+/g, '');
+                            const translatedOption = translations[currentLanguage][optionKey];
+                            if (translatedOption && option.value !== '') {
+                                option.textContent = translatedOption;
+                            }
+                        });
+                    }
+                }
+            });
+        }
+        
+        function showFieldHelp(fieldId) {
+            const helpElement = document.getElementById(fieldId + '-help');
+            const allHelpElements = document.querySelectorAll('.field-help');
+            
+            // Hide all other help elements
+            allHelpElements.forEach(help => {
+                if (help !== helpElement) {
+                    help.classList.remove('show');
+                }
+            });
+            
+            // Update help content in current language
+            if (helpElement) {
+                updateHelpContent(helpElement, fieldId);
+                helpElement.classList.toggle('show');
+            }
+        }
+        
+        function updateHelpContent(helpElement, fieldId) {
+            const aiHelpKey = 'aiHelp' + fieldId.charAt(0).toUpperCase() + fieldId.slice(1);
+            const aiHelpText = translations[currentLanguage][aiHelpKey];
+            
+            if (aiHelpText) {
+                const strongElement = helpElement.querySelector('strong');
+                const spanElement = helpElement.querySelector('span');
+                
+                if (strongElement) {
+                    strongElement.textContent = translations[currentLanguage].aiHelp + ' ';
+                }
+                if (spanElement) {
+                    spanElement.textContent = aiHelpText;
+                }
+            }
+        }
+        
+        function loadSavedData() {
+            const savedData = localStorage.getItem('documentData');
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                Object.entries(data).forEach(([key, value]) => {
+                    const field = document.getElementById(key);
+                    if (field) {
+                        field.value = value;
+                    }
+                });
+            }
+        }
+        
+        function saveProgress() {
+            const formData = {};
+            const inputs = document.querySelectorAll('input, select, textarea');
+            inputs.forEach(input => {
+                if (input.value.trim() !== '') {
+                    formData[input.id] = input.value;
+                }
+            });
+            
+            localStorage.setItem('documentData', JSON.stringify(formData));
+            showNotification('Progress saved successfully!', 'success');
+        }
+        
+        function goBack() {
+            window.location.href = 'complete-application.html';
+        }
+        
+        function submitApplication() {
+            // Validate required fields
+            const requiredFields = document.querySelectorAll('input[required], select[required], textarea[required]');
+            let isValid = true;
+            let missingFields = [];
+            
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    field.style.borderColor = '#e74c3c';
+                    isValid = false;
+                    const label = field.previousElementSibling;
+                    if (label) {
+                        missingFields.push(label.textContent.replace(' *', ''));
+                    }
+                } else {
+                    field.style.borderColor = '#e9ecef';
+                }
+            });
+            
+            if (!isValid) {
+                const errorMessage = translations[currentLanguage].pleaseFillRequired + '\n' + missingFields.join(', ');
+                showNotification(errorMessage, 'error');
+                return;
+            }
+            
+            // Additional validation
+            if (!validateFormData()) {
+                return;
+            }
+            
+            // Save final data
+            saveProgress();
+            
+            // Show AI-powered submission process
+            showAISubmissionProcess();
+        }
+        
+        function validateFormData() {
+            const email = document.getElementById('emailAddress');
+            const phone = document.getElementById('phoneNumber');
+            
+            // Email validation
+            if (email && email.value) {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email.value)) {
+                    showNotification('Please enter a valid email address', 'error');
+                    email.style.borderColor = '#e74c3c';
+                    return false;
+                }
+            }
+            
+            // Phone validation
+            if (phone && phone.value) {
+                const phoneRegex = /^\(\d{3}\) \d{3}-\d{4}$/;
+                if (!phoneRegex.test(phone.value)) {
+                    showNotification('Please enter phone number in format (555) 123-4567', 'error');
+                    phone.style.borderColor = '#e74c3c';
+                    return false;
+                }
+            }
+            
+            return true;
+        }
+        
+        function showAISubmissionProcess() {
+            // Show AI processing steps
+            const steps = [
+                translations[currentLanguage].aiProcessing1 || "AI is validating your information...",
+                translations[currentLanguage].aiProcessing2 || "AI is checking for common errors...",
+                translations[currentLanguage].aiProcessing3 || "AI is generating your application...",
+                translations[currentLanguage].aiProcessing4 || "AI is preparing submission..."
+            ];
+            
+            let currentStep = 0;
+            const processInterval = setInterval(() => {
+                if (currentStep < steps.length) {
+                    showNotification(steps[currentStep], 'info');
+                    currentStep++;
+                } else {
+                    clearInterval(processInterval);
+                    showNotification(translations[currentLanguage].applicationSubmitted, 'success');
+                    
+                    // Redirect to success page
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 2000);
+                }
+            }, 1000);
+        }
+        
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 15px 20px;
+                border-radius: 6px;
+                color: white;
+                font-weight: 500;
+                z-index: 1000;
+                animation: slideIn 0.3s ease-out;
+                ${type === 'success' ? 'background: #27ae60;' : 'background: #e74c3c;'}
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

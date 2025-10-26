@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple API Test - Immigr-Aid.ai</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .test-container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .test-button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        
+        .test-button:hover {
+            background: #0056b3;
+        }
+        
+        .result {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 6px;
+            margin-top: 20px;
+            border-left: 4px solid #007bff;
+            white-space: pre-wrap;
+        }
+        
+        .error {
+            border-left-color: #dc3545;
+            background: #f8d7da;
+        }
+        
+        .success {
+            border-left-color: #28a745;
+            background: #d4edda;
+        }
+        
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin: 10px 0;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🔧 Simple API Test</h1>
+        <p>Testing llama3.2:1b with your API key</p>
+        
+        <input type="text" id="testMessage" placeholder="Enter your message..." value="Hello, can you help me with immigration forms?">
+        
+        <button class="test-button" onclick="testAPI()">Test API</button>
+        <button class="test-button" onclick="testSimple()">Simple Test</button>
+        <button class="test-button" onclick="testDirect()">Direct Test</button>
+        
+        <div id="result" class="result" style="display: none;"></div>
+    </div>
+    
+    <script>
+        const OLLAMA_API_KEY = 'b4fcd325fca84349b433b28494e6ed3f.nzXs0J5KFSsKEuZQm9BJYKu7';
+        const OLLAMA_BASE_URL = 'https://api.ollama.com/v1';
+        
+        function showResult(message, isError = false) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.display = 'block';
+            resultDiv.className = `result ${isError ? 'error' : 'success'}`;
+            resultDiv.textContent = message;
+        }
+        
+        async function testAPI() {
+            const message = document.getElementById('testMessage').value;
+            showResult('Testing API...', false);
+            
+            try {
+                console.log('Starting API test...');
+                console.log('API Key:', OLLAMA_API_KEY.substring(0, 20) + '...');
+                console.log('Base URL:', OLLAMA_BASE_URL);
+                console.log('Model: llama3.2:1b');
+                
+                const response = await fetch(`${OLLAMA_BASE_URL}/chat/completions`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${OLLAMA_API_KEY}`
+                    },
+                    body: JSON.stringify({
+                        model: 'llama3.2:1b',
+                        messages: [
+                            {
+                                role: 'user',
+                                content: message
+                            }
+                        ],
+                        max_tokens: 100,
+                        temperature: 0.7
+                    })
+                });
+                
+                console.log('Response status:', response.status);
+                console.log('Response headers:', response.headers);
+                
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error('Error response:', errorText);
+                    showResult(`API Error: ${response.status}\n${errorText}`, true);
+                    return;
+                }
+                
+                const data = await response.json();
+                console.log('Response data:', data);
+                
+                if (data.choices && data.choices[0] && data.choices[0].message) {
+                    const aiResponse = data.choices[0].message.content;
+                    showResult(`✅ SUCCESS!\n\nAI Response:\n${aiResponse}\n\nFull Response:\n${JSON.stringify(data, null, 2)}`, false);
+                } else {
+                    showResult(`❌ Invalid response format:\n${JSON.stringify(data, null, 2)}`, true);
+                }
+                
+            } catch (error) {
+                console.error('Request error:', error);
+                showResult(`❌ Request failed:\n${error.message}\n\nStack trace:\n${error.stack}`, true);
+            }
+        }
+        
+        async function testSimple() {
+            showResult('Testing simple request...', false);
+            
+            try {
+                const response = await fetch(`${OLLAMA_BASE_URL}/chat/completions`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${OLLAMA_API_KEY}`
+                    },
+                    body: JSON.stringify({
+                        model: 'llama3.2:1b',
+                        messages: [
+                            {
+                                role: 'user',
+                                content: 'Hi'
+                            }
+                        ],
+                        max_tokens: 50
+                    })
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    showResult(`✅ Simple test successful!\n\nResponse:\n${JSON.stringify(data, null, 2)}`, false);
+                } else {
+                    const errorText = await response.text();
+                    showResult(`❌ Simple test failed: ${response.status}\n${errorText}`, true);
+                }
+            } catch (error) {
+                showResult(`❌ Simple test error:\n${error.message}`, true);
+            }
+        }
+        
+        async function testDirect() {
+            showResult('Testing direct fetch...', false);
+            
+            try {
+                const requestBody = {
+                    model: 'llama3.2:1b',
+                    messages: [
+                        {
+                            role: 'user',
+                            content: 'Hello'
+                        }
+                    ],
+                    max_tokens: 30
+                };
+                
+                console.log('Request body:', JSON.stringify(requestBody, null, 2));
+                
+                const response = await fetch(`${OLLAMA_BASE_URL}/chat/completions`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${OLLAMA_API_KEY}`
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+                
+                console.log('Response:', response);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    showResult(`✅ Direct test successful!\n\nAI said: ${data.choices[0].message.content}`, false);
+                } else {
+                    showResult(`❌ Direct test failed: ${response.status}`, true);
+                }
+            } catch (error) {
+                showResult(`❌ Direct test error:\n${error.message}`, true);
+            }
+        }
+    </script>
+</body>
+</html>

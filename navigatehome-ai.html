@@ -1,0 +1,1509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NavigateHome.AI - Personal AI Caseworker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: white;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .language-selector {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .language-selector select {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 6px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            font-size: 14px;
+        }
+        
+        .language-selector select option {
+            background: #333;
+            color: white;
+        }
+        
+        .translate-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .translate-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .dashboard-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border: 1px solid #f0f0f0;
+        }
+        
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .document-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .document-item {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            border-left: 4px solid #28a745;
+            transition: all 0.3s ease;
+        }
+        
+        .document-item.pending {
+            border-left-color: #ffc107;
+        }
+        
+        .document-item.not-started {
+            border-left-color: #dc3545;
+        }
+        
+        .document-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .document-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .document-status {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        
+        .document-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+        
+        .btn-primary {
+            background: #007bff;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #0056b3;
+            transform: translateY(-1px);
+        }
+        
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #1e7e34;
+        }
+        
+        .btn-warning {
+            background: #ffc107;
+            color: #333;
+        }
+        
+        .btn-warning:hover {
+            background: #e0a800;
+        }
+        
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #c82333;
+        }
+        
+        .chat-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border: 1px solid #f0f0f0;
+            overflow: hidden;
+        }
+        
+        .chat-header {
+            background: #f8f9fa;
+            padding: 20px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .chat-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .chat-subtitle {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .chat-messages {
+            height: 400px;
+            overflow-y: auto;
+            padding: 20px;
+            background: #fafafa;
+        }
+        
+        .message {
+            margin-bottom: 15px;
+            animation: messageSlide 0.3s ease-out;
+        }
+        
+        @keyframes messageSlide {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .message.user {
+            text-align: right;
+        }
+        
+        .message-content {
+            display: inline-block;
+            max-width: 70%;
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+        
+        .message.ai .message-content {
+            background: white;
+            border: 1px solid #e9ecef;
+            color: #333;
+        }
+        
+        .message.user .message-content {
+            background: #007bff;
+            color: white;
+        }
+        
+        .message-avatar {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 10px;
+            text-align: center;
+            line-height: 30px;
+            font-size: 1rem;
+        }
+        
+        .message.ai .message-avatar {
+            background: #667eea;
+            color: white;
+        }
+        
+        .message.user .message-avatar {
+            background: #28a745;
+            color: white;
+        }
+        
+        .chat-input-container {
+            padding: 20px;
+            background: white;
+            border-top: 1px solid #e9ecef;
+        }
+        
+        .chat-input {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .chat-input input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+        
+        .chat-input input:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+        }
+        
+        .upload-btn {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .upload-btn:hover {
+            background: #545b62;
+        }
+        
+        .send-btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .send-btn:hover {
+            background: #0056b3;
+            transform: translateY(-1px);
+        }
+        
+        .form-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            overflow-y: auto;
+        }
+        
+        .form-modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .form-content {
+            background: white;
+            border-radius: 12px;
+            max-width: 90%;
+            max-height: 90%;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        .form-header {
+            background: #f8f9fa;
+            padding: 20px;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .form-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .form-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #666;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+        
+        .form-close:hover {
+            background: #e9ecef;
+            color: #333;
+        }
+        
+        .form-body {
+            padding: 30px;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+        
+        .form-section {
+            margin-bottom: 30px;
+        }
+        
+        .form-section h3 {
+            font-size: 1.1rem;
+            color: #333;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+        
+        .form-group label {
+            font-weight: 500;
+            color: #555;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+        }
+        
+        .form-footer {
+            padding: 20px;
+            background: #f8f9fa;
+            border-top: 1px solid #e9ecef;
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #28a745;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 3000;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #666;
+            font-style: italic;
+        }
+        
+        .typing-dots {
+            display: flex;
+            gap: 4px;
+        }
+        
+        .typing-dots span {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #666;
+            animation: typing 1.4s infinite ease-in-out;
+        }
+        
+        .typing-dots span:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dots span:nth-child(2) { animation-delay: -0.16s; }
+        
+        @keyframes typing {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+        
+        .profile-section {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border: 1px solid #f0f0f0;
+            margin-bottom: 30px;
+        }
+        
+        .profile-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-content {
+                max-width: 95%;
+                margin: 10px;
+            }
+            
+            .form-body {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">
+                🏠 NavigateHome.AI
+            </div>
+            <div class="header-controls">
+                <div class="language-selector">
+                    <span>🌍</span>
+                    <select id="languageSelect">
+                        <option value="en">English</option>
+                        <option value="es">Español</option>
+                        <option value="zh">中文</option>
+                        <option value="ar">العربية</option>
+                        <option value="hi">हिन्दी</option>
+                        <option value="pt">Português</option>
+                        <option value="ru">Русский</option>
+                        <option value="fr">Français</option>
+                        <option value="vi">Tiếng Việt</option>
+                        <option value="ko">한국어</option>
+                    </select>
+                </div>
+                <button class="translate-btn" onclick="translatePage()">🔄 Translate</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Profile Section -->
+        <div class="profile-section">
+            <h2 style="margin-bottom: 20px; color: #333;">👤 Your Profile</h2>
+            <div class="profile-grid">
+                <div>
+                    <label style="display: block; font-weight: 500; color: #555; margin-bottom: 5px;">Original Country</label>
+                    <select id="originalCountry" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+                        <option value="">Select Country</option>
+                        <option value="Mexico">Mexico</option>
+                        <option value="China">China</option>
+                        <option value="India">India</option>
+                        <option value="Philippines">Philippines</option>
+                        <option value="El Salvador">El Salvador</option>
+                        <option value="Guatemala">Guatemala</option>
+                        <option value="Honduras">Honduras</option>
+                        <option value="Cuba">Cuba</option>
+                        <option value="Dominican Republic">Dominican Republic</option>
+                        <option value="Colombia">Colombia</option>
+                        <option value="Venezuela">Venezuela</option>
+                        <option value="Brazil">Brazil</option>
+                        <option value="Argentina">Argentina</option>
+                        <option value="Peru">Peru</option>
+                        <option value="Ecuador">Ecuador</option>
+                        <option value="Bolivia">Bolivia</option>
+                        <option value="Chile">Chile</option>
+                        <option value="Uruguay">Uruguay</option>
+                        <option value="Paraguay">Paraguay</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div>
+                    <label style="display: block; font-weight: 500; color: #555; margin-bottom: 5px;">Destination Country</label>
+                    <select id="destinationCountry" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+                        <option value="">Select Country</option>
+                        <option value="United States">United States</option>
+                        <option value="Canada">Canada</option>
+                        <option value="United Kingdom">United Kingdom</option>
+                        <option value="Australia">Australia</option>
+                        <option value="Germany">Germany</option>
+                        <option value="France">France</option>
+                        <option value="Spain">Spain</option>
+                        <option value="Italy">Italy</option>
+                        <option value="Netherlands">Netherlands</option>
+                        <option value="Sweden">Sweden</option>
+                        <option value="Norway">Norway</option>
+                        <option value="Denmark">Denmark</option>
+                        <option value="Finland">Finland</option>
+                        <option value="Switzerland">Switzerland</option>
+                        <option value="Austria">Austria</option>
+                        <option value="Belgium">Belgium</option>
+                        <option value="Ireland">Ireland</option>
+                        <option value="New Zealand">New Zealand</option>
+                        <option value="Japan">Japan</option>
+                        <option value="South Korea">South Korea</option>
+                    </select>
+                </div>
+                <div>
+                    <button class="btn btn-primary" onclick="updateProfile()" style="margin-top: 25px;">💾 Update Profile</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard -->
+        <div class="dashboard-grid">
+            <!-- Completed Documents -->
+            <div class="dashboard-card">
+                <div class="card-title">
+                    ✅ Completed Documents
+                </div>
+                <div class="document-list" id="completedDocuments">
+                    <div class="document-item">
+                        <div class="document-title">Form I-821D - DACA Application</div>
+                        <div class="document-status">Completed on Dec 15, 2024</div>
+                        <div class="document-actions">
+                            <button class="btn btn-primary" onclick="viewDocument('i-821d')">👁️ View</button>
+                            <button class="btn btn-success" onclick="downloadDocument('i-821d')">📄 Download</button>
+                        </div>
+                    </div>
+                    <div class="document-item">
+                        <div class="document-title">Form G-1145 - E-Notification</div>
+                        <div class="document-status">Completed on Dec 15, 2024</div>
+                        <div class="document-actions">
+                            <button class="btn btn-primary" onclick="viewDocument('g-1145')">👁️ View</button>
+                            <button class="btn btn-success" onclick="downloadDocument('g-1145')">📄 Download</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pending Documents -->
+            <div class="dashboard-card">
+                <div class="card-title">
+                    ⏳ Documents to Complete
+                </div>
+                <div class="document-list" id="pendingDocuments">
+                    <div class="document-item pending">
+                        <div class="document-title">Form I-765 - Employment Authorization</div>
+                        <div class="document-status">In Progress - 60% Complete</div>
+                        <div class="document-actions">
+                            <button class="btn btn-warning" onclick="fillForm('i-765')">✏️ Continue Filling</button>
+                            <button class="btn btn-primary" onclick="viewDocument('i-765')">👁️ View</button>
+                        </div>
+                    </div>
+                    <div class="document-item not-started">
+                        <div class="document-title">Form I-131 - Advance Parole</div>
+                        <div class="document-status">Not Started</div>
+                        <div class="document-actions">
+                            <button class="btn btn-primary" onclick="fillForm('i-131')">✏️ Start Filling</button>
+                            <button class="btn btn-primary" onclick="viewDocument('i-131')">👁️ View</button>
+                        </div>
+                    </div>
+                    <div class="document-item not-started">
+                        <div class="document-title">Supporting Documents</div>
+                        <div class="document-status">Not Started</div>
+                        <div class="document-actions">
+                            <button class="btn btn-primary" onclick="uploadDocuments()">📎 Upload Documents</button>
+                            <button class="btn btn-primary" onclick="getDocumentList()">📋 View Checklist</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI Chat Assistant -->
+        <div class="chat-container">
+            <div class="chat-header">
+                <div class="chat-title">🤖 AI Personal Caseworker</div>
+                <div class="chat-subtitle">Your 24/7 immigration assistant - Upload documents, ask questions, get guidance</div>
+            </div>
+            <div class="chat-messages" id="chatMessages">
+                <div class="message ai">
+                    <div class="message-avatar">🤖</div>
+                    <div class="message-content">
+                        Hello! I'm your AI Personal Caseworker. I can help you with:
+                        <br><br>
+                        📋 <strong>Document Assistance:</strong> Upload immigration forms and I'll explain each question in simple terms
+                        <br>
+                        🌍 <strong>Translation:</strong> I'll translate complex questions into your native language
+                        <br>
+                        ⚖️ <strong>Legal Guidance:</strong> Get help with your immigration process and rights
+                        <br>
+                        🏥 <strong>Healthcare Access:</strong> Find free/low-cost healthcare options
+                        <br>
+                        🏠 <strong>Resource Connection:</strong> Connect you with verified community resources
+                        <br><br>
+                        <strong>What would you like help with today?</strong>
+                    </div>
+                </div>
+            </div>
+            <div class="chat-input-container">
+                <div class="chat-input">
+                    <input type="file" id="documentUpload" accept=".pdf,.doc,.docx" style="display: none;" onchange="handleDocumentUpload(event)">
+                    <button class="upload-btn" onclick="document.getElementById('documentUpload').click()" title="Upload Document">📎</button>
+                    <input type="text" id="messageInput" placeholder="Ask me anything about your immigration case..." onkeypress="handleKeyPress(event)">
+                    <button class="send-btn" onclick="sendMessage()">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Form Modal -->
+    <div class="form-modal" id="formModal">
+        <div class="form-content">
+            <div class="form-header">
+                <div class="form-title" id="formTitle">Form</div>
+                <button class="form-close" onclick="closeFormModal()">&times;</button>
+            </div>
+            <div class="form-body" id="formBody">
+                <!-- Form content will be populated here -->
+            </div>
+            <div class="form-footer">
+                <button class="btn btn-secondary" onclick="closeFormModal()">Close</button>
+                <button class="btn btn-primary" onclick="saveForm()">Save Progress</button>
+                <button class="btn btn-success" onclick="submitForm()">Submit Form</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentLanguage = 'en';
+        let currentForm = null;
+        let formData = {};
+        let backendAPI = 'http://localhost:8000'; // NavigateHome AI backend
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeLanguageSelector();
+            loadUserProfile();
+        });
+
+        function initializeLanguageSelector() {
+            const languageSelect = document.getElementById('languageSelect');
+            languageSelect.addEventListener('change', function() {
+                currentLanguage = this.value;
+                showNotification(`Language changed to ${this.value.toUpperCase()}`, 'success');
+            });
+        }
+
+        function updateProfile() {
+            const originalCountry = document.getElementById('originalCountry').value;
+            const destinationCountry = document.getElementById('destinationCountry').value;
+            
+            if (!originalCountry || !destinationCountry) {
+                showNotification('Please select both countries', 'error');
+                return;
+            }
+            
+            localStorage.setItem('userProfile', JSON.stringify({
+                originalCountry,
+                destinationCountry,
+                language: currentLanguage
+            }));
+            
+            showNotification('Profile updated successfully!', 'success');
+        }
+
+        function loadUserProfile() {
+            const savedProfile = localStorage.getItem('userProfile');
+            if (savedProfile) {
+                const profile = JSON.parse(savedProfile);
+                document.getElementById('originalCountry').value = profile.originalCountry || '';
+                document.getElementById('destinationCountry').value = profile.destinationCountry || '';
+                if (profile.language) {
+                    document.getElementById('languageSelect').value = profile.language;
+                    currentLanguage = profile.language;
+                }
+            }
+        }
+
+        function translatePage() {
+            const targetLanguage = document.getElementById('languageSelect').value;
+            if (targetLanguage === 'en') {
+                showNotification('Page is already in English', 'info');
+                return;
+            }
+            
+            showNotification(`Translating page to ${targetLanguage.toUpperCase()}...`, 'success');
+            
+            // Simulate translation process
+            setTimeout(() => {
+                showNotification(`Page translated to ${targetLanguage.toUpperCase()}`, 'success');
+            }, 2000);
+        }
+
+        function fillForm(formType) {
+            currentForm = formType;
+            const formModal = document.getElementById('formModal');
+            const formTitle = document.getElementById('formTitle');
+            const formBody = document.getElementById('formBody');
+            
+            // Set form title
+            formTitle.textContent = getFormTitle(formType);
+            
+            // Generate form content
+            formBody.innerHTML = generateFormContent(formType);
+            
+            // Load saved data if any
+            loadFormData(formType);
+            
+            formModal.classList.add('active');
+        }
+
+        function getFormTitle(formType) {
+            const titles = {
+                'i-765': 'Form I-765 - Employment Authorization',
+                'i-131': 'Form I-131 - Advance Parole',
+                'i-821d': 'Form I-821D - DACA Application',
+                'g-1145': 'Form G-1145 - E-Notification'
+            };
+            return titles[formType] || 'Immigration Form';
+        }
+
+        function generateFormContent(formType) {
+            const forms = {
+                'i-765': {
+                    sections: [
+                        {
+                            title: 'Personal Information',
+                            fields: [
+                                { id: 'firstName', label: 'First Name', type: 'text', required: true },
+                                { id: 'lastName', label: 'Last Name', type: 'text', required: true },
+                                { id: 'middleName', label: 'Middle Name', type: 'text', required: false },
+                                { id: 'dateOfBirth', label: 'Date of Birth', type: 'date', required: true },
+                                { id: 'countryOfBirth', label: 'Country of Birth', type: 'select', required: true, options: ['Mexico', 'China', 'India', 'Philippines', 'El Salvador', 'Guatemala', 'Honduras', 'Cuba', 'Dominican Republic', 'Colombia', 'Venezuela', 'Brazil', 'Argentina', 'Peru', 'Ecuador', 'Bolivia', 'Chile', 'Uruguay', 'Paraguay', 'Other'] },
+                                { id: 'currentAddress', label: 'Current Address', type: 'textarea', required: true },
+                                { id: 'phoneNumber', label: 'Phone Number', type: 'tel', required: true },
+                                { id: 'emailAddress', label: 'Email Address', type: 'email', required: true }
+                            ]
+                        },
+                        {
+                            title: 'Immigration Status',
+                            fields: [
+                                { id: 'currentStatus', label: 'Current Immigration Status', type: 'select', required: true, options: ['DACA', 'TPS', 'Asylum Pending', 'Family Petition Pending', 'Employment Petition Pending', 'Other'] },
+                                { id: 'alienNumber', label: 'Alien Registration Number (A-Number)', type: 'text', required: false },
+                                { id: 'uscisAccount', label: 'USCIS Online Account Number', type: 'text', required: false },
+                                { id: 'previousEAD', label: 'Previous Employment Authorization Document Number', type: 'text', required: false }
+                            ]
+                        },
+                        {
+                            title: 'Employment Information',
+                            fields: [
+                                { id: 'employmentHistory', label: 'Employment History', type: 'textarea', required: false },
+                                { id: 'employerName', label: 'Current Employer Name', type: 'text', required: false },
+                                { id: 'employerAddress', label: 'Employer Address', type: 'textarea', required: false },
+                                { id: 'jobTitle', label: 'Job Title', type: 'text', required: false }
+                            ]
+                        }
+                    ]
+                },
+                'i-131': {
+                    sections: [
+                        {
+                            title: 'Personal Information',
+                            fields: [
+                                { id: 'firstName', label: 'First Name', type: 'text', required: true },
+                                { id: 'lastName', label: 'Last Name', type: 'text', required: true },
+                                { id: 'middleName', label: 'Middle Name', type: 'text', required: false },
+                                { id: 'dateOfBirth', label: 'Date of Birth', type: 'date', required: true },
+                                { id: 'countryOfBirth', label: 'Country of Birth', type: 'select', required: true, options: ['Mexico', 'China', 'India', 'Philippines', 'El Salvador', 'Guatemala', 'Honduras', 'Cuba', 'Dominican Republic', 'Colombia', 'Venezuela', 'Brazil', 'Argentina', 'Peru', 'Ecuador', 'Bolivia', 'Chile', 'Uruguay', 'Paraguay', 'Other'] },
+                                { id: 'currentAddress', label: 'Current Address', type: 'textarea', required: true },
+                                { id: 'phoneNumber', label: 'Phone Number', type: 'tel', required: true },
+                                { id: 'emailAddress', label: 'Email Address', type: 'email', required: true }
+                            ]
+                        },
+                        {
+                            title: 'Travel Information',
+                            fields: [
+                                { id: 'travelPurpose', label: 'Purpose of Travel', type: 'textarea', required: true },
+                                { id: 'destinationCountry', label: 'Destination Country', type: 'text', required: true },
+                                { id: 'intendedDeparture', label: 'Intended Departure Date', type: 'date', required: true },
+                                { id: 'intendedReturn', label: 'Intended Return Date', type: 'date', required: true },
+                                { id: 'travelDuration', label: 'Duration of Travel', type: 'text', required: true }
+                            ]
+                        },
+                        {
+                            title: 'Supporting Documents',
+                            fields: [
+                                { id: 'supportingEvidence', label: 'Supporting Evidence', type: 'textarea', required: false },
+                                { id: 'emergencyContact', label: 'Emergency Contact Information', type: 'textarea', required: false }
+                            ]
+                        }
+                    ]
+                }
+            };
+            
+            const form = forms[formType];
+            if (!form) return '<p>Form not found</p>';
+            
+            let html = '';
+            form.sections.forEach(section => {
+                html += `
+                    <div class="form-section">
+                        <h3>${section.title}</h3>
+                        <div class="form-grid">
+                `;
+                
+                section.fields.forEach(field => {
+                    html += `
+                        <div class="form-group ${field.type === 'textarea' ? 'full-width' : ''}">
+                            <label for="${field.id}">${field.label}${field.required ? ' *' : ''}</label>
+                            ${createFieldInput(field)}
+                        </div>
+                    `;
+                });
+                
+                html += `
+                        </div>
+                    </div>
+                `;
+            });
+            
+            return html;
+        }
+
+        function createFieldInput(field) {
+            switch (field.type) {
+                case 'text':
+                case 'email':
+                case 'tel':
+                case 'date':
+                    return `<input type="${field.type}" id="${field.id}" name="${field.id}" ${field.required ? 'required' : ''}>`;
+                case 'textarea':
+                    return `<textarea id="${field.id}" name="${field.id}" rows="3" ${field.required ? 'required' : ''}></textarea>`;
+                case 'select':
+                    let options = '<option value="">Select...</option>';
+                    if (field.options) {
+                        field.options.forEach(option => {
+                            options += `<option value="${option}">${option}</option>`;
+                        });
+                    }
+                    return `<select id="${field.id}" name="${field.id}" ${field.required ? 'required' : ''}>${options}</select>`;
+                default:
+                    return `<input type="text" id="${field.id}" name="${field.id}" ${field.required ? 'required' : ''}>`;
+            }
+        }
+
+        function loadFormData(formType) {
+            const savedData = localStorage.getItem(`form_${formType}`);
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                Object.entries(data).forEach(([key, value]) => {
+                    const element = document.getElementById(key);
+                    if (element) {
+                        element.value = value;
+                    }
+                });
+            }
+        }
+
+        function saveForm() {
+            if (!currentForm) return;
+            
+            const formElements = document.querySelectorAll('#formBody input, #formBody select, #formBody textarea');
+            const data = {};
+            
+            formElements.forEach(element => {
+                data[element.id] = element.value;
+            });
+            
+            localStorage.setItem(`form_${currentForm}`, JSON.stringify(data));
+            showNotification('Form progress saved successfully!', 'success');
+        }
+
+        function submitForm() {
+            if (!currentForm) return;
+            
+            // Validate required fields
+            const requiredFields = document.querySelectorAll('#formBody input[required], #formBody select[required], #formBody textarea[required]');
+            const missingFields = [];
+            
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    missingFields.push(field.previousElementSibling.textContent.replace(' *', ''));
+                }
+            });
+            
+            if (missingFields.length > 0) {
+                showNotification(`Please fill in: ${missingFields.join(', ')}`, 'error');
+                return;
+            }
+            
+            // Save final data
+            saveForm();
+            
+            showNotification('Form submitted successfully!', 'success');
+            closeFormModal();
+            
+            // Update document status
+            updateDocumentStatus(currentForm, 'completed');
+        }
+
+        function closeFormModal() {
+            document.getElementById('formModal').classList.remove('active');
+            currentForm = null;
+        }
+
+        function updateDocumentStatus(formType, status) {
+            // Update the document status in the UI
+            const documentItems = document.querySelectorAll('.document-item');
+            documentItems.forEach(item => {
+                const title = item.querySelector('.document-title').textContent;
+                if (title.includes(formType.toUpperCase())) {
+                    const statusElement = item.querySelector('.document-status');
+                    if (status === 'completed') {
+                        statusElement.textContent = 'Completed on ' + new Date().toLocaleDateString();
+                        item.classList.remove('pending', 'not-started');
+                        item.classList.add('completed');
+                    }
+                }
+            });
+        }
+
+        function viewDocument(formType) {
+            showNotification(`Opening ${formType.toUpperCase()} document...`, 'success');
+        }
+
+        function downloadDocument(formType) {
+            showNotification(`Downloading ${formType.toUpperCase()} document...`, 'success');
+        }
+
+        function uploadDocuments() {
+            showNotification('Document upload feature coming soon!', 'info');
+        }
+
+        function getDocumentList() {
+            addMessage('ai', `Here's your personalized document checklist:
+
+📋 **Required Documents for Your Case:**
+
+✅ **Completed:**
+• Form I-821D (DACA Application)
+• Form G-1145 (E-Notification)
+
+⏳ **In Progress:**
+• Form I-765 (Employment Authorization) - 60% complete
+
+❌ **Still Needed:**
+• Form I-131 (Advance Parole)
+• Passport photos (2 recent photos)
+• Proof of continuous residence since 2007
+• Education records (diploma, transcripts)
+• Economic necessity documentation
+• Criminal background check (if applicable)
+
+💡 **Next Steps:**
+1. Complete Form I-765
+2. Gather supporting documents
+3. Take passport photos
+4. Submit complete application package
+
+Would you like me to help you with any specific document?`);
+        }
+
+        // AI Chat Functions
+        async function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            addMessage('user', message);
+            input.value = '';
+            
+            // Show typing indicator
+            showTypingIndicator();
+            
+            try {
+                // Send message to backend AI
+                const response = await fetch(`${backendAPI}/ask-question`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        question: message,
+                        context: `User profile: ${document.getElementById('originalCountry').value} to ${document.getElementById('destinationCountry').value}`,
+                        language: currentLanguage
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to get AI response');
+                }
+                
+                const result = await response.json();
+                
+                hideTypingIndicator();
+                
+                // Use translated response if available, otherwise use original
+                const responseText = result.translated_response || result.response;
+                addMessage('ai', responseText);
+                
+            } catch (error) {
+                hideTypingIndicator();
+                
+                // Fallback to local AI response
+                const response = generateAIResponse(message);
+                addMessage('ai', response);
+                
+                // Show error message
+                setTimeout(() => {
+                    addMessage('ai', `⚠️ **Note:** Using offline mode. For full AI features, make sure the NavigateHome AI backend server is running on port 8000.`);
+                }, 1000);
+            }
+        }
+
+        function addMessage(sender, content) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            
+            const avatar = sender === 'ai' ? '🤖' : '👤';
+            
+            messageDiv.innerHTML = `
+                <div class="message-avatar">${avatar}</div>
+                <div class="message-content">${content}</div>
+            `;
+            
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function showTypingIndicator() {
+            const chatMessages = document.getElementById('chatMessages');
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message ai';
+            typingDiv.id = 'typingIndicator';
+            
+            typingDiv.innerHTML = `
+                <div class="message-avatar">🤖</div>
+                <div class="message-content">
+                    <div class="typing-indicator">
+                        AI is thinking
+                        <div class="typing-dots">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            chatMessages.appendChild(typingDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function hideTypingIndicator() {
+            const typingIndicator = document.getElementById('typingIndicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+        }
+
+        function generateAIResponse(message) {
+            const msg = message.toLowerCase();
+            
+            // Document parsing and LEQ handling
+            if (msg.includes('upload') || msg.includes('document') || msg.includes('form')) {
+                return `I can help you with document processing! Here's what I can do:
+
+📄 **Document Analysis:**
+• Parse immigration forms (I-485, I-130, N-400, etc.)
+• Break down complex questions into simple terms
+• Identify Long Essay Questions (LEQs) and Short Answer Questions
+• Translate questions into your native language
+
+🌍 **Translation Support:**
+• Convert complex legal language to plain English
+• Translate into ${currentLanguage.toUpperCase()} if needed
+• Explain what each question is really asking
+
+💡 **Smart Assistance:**
+• Flag common mistakes that lead to rejections
+• Generate personalized checklists with deadlines
+• Provide step-by-step guidance
+
+**To get started:** Upload a document using the 📎 button, or ask me about a specific form!`;
+            }
+            
+            if (msg.includes('daca') || msg.includes('i-821d')) {
+                return `**DACA (Deferred Action for Childhood Arrivals) Help:**
+
+📋 **Form I-821D Simplified Questions:**
+
+**Question 1:** "Tell us about yourself"
+- Original: "Provide detailed personal information including full name, date of birth, and place of birth"
+- Simple: What's your full name, when were you born, and where were you born?
+
+**Question 2:** "How did you come to the US?"
+- Original: "Describe the circumstances of your entry into the United States"
+- Simple: How did you get to the US? When did you arrive?
+
+**Question 3:** "Where have you lived?"
+- Original: "Provide a complete residential history since your entry"
+- Simple: List all the places you've lived since coming to the US
+
+**Question 4:** "What's your education?"
+- Original: "Detail your educational background and achievements"
+- Simple: What schools have you gone to? Do you have any degrees or certificates?
+
+Would you like me to help you fill out any specific section?`;
+            }
+            
+            if (msg.includes('work permit') || msg.includes('i-765')) {
+                return `**Work Permit (Form I-765) Help:**
+
+💼 **Simplified Questions:**
+
+**Question 1:** "Why do you need to work?"
+- Original: "Explain the basis for your employment authorization request"
+- Simple: Why do you need permission to work? What's your situation?
+
+**Question 2:** "What's your current status?"
+- Original: "Describe your current immigration status and any pending applications"
+- Simple: What's your current immigration status? Are you waiting for any other applications?
+
+**Question 3:** "Have you worked before?"
+- Original: "Provide employment history and previous work authorization"
+- Simple: Have you worked in the US before? Did you have permission to work?
+
+**Question 4:** "What job do you want?"
+- Original: "Describe the type of employment you seek"
+- Simple: What kind of job do you want to do?
+
+Ready to fill out Form I-765? Click the "Start Filling" button!`;
+            }
+            
+            if (msg.includes('help') || msg.includes('assistance')) {
+                return `**I'm here to help! Here's what I can do:**
+
+🆘 **Emergency Help:**
+• ICE encounters: Know your rights
+• Legal emergencies: Get immediate assistance
+• Detention issues: Contact hotlines
+
+⚖️ **Legal Guidance:**
+• Form completion assistance
+• Document requirements
+• Process explanations
+• Deadline reminders
+
+🏥 **Healthcare Access:**
+• Find free/low-cost clinics
+• Insurance options (Medicaid, CHIP)
+• Medical form assistance
+• Translation of medical documents
+
+🏠 **Community Resources:**
+• Food banks and assistance
+• ESL classes and education
+• Job training programs
+• Housing support
+
+**What specific help do you need right now?**`;
+            }
+            
+            if (msg.includes('status') || msg.includes('progress')) {
+                return `**Your Application Status:**
+
+✅ **Completed Documents:**
+• Form I-821D (DACA) - Submitted Dec 15, 2024
+• Form G-1145 (E-Notification) - Submitted Dec 15, 2024
+
+⏳ **In Progress:**
+• Form I-765 (Work Permit) - 60% complete
+• Supporting documents - Gathering evidence
+
+📅 **Next Steps:**
+1. Complete Form I-765 (2-3 hours remaining)
+2. Submit Form I-131 (Advance Parole)
+3. Gather supporting documents
+4. Submit complete package
+
+⏰ **Timeline:**
+• Processing time: 3-6 months
+• Expected decision: March-June 2025
+• You'll receive updates via email
+
+**Would you like me to help you complete any pending forms?**`;
+            }
+            
+            if (msg.includes('rights') || msg.includes('ice') || msg.includes('police')) {
+                return `**🚨 Know Your Rights:**
+
+**If ICE comes to your door:**
+• You have the RIGHT to remain silent
+• You do NOT have to open the door
+• Ask to see a warrant (they must show it)
+• Do NOT sign anything without a lawyer
+• You have the RIGHT to call a lawyer
+
+**If stopped by police:**
+• Stay calm and respectful
+• You have the RIGHT to remain silent
+• Ask "Am I free to go?"
+• Do NOT consent to searches
+• You have the RIGHT to refuse to answer questions
+
+**Emergency Numbers:**
+• National Immigration Hotline: 1-800-375-5283
+• ICE Detention Hotline: 1-888-351-4024
+• Legal Aid: 1-800-399-4529
+
+**Remember:** You have rights regardless of your immigration status!`;
+            }
+            
+            // Default response
+            return `I understand you're asking about immigration. I'm your AI Personal Caseworker and I'm here to help you navigate the complex immigration system.
+
+**I can help you with:**
+• 📋 Document processing and form filling
+• 🌍 Translation and language assistance  
+• ⚖️ Legal guidance and rights protection
+• 🏥 Healthcare access and resources
+• 🏠 Community resource connections
+
+**What would you like help with specifically?** You can:
+- Upload a document for me to analyze
+- Ask about a specific form or process
+- Get help with your current application
+- Find resources in your area
+
+Just let me know what you need!`;
+        }
+
+        async function handleDocumentUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            addMessage('user', `📎 Uploaded document: ${file.name}`);
+            
+            // Show processing message
+            showTypingIndicator();
+            
+            try {
+                // Upload to backend for processing
+                const formData = new FormData();
+                formData.append('file', file);
+                
+                const response = await fetch(`${backendAPI}/upload-pdf`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to upload document');
+                }
+                
+                const result = await response.json();
+                
+                // Analyze document with AI
+                const analysisResponse = await fetch(`${backendAPI}/analyze-document`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        text: result.text || 'Document text extracted',
+                        form_type: result.form_type,
+                        language: currentLanguage
+                    })
+                });
+                
+                if (!analysisResponse.ok) {
+                    throw new Error('Failed to analyze document');
+                }
+                
+                const analysis = await analysisResponse.json();
+                
+                hideTypingIndicator();
+                
+                // Display analysis results
+                let analysisMessage = `📄 **Document Analysis Complete!**
+
+**File:** ${file.name}
+**Type:** ${result.form_type} Immigration Form
+**Pages:** ${Math.ceil(result.text_length / 2000)} estimated
+**Confidence:** 95%
+
+**📋 Document Breakdown:**
+
+**Long Essay Questions (LEQs) Found:** ${analysis.analysis.long_essay_questions.length}
+**Short Answer Questions Found:** ${analysis.analysis.short_answer_questions.length}
+
+**🔍 Sample LEQs:**`;
+
+                // Show first 3 LEQs
+                analysis.analysis.long_essay_questions.slice(0, 3).forEach((leq, index) => {
+                    analysisMessage += `
+${index + 1}. **Original:** "${leq.original}"
+   **Simplified:** ${leq.simplified}
+   **Translation:** ${leq.translated}`;
+                });
+
+                analysisMessage += `
+
+**💡 Recommendations:**
+• Complete personal information first
+• Gather supporting documents for LEQs
+• Review each question carefully
+• Use simplified versions for better understanding
+
+**Would you like me to help you fill out any specific section?**`;
+
+                addMessage('ai', analysisMessage);
+                
+            } catch (error) {
+                hideTypingIndicator();
+                addMessage('ai', `❌ **Error processing document:** ${error.message}
+
+Please make sure:
+• The NavigateHome AI backend server is running on port 8000
+• The document is a valid PDF file
+
+**Fallback:** I can still help you with general immigration questions!`);
+            }
+            
+            // Reset file input
+            event.target.value = '';
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.textContent = message;
+            
+            if (type === 'error') {
+                notification.style.background = '#dc3545';
+            } else if (type === 'warning') {
+                notification.style.background = '#ffc107';
+                notification.style.color = '#000';
+            } else if (type === 'info') {
+                notification.style.background = '#17a2b8';
+            }
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

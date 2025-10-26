@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Immigr-Aid.ai - Simple Immigration Helper</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+        
+        .logo {
+            width: 40px;
+            height: 40px;
+            background: #8B4513;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: white;
+        }
+        
+        .brand-name {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+        
+        .tagline {
+            font-size: 1rem;
+            color: #7f8c8d;
+            margin-bottom: 20px;
+        }
+        
+        /* Language Selector */
+        .language-selector {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .language-selector select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background: white;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        
+        .translate-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s ease;
+        }
+        
+        .translate-btn:hover {
+            background: #2980b9;
+        }
+        
+        /* Progress Indicator */
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #ecf0f1;
+            border-radius: 4px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: #3498db;
+            width: 33.33%;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+        
+        /* Main Card */
+        .main-card {
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #e9ecef;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: #3498db;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .step-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        /* Options Grid */
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .option-card {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .option-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-color: #3498db;
+        }
+        
+        .option-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 15px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        
+        .option-icon.daca {
+            background: #8B4513;
+            color: white;
+        }
+        
+        .option-icon.work {
+            background: #8B4513;
+            color: white;
+        }
+        
+        .option-icon.travel {
+            background: #87CEEB;
+            color: white;
+        }
+        
+        .option-icon.citizenship {
+            background: #B22234;
+            color: white;
+        }
+        
+        .option-icon.family {
+            background: #87CEEB;
+            color: white;
+        }
+        
+        .option-icon.help {
+            background: #e74c3c;
+            color: white;
+        }
+        
+        .option-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+        
+        .option-description {
+            font-size: 0.95rem;
+            color: #7f8c8d;
+            line-height: 1.4;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .brand-name {
+                font-size: 1.5rem;
+            }
+            
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .main-card {
+                padding: 20px;
+            }
+        }
+        
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .option-card {
+            animation: fadeIn 0.6s ease-out;
+        }
+        
+        .option-card:nth-child(1) { animation-delay: 0.1s; }
+        .option-card:nth-child(2) { animation-delay: 0.2s; }
+        .option-card:nth-child(3) { animation-delay: 0.3s; }
+        .option-card:nth-child(4) { animation-delay: 0.4s; }
+        .option-card:nth-child(5) { animation-delay: 0.5s; }
+        .option-card:nth-child(6) { animation-delay: 0.6s; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo-container">
+                <div class="logo">🏠</div>
+                <div class="brand-name">Immigr-Aid.ai</div>
+            </div>
+            <div class="tagline">Simple Immigration Helper</div>
+            
+            <!-- Language Selector -->
+            <div class="language-selector">
+                <span>🌍</span>
+                <select id="languageSelect">
+                    <option value="en">English</option>
+                    <option value="es">Español</option>
+                    <option value="zh">中文</option>
+                    <option value="ar">العربية</option>
+                    <option value="hi">हिन्दी</option>
+                    <option value="pt">Português</option>
+                    <option value="ru">Русский</option>
+                    <option value="fr">Français</option>
+                    <option value="vi">Tiếng Việt</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button class="translate-btn" onclick="translatePage()">Translate</button>
+            </div>
+        </div>
+        
+        <!-- Progress Bar -->
+        <div class="progress-bar">
+            <div class="progress-fill"></div>
+        </div>
+        
+        <!-- Main Card -->
+        <div class="main-card">
+            <div class="step-header">
+                <div class="step-number">1</div>
+                <div class="step-title">Choose What You Want to Do</div>
+            </div>
+            
+            <!-- Options Grid -->
+            <div class="options-grid">
+                <div class="option-card" onclick="selectOption('daca')">
+                    <div class="option-icon daca">📋</div>
+                    <div class="option-title">DACA Application</div>
+                    <div class="option-description">Apply for Deferred Action for Childhood Arrivals</div>
+                </div>
+                
+                <div class="option-card" onclick="selectOption('work')">
+                    <div class="option-icon work">💼</div>
+                    <div class="option-title">Work Permit</div>
+                    <div class="option-description">Get authorization to work legally</div>
+                </div>
+                
+                <div class="option-card" onclick="selectOption('travel')">
+                    <div class="option-icon travel">✈️</div>
+                    <div class="option-title">Travel Document</div>
+                    <div class="option-description">Apply for advance parole to travel</div>
+                </div>
+                
+                <div class="option-card" onclick="selectOption('citizenship')">
+                    <div class="option-icon citizenship">🇺🇸</div>
+                    <div class="option-title">Citizenship</div>
+                    <div class="option-description">Apply for US citizenship</div>
+                </div>
+                
+                <div class="option-card" onclick="selectOption('family')">
+                    <div class="option-icon family">👨‍👩‍👧‍👦</div>
+                    <div class="option-title">Family Petition</div>
+                    <div class="option-description">Petition for family members</div>
+                </div>
+                
+                <div class="option-card" onclick="selectOption('help')">
+                    <div class="option-icon help">❓</div>
+                    <div class="option-title">Get Help</div>
+                    <div class="option-description">Find legal assistance and resources</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentLanguage = 'en';
+        let backendAPI = 'http://localhost:8000';
+        
+        // Translation data
+        const translations = {
+            en: {
+                brandName: "Immigr-Aid.ai",
+                tagline: "Simple Immigration Helper",
+                stepTitle: "Choose What You Want to Do",
+                options: {
+                    daca: {
+                        title: "DACA Application",
+                        description: "Apply for Deferred Action for Childhood Arrivals"
+                    },
+                    work: {
+                        title: "Work Permit",
+                        description: "Get authorization to work legally"
+                    },
+                    travel: {
+                        title: "Travel Document",
+                        description: "Apply for advance parole to travel"
+                    },
+                    citizenship: {
+                        title: "Citizenship",
+                        description: "Apply for US citizenship"
+                    },
+                    family: {
+                        title: "Family Petition",
+                        description: "Petition for family members"
+                    },
+                    help: {
+                        title: "Get Help",
+                        description: "Find legal assistance and resources"
+                    }
+                }
+            },
+            es: {
+                brandName: "Immigr-Aid.ai",
+                tagline: "Ayudante Simple de Inmigración",
+                stepTitle: "Elige Lo Que Quieres Hacer",
+                options: {
+                    daca: {
+                        title: "Solicitud DACA",
+                        description: "Solicitar Acción Diferida para Llegadas en la Infancia"
+                    },
+                    work: {
+                        title: "Permiso de Trabajo",
+                        description: "Obtener autorización para trabajar legalmente"
+                    },
+                    travel: {
+                        title: "Documento de Viaje",
+                        description: "Solicitar libertad condicional anticipada para viajar"
+                    },
+                    citizenship: {
+                        title: "Ciudadanía",
+                        description: "Solicitar ciudadanía estadounidense"
+                    },
+                    family: {
+                        title: "Petición Familiar",
+                        description: "Peticionar por miembros de la familia"
+                    },
+                    help: {
+                        title: "Obtener Ayuda",
+                        description: "Encontrar asistencia legal y recursos"
+                    }
+                }
+            },
+            zh: {
+                brandName: "Immigr-Aid.ai",
+                tagline: "简单移民助手",
+                stepTitle: "选择您想要做什么",
+                options: {
+                    daca: {
+                        title: "DACA申请",
+                        description: "申请童年入境暂缓遣返"
+                    },
+                    work: {
+                        title: "工作许可",
+                        description: "获得合法工作授权"
+                    },
+                    travel: {
+                        title: "旅行证件",
+                        description: "申请提前假释旅行"
+                    },
+                    citizenship: {
+                        title: "公民身份",
+                        description: "申请美国公民身份"
+                    },
+                    family: {
+                        title: "家庭申请",
+                        description: "为家庭成员申请"
+                    },
+                    help: {
+                        title: "获取帮助",
+                        description: "寻找法律协助和资源"
+                    }
+                }
+            },
+            ar: {
+                brandName: "Immigr-Aid.ai",
+                tagline: "مساعد الهجرة البسيط",
+                stepTitle: "اختر ما تريد القيام به",
+                options: {
+                    daca: {
+                        title: "طلب DACA",
+                        description: "التقدم بطلب للعمل المؤجل للقادمين في الطفولة"
+                    },
+                    work: {
+                        title: "تصريح العمل",
+                        description: "الحصول على إذن للعمل قانونياً"
+                    },
+                    travel: {
+                        title: "وثيقة السفر",
+                        description: "التقدم بطلب للإفراج المبكر للسفر"
+                    },
+                    citizenship: {
+                        title: "الجنسية",
+                        description: "التقدم بطلب للحصول على الجنسية الأمريكية"
+                    },
+                    family: {
+                        title: "التماس العائلة",
+                        description: "التماس لأفراد العائلة"
+                    },
+                    help: {
+                        title: "الحصول على المساعدة",
+                        description: "العثور على المساعدة القانونية والموارد"
+                    }
+                }
+            }
+        };
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Redirect to enhanced landing page
+            window.location.href = 'landing-enhanced.html';
+        });
+        
+        function initializeLanguageSelector() {
+            const languageSelect = document.getElementById('languageSelect');
+            languageSelect.addEventListener('change', function() {
+                currentLanguage = this.value;
+                translatePage();
+            });
+        }
+        
+        function translatePage() {
+            const targetLanguage = document.getElementById('languageSelect').value;
+            currentLanguage = targetLanguage;
+            
+            if (targetLanguage === 'en') {
+                return; // Already in English
+            }
+            
+            const translation = translations[targetLanguage];
+            if (!translation) {
+                console.log('Translation not available for', targetLanguage);
+                return;
+            }
+            
+            // Update brand name and tagline
+            document.querySelector('.brand-name').textContent = translation.brandName;
+            document.querySelector('.tagline').textContent = translation.tagline;
+            document.querySelector('.step-title').textContent = translation.stepTitle;
+            
+            // Update option cards
+            const optionCards = document.querySelectorAll('.option-card');
+            optionCards.forEach((card, index) => {
+                const optionKeys = ['daca', 'work', 'travel', 'citizenship', 'family', 'help'];
+                const optionKey = optionKeys[index];
+                
+                if (translation.options[optionKey]) {
+                    const titleElement = card.querySelector('.option-title');
+                    const descElement = card.querySelector('.option-description');
+                    
+                    titleElement.textContent = translation.options[optionKey].title;
+                    descElement.textContent = translation.options[optionKey].description;
+                }
+            });
+            
+            // Show success message
+            showNotification(`Page translated to ${targetLanguage.toUpperCase()}`, 'success');
+        }
+        
+        function selectOption(optionType) {
+            // Show loading state
+            const card = event.currentTarget;
+            card.style.opacity = '0.7';
+            card.style.transform = 'scale(0.98)';
+            
+            // Simulate processing
+            setTimeout(() => {
+                card.style.opacity = '1';
+                card.style.transform = 'scale(1)';
+                
+                // Handle different options
+                switch(optionType) {
+                    case 'daca':
+                        showNotification('Opening DACA Application...', 'success');
+                        // Redirect to DACA form
+                        window.location.href = 'fill-information.html?form=daca';
+                        break;
+                    case 'work':
+                        showNotification('Opening Work Permit Application...', 'success');
+                        window.location.href = 'fill-information.html?form=work';
+                        break;
+                    case 'travel':
+                        showNotification('Opening Travel Document Application...', 'success');
+                        window.location.href = 'fill-information.html?form=travel';
+                        break;
+                    case 'citizenship':
+                        showNotification('Opening Citizenship Application...', 'success');
+                        window.location.href = 'fill-information.html?form=citizenship';
+                        break;
+                    case 'family':
+                        showNotification('Opening Family Petition...', 'success');
+                        window.location.href = 'fill-information.html?form=family';
+                        break;
+                    case 'help':
+                        showNotification('Opening Help and Resources...', 'success');
+                        window.location.href = 'navigatehome-ai.html?form=help';
+                        break;
+                }
+            }, 300);
+        }
+        
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'success' ? '#27ae60' : '#e74c3c'};
+                color: white;
+                padding: 12px 20px;
+                border-radius: 6px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                z-index: 3000;
+                animation: slideIn 0.3s ease-out;
+            `;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+        
+        // Add CSS for notification animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

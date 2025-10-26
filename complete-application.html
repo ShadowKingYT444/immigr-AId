@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Your Application - Immigr-Aid.ai</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+        
+        .logo {
+            width: 40px;
+            height: 40px;
+            background: #8B4513;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: white;
+        }
+        
+        .brand-name {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+        
+        .tagline {
+            font-size: 1rem;
+            color: #7f8c8d;
+            margin-bottom: 20px;
+        }
+        
+        /* Language Selector */
+        .language-selector {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .language-selector select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background: white;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        
+        .translate-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s ease;
+        }
+        
+        .translate-btn:hover {
+            background: #2980b9;
+        }
+        
+        /* Progress Bar */
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #ecf0f1;
+            border-radius: 4px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: #3498db;
+            width: 100%;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+        
+        /* Main Card */
+        .main-card {
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #e9ecef;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: #3498db;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .step-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        /* Application Info */
+        .application-info {
+            margin-bottom: 30px;
+        }
+        
+        .application-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .application-description {
+            color: #7f8c8d;
+            margin-bottom: 25px;
+        }
+        
+        /* Sections */
+        .section {
+            margin-bottom: 25px;
+        }
+        
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        
+        .checklist {
+            list-style: none;
+        }
+        
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 0;
+            font-size: 0.95rem;
+            color: #555;
+        }
+        
+        .checklist-icon {
+            width: 20px;
+            height: 20px;
+            background: #27ae60;
+            color: white;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        /* Requirements Box */
+        .requirements-box {
+            background: #e8f5e8;
+            border: 1px solid #27ae60;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .requirements-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #27ae60;
+            margin-bottom: 15px;
+        }
+        
+        /* AI Assistant */
+        .ai-assistant {
+            background: #e8f4fd;
+            border: 1px solid #3498db;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .ai-assistant-title {
+            font-weight: 600;
+            color: #2980b9;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .ai-assistant-text {
+            color: #2c3e50;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+        
+        /* Document Support */
+        .document-support {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .document-support-title {
+            font-weight: 600;
+            color: #856404;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .document-support-content {
+            color: #856404;
+            font-size: 0.9rem;
+        }
+        
+        .support-checklist {
+            list-style: none;
+            margin-top: 10px;
+        }
+        
+        .support-checklist li {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 5px;
+            font-size: 0.85rem;
+        }
+        
+        .support-checklist li::before {
+            content: "✓";
+            color: #27ae60;
+            font-weight: bold;
+        }
+        
+        /* Interactive Help */
+        .help-button {
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 12px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        
+        .help-button:hover {
+            background: #2980b9;
+        }
+        
+        .help-content {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            padding: 12px;
+            margin-top: 10px;
+            font-size: 0.85rem;
+            color: #6c757d;
+            display: none;
+        }
+        
+        .help-content.show {
+            display: block;
+            animation: slideDown 0.3s ease-out;
+        }
+        
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+        
+        .btn-secondary {
+            background: #95a5a6;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #7f8c8d;
+        }
+        
+        .btn-primary {
+            background: #27ae60;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #229954;
+            transform: translateY(-1px);
+        }
+        
+        .btn-info {
+            background: #3498db;
+            color: white;
+        }
+        
+        .btn-info:hover {
+            background: #2980b9;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .main-card {
+                padding: 20px;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo-container">
+                <div class="logo">🏠</div>
+                <div class="brand-name">Immigr-Aid.ai</div>
+            </div>
+            <div class="tagline">Simple Immigration Helper</div>
+            
+            <!-- Language Selector -->
+            <div class="language-selector">
+                <span>🌍</span>
+                <select id="languageSelect">
+                    <option value="en">English</option>
+                    <option value="es">Español</option>
+                    <option value="zh">中文</option>
+                    <option value="ar">العربية</option>
+                    <option value="hi">हिन्दी</option>
+                    <option value="pt">Português</option>
+                    <option value="ru">Русский</option>
+                    <option value="fr">Français</option>
+                    <option value="vi">Tiếng Việt</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button class="translate-btn" onclick="translatePage()">Translate</button>
+            </div>
+        </div>
+        
+        <!-- Progress Bar -->
+        <div class="progress-bar">
+            <div class="progress-fill"></div>
+        </div>
+        
+        <!-- Main Card -->
+        <div class="main-card">
+            <div class="step-header">
+                <div class="step-number">3</div>
+                <div class="step-title">Complete Your Application</div>
+            </div>
+            
+            <!-- Application Info -->
+            <div class="application-info">
+                <div class="application-title">
+                    🇺🇸 Citizenship Application (Form N-400)
+                </div>
+                <div class="application-description">
+                    Based on your information, here's what you need for citizenship:
+                </div>
+            </div>
+            
+            <!-- AI Assistant -->
+            <div class="ai-assistant">
+                <div class="ai-assistant-title">
+                    🤖 AI Assistant
+                </div>
+                <div class="ai-assistant-text" id="aiAssistantText">
+                    I've analyzed your information and prepared a personalized checklist. You're on track for citizenship! Make sure to gather all required documents before submitting your application.
+                </div>
+            </div>
+            
+            <!-- Document Support Panel -->
+            <div class="document-support" id="documentSupport">
+                <div class="document-support-title">
+                    📋 Document Support
+                </div>
+                <div class="document-support-content" id="documentSupportContent">
+                    <p>I'll guide you through each document requirement with specific help and validation.</p>
+                    <ul class="support-checklist" id="supportChecklist">
+                        <li>Click "Get Help" next to any document for detailed guidance</li>
+                        <li>All required documents are marked with ✓</li>
+                        <li>I'll validate your documents as you upload them</li>
+                        <li>Your progress is tracked automatically</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Required Documents Section -->
+            <div class="section">
+                <div class="section-title">Required Documents:</div>
+                <ul class="checklist">
+                    <li class="checklist-item">
+                        <div class="checklist-icon">✓</div>
+                        <span>Form N-400 (Application for Naturalization)</span>
+                        <button class="help-button" onclick="showDocumentHelp('formN400')">Get Help</button>
+                        <div class="help-content" id="formN400-help">
+                            <strong>Form N-400 Help:</strong> Complete all sections accurately. Use black ink, print clearly, and don't leave any fields blank (use "N/A" if not applicable).
+                        </div>
+                    </li>
+                    <li class="checklist-item">
+                        <div class="checklist-icon">✓</div>
+                        <span>Form G-1145 (E-Notification)</span>
+                    </li>
+                    <li class="checklist-item">
+                        <div class="checklist-icon">✓</div>
+                        <span>Green card (Permanent Resident Card)</span>
+                        <button class="help-button" onclick="showDocumentHelp('greenCard')">Get Help</button>
+                        <div class="help-content" id="greenCard-help">
+                            <strong>Green Card Help:</strong> You need your current Green Card (Form I-551). If it's expired, you may still use it if it's been less than 2 years since expiration. Make sure it's not damaged or altered.
+                        </div>
+                    </li>
+                    <li class="checklist-item">
+                        <div class="checklist-icon">✓</div>
+                        <span>Proof of continuous residence</span>
+                        <button class="help-button" onclick="showDocumentHelp('continuousResidence')">Get Help</button>
+                        <div class="help-content" id="continuousResidence-help">
+                            <strong>Continuous Residence Help:</strong> Provide documents showing you've lived in the US for 5 years (or 3 if married to US citizen). Include: tax returns, employment records, utility bills, bank statements.
+                        </div>
+                    </li>
+                    <li class="checklist-item">
+                        <div class="checklist-icon">✓</div>
+                        <span>English and civics test preparation</span>
+                    </li>
+                    <li class="checklist-item">
+                        <div class="checklist-icon">✓</div>
+                        <span>Passport photos</span>
+                    </li>
+                    <li class="checklist-item">
+                        <div class="checklist-icon">✓</div>
+                        <span>Filing fee ($640 + $85 biometrics)</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Requirements Check Section -->
+            <div class="requirements-box">
+                <div class="requirements-title">Requirements Check:</div>
+                <ul class="checklist">
+                    <li class="checklist-item">
+                        <div class="checklist-icon">✓</div>
+                        <span>You need to be a lawful permanent resident for 5 years (3 if married to US citizen)</span>
+                    </li>
+                    <li class="checklist-item">
+                        <div class="checklist-icon">✓</div>
+                        <span>You must pass English and civics tests</span>
+                    </li>
+                    <li class="checklist-item">
+                        <div class="checklist-icon">✓</div>
+                        <span>Processing time: 6-12 months</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button class="btn btn-secondary" onclick="goBack()">Back</button>
+                <button class="btn btn-info" onclick="downloadForms()">Download Forms</button>
+                <button class="btn btn-primary" onclick="submitApplication()">Fill Out Documents</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentLanguage = 'en';
+        let backendAPI = 'http://localhost:8000';
+        
+        // Translation data
+        const translations = {
+            en: {
+                stepTitle: "Complete Your Application",
+                applicationTitle: "Citizenship Application (Form N-400)",
+                applicationDescription: "Based on your information, here's what you need for citizenship:",
+                requiredDocuments: "Required Documents:",
+                requirementsCheck: "Requirements Check:",
+                aiAssistant: "I've analyzed your information and prepared a personalized checklist. You're on track for citizenship! Make sure to gather all required documents before submitting your application.",
+                documents: [
+                    "Form N-400 (Application for Naturalization)",
+                    "Form G-1145 (E-Notification)",
+                    "Green card (Permanent Resident Card)",
+                    "Proof of continuous residence",
+                    "English and civics test preparation",
+                    "Passport photos",
+                    "Filing fee ($640 + $85 biometrics)"
+                ],
+                requirements: [
+                    "You need to be a lawful permanent resident for 5 years (3 if married to US citizen)",
+                    "You must pass English and civics tests",
+                    "Processing time: 6-12 months"
+                ],
+                back: "Back",
+                downloadForms: "Download Forms",
+                submitApplication: "Fill Out Documents"
+            },
+            es: {
+                stepTitle: "Complete Su Solicitud",
+                applicationTitle: "Solicitud de Ciudadanía (Formulario N-400)",
+                applicationDescription: "Basado en su información, esto es lo que necesita para la ciudadanía:",
+                requiredDocuments: "Documentos Requeridos:",
+                requirementsCheck: "Verificación de Requisitos:",
+                aiAssistant: "He analizado su información y preparado una lista personalizada. ¡Está en camino hacia la ciudadanía! Asegúrese de reunir todos los documentos requeridos antes de enviar su solicitud.",
+                documents: [
+                    "Formulario N-400 (Solicitud de Naturalización)",
+                    "Formulario G-1145 (Notificación Electrónica)",
+                    "Tarjeta verde (Tarjeta de Residente Permanente)",
+                    "Prueba de residencia continua",
+                    "Preparación para pruebas de inglés y civismo",
+                    "Fotos de pasaporte",
+                    "Tarifa de presentación ($640 + $85 biométricos)"
+                ],
+                requirements: [
+                    "Necesita ser residente permanente legal por 5 años (3 si está casado con ciudadano estadounidense)",
+                    "Debe aprobar las pruebas de inglés y civismo",
+                    "Tiempo de procesamiento: 6-12 meses"
+                ],
+                back: "Atrás",
+                downloadForms: "Descargar Formularios",
+                submitApplication: "Completar Documentos"
+            },
+            zh: {
+                stepTitle: "完成您的申请",
+                applicationTitle: "公民身份申请 (表格 N-400)",
+                applicationDescription: "根据您的信息，以下是您获得公民身份所需的内容：",
+                requiredDocuments: "所需文件：",
+                requirementsCheck: "要求检查：",
+                aiAssistant: "我已经分析了您的信息并准备了个人化清单。您正在通往公民身份的道路上！在提交申请之前，请确保收集所有必需的文件。",
+                documents: [
+                    "表格 N-400 (入籍申请)",
+                    "表格 G-1145 (电子通知)",
+                    "绿卡 (永久居民卡)",
+                    "连续居住证明",
+                    "英语和公民考试准备",
+                    "护照照片",
+                    "申请费 ($640 + $85 生物识别)"
+                ],
+                requirements: [
+                    "您需要成为合法永久居民5年 (如果与美国公民结婚则为3年)",
+                    "您必须通过英语和公民考试",
+                    "处理时间：6-12个月"
+                ],
+                back: "返回",
+                downloadForms: "下载表格",
+                submitApplication: "提交申请"
+            }
+        };
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeLanguageSelector();
+            loadUserData();
+            generatePersonalizedContent();
+        });
+        
+        function initializeLanguageSelector() {
+            const languageSelect = document.getElementById('languageSelect');
+            languageSelect.addEventListener('change', function() {
+                currentLanguage = this.value;
+                translatePage();
+            });
+        }
+        
+        function loadUserData() {
+            const savedData = localStorage.getItem('formData');
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                console.log('Loaded user data:', data);
+            }
+        }
+        
+        function generatePersonalizedContent() {
+            // Get the selected form type from localStorage
+            const selectedFormType = localStorage.getItem('selectedFormType') || 'citizenship';
+            updateApplicationType(selectedFormType);
+        }
+        
+        function updateApplicationType(type) {
+            const applicationTitle = document.querySelector('.application-title');
+            const applicationDescription = document.querySelector('.application-description');
+            const aiAssistantText = document.getElementById('aiAssistantText');
+            const documentSupportContent = document.getElementById('documentSupportContent');
+            
+            switch(type) {
+                case 'citizenship':
+                    applicationTitle.innerHTML = '🇺🇸 Citizenship Application (Form N-400)';
+                    applicationDescription.textContent = 'Based on your information, here\'s what you need for citizenship:';
+                    aiAssistantText.textContent = 'I\'ve analyzed your information and prepared a personalized checklist. You\'re on track for citizenship! Make sure to gather all required documents before submitting your application.';
+                    documentSupportContent.innerHTML = `
+                        <p>Citizenship Application Support - I'll guide you through each document requirement with specific help and validation.</p>
+                        <ul class="support-checklist">
+                            <li>Click "Get Help" next to any document for detailed guidance</li>
+                            <li>All required documents are marked with ✓</li>
+                            <li>I'll validate your documents as you upload them</li>
+                            <li>Your progress is tracked automatically</li>
+                            <li>You must be a permanent resident for 5 years (or 3 if married to US citizen)</li>
+                            <li>Continuous residence and physical presence required</li>
+                        </ul>
+                    `;
+                    break;
+                case 'daca':
+                    applicationTitle.innerHTML = '📋 DACA Application (Form I-821D)';
+                    applicationDescription.textContent = 'Based on your information, here\'s what you need for DACA:';
+                    aiAssistantText.textContent = 'I\'ve analyzed your information for DACA eligibility. You\'re on track! Make sure to provide evidence of continuous residence since 2007 and meet all requirements.';
+                    documentSupportContent.innerHTML = `
+                        <p>DACA Application Support - I'll guide you through each document requirement with specific help and validation.</p>
+                        <ul class="support-checklist">
+                            <li>Click "Get Help" next to any document for detailed guidance</li>
+                            <li>All required documents are marked with ✓</li>
+                            <li>I'll validate your documents as you upload them</li>
+                            <li>Your progress is tracked automatically</li>
+                            <li>DACA requires continuous residence since June 15, 2007</li>
+                            <li>You must have arrived before age 16</li>
+                        </ul>
+                    `;
+                    break;
+                case 'work':
+                    applicationTitle.innerHTML = '💼 Work Permit Application (Form I-765)';
+                    applicationDescription.textContent = 'Based on your information, here\'s what you need for a work permit:';
+                    aiAssistantText.textContent = 'I\'ve analyzed your information for work permit eligibility. You\'re on track! Make sure to provide your current immigration status and employment information.';
+                    documentSupportContent.innerHTML = `
+                        <p>Work Permit Application Support - I'll guide you through each document requirement with specific help and validation.</p>
+                        <ul class="support-checklist">
+                            <li>Click "Get Help" next to any document for detailed guidance</li>
+                            <li>All required documents are marked with ✓</li>
+                            <li>I'll validate your documents as you upload them</li>
+                            <li>Your progress is tracked automatically</li>
+                            <li>You need a valid immigration status</li>
+                            <li>Employment authorization may be required</li>
+                        </ul>
+                    `;
+                    break;
+                case 'travel':
+                    applicationTitle.innerHTML = '✈️ Travel Document Application (Form I-131)';
+                    applicationDescription.textContent = 'Based on your information, here\'s what you need for advance parole:';
+                    aiAssistantText.textContent = 'I\'ve analyzed your information for travel document eligibility. You\'re on track! Make sure to provide a valid reason for travel and supporting evidence.';
+                    documentSupportContent.innerHTML = `
+                        <p>Travel Document Application Support - I'll guide you through each document requirement with specific help and validation.</p>
+                        <ul class="support-checklist">
+                            <li>Click "Get Help" next to any document for detailed guidance</li>
+                            <li>All required documents are marked with ✓</li>
+                            <li>I'll validate your documents as you upload them</li>
+                            <li>Your progress is tracked automatically</li>
+                            <li>You need a valid reason for travel</li>
+                            <li>Supporting evidence is required</li>
+                        </ul>
+                    `;
+                    break;
+                case 'family':
+                    applicationTitle.innerHTML = '👨‍👩‍👧‍👦 Family Petition (Form I-130)';
+                    applicationDescription.textContent = 'Based on your information, here\'s what you need for family sponsorship:';
+                    aiAssistantText.textContent = 'I\'ve analyzed your information for family petition eligibility. You\'re on track! Make sure to provide detailed relationship evidence and supporting documents.';
+                    documentSupportContent.innerHTML = `
+                        <p>Family Petition Support - I'll guide you through each document requirement with specific help and validation.</p>
+                        <ul class="support-checklist">
+                            <li>Click "Get Help" next to any document for detailed guidance</li>
+                            <li>All required documents are marked with ✓</li>
+                            <li>I'll validate your documents as you upload them</li>
+                            <li>Your progress is tracked automatically</li>
+                            <li>You must be a US citizen or permanent resident</li>
+                            <li>Relationship evidence is required</li>
+                        </ul>
+                    `;
+                    break;
+                default:
+                    applicationTitle.innerHTML = '🇺🇸 Citizenship Application (Form N-400)';
+                    applicationDescription.textContent = 'Based on your information, here\'s what you need for citizenship:';
+                    aiAssistantText.textContent = 'I\'ve analyzed your information and prepared a personalized checklist. You\'re on track for citizenship! Make sure to gather all required documents before submitting your application.';
+                    documentSupportContent.innerHTML = `
+                        <p>I'll guide you through each document requirement with specific help and validation.</p>
+                        <ul class="support-checklist">
+                            <li>Click "Get Help" next to any document for detailed guidance</li>
+                            <li>All required documents are marked with ✓</li>
+                            <li>I'll validate your documents as you upload them</li>
+                            <li>Your progress is tracked automatically</li>
+                        </ul>
+                    `;
+            }
+        }
+        
+        function showDocumentHelp(documentId) {
+            const helpElement = document.getElementById(documentId + '-help');
+            const allHelpElements = document.querySelectorAll('.help-content');
+            
+            // Hide all other help elements
+            allHelpElements.forEach(help => {
+                if (help !== helpElement) {
+                    help.classList.remove('show');
+                }
+            });
+            
+            // Toggle current help element
+            if (helpElement) {
+                helpElement.classList.toggle('show');
+            }
+        }
+        
+        function translatePage() {
+            const targetLanguage = document.getElementById('languageSelect').value;
+            currentLanguage = targetLanguage;
+            
+            if (targetLanguage === 'en') {
+                return; // Already in English
+            }
+            
+            const translation = translations[targetLanguage];
+            if (!translation) {
+                console.log('Translation not available for', targetLanguage);
+                return;
+            }
+            
+            // Update step title
+            document.querySelector('.step-title').textContent = translation.stepTitle;
+            
+            // Update application info
+            document.querySelector('.application-title').textContent = translation.applicationTitle;
+            document.querySelector('.application-description').textContent = translation.applicationDescription;
+            
+            // Update section titles
+            const sections = document.querySelectorAll('.section-title');
+            sections[0].textContent = translation.requiredDocuments;
+            sections[1].textContent = translation.requirementsCheck;
+            
+            // Update AI assistant text
+            document.getElementById('aiAssistantText').textContent = translation.aiAssistant;
+            
+            // Update document list
+            const documentItems = document.querySelectorAll('.section:first-child .checklist-item span');
+            documentItems.forEach((item, index) => {
+                if (translation.documents[index]) {
+                    item.textContent = translation.documents[index];
+                }
+            });
+            
+            // Update requirements list
+            const requirementItems = document.querySelectorAll('.requirements-box .checklist-item span');
+            requirementItems.forEach((item, index) => {
+                if (translation.requirements[index]) {
+                    item.textContent = translation.requirements[index];
+                }
+            });
+            
+            // Update buttons
+            const buttons = document.querySelectorAll('.btn');
+            buttons[0].textContent = translation.back;
+            buttons[1].textContent = translation.downloadForms;
+            buttons[2].textContent = translation.submitApplication;
+            
+            showNotification(`Page translated to ${targetLanguage.toUpperCase()}`, 'success');
+        }
+        
+        function goBack() {
+            window.location.href = 'fill-information.html';
+        }
+        
+        function downloadForms() {
+            showNotification('Downloading forms...', 'success');
+            
+            // Simulate form download
+            setTimeout(() => {
+                showNotification('Forms downloaded successfully!', 'success');
+            }, 2000);
+        }
+        
+        function submitApplication() {
+            // Validate that user has completed all steps
+            const savedData = localStorage.getItem('formData');
+            if (!savedData) {
+                showNotification('Please complete your information first', 'error');
+                return;
+            }
+            
+            // Redirect to the fillable documents page
+            const selectedFormType = localStorage.getItem('selectedFormType') || 'citizenship';
+            window.location.href = `fill-documents-enhanced.html?form=${selectedFormType}`;
+        }
+        
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'success' ? '#27ae60' : '#e74c3c'};
+                color: white;
+                padding: 12px 20px;
+                border-radius: 6px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                z-index: 3000;
+                animation: slideIn 0.3s ease-out;
+            `;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+        
+        // Add CSS for notification animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

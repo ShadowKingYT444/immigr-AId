@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Immigr-Aid.ai - AI Chat</title>
+    <style>
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --bg-tertiary: #e9ecef;
+            --text-primary: #212529;
+            --text-secondary: #6c757d;
+            --text-muted: #adb5bd;
+            --border-color: #dee2e6;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --accent-primary: #007bff;
+            --accent-secondary: #28a745;
+            --accent-tertiary: #ffc107;
+            --accent-danger: #dc3545;
+            --accent-info: #17a2b8;
+        }
+        
+        [data-theme="dark"] {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #2d2d2d;
+            --bg-tertiary: #404040;
+            --text-primary: #ffffff;
+            --text-secondary: #b3b3b3;
+            --text-muted: #808080;
+            --border-color: #404040;
+            --shadow: rgba(0, 0, 0, 0.3);
+            --accent-primary: #4dabf7;
+            --accent-secondary: #51cf66;
+            --accent-tertiary: #ffd43b;
+            --accent-danger: #ff6b6b;
+            --accent-info: #74c0fc;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: all 0.3s ease;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        
+        /* Header */
+        .chat-header {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px var(--shadow);
+        }
+        
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .back-button {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 8px 12px;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+        
+        .back-button:hover {
+            background: var(--bg-primary);
+        }
+        
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-info) 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .logo-icon {
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 3px;
+            position: relative;
+        }
+        
+        .logo-icon::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 8px;
+            height: 8px;
+            background: var(--accent-primary);
+            border-radius: 1px;
+        }
+        
+        .logo-icon::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 3px;
+            height: 3px;
+            background: white;
+            border-radius: 50%;
+        }
+        
+        .logo-text {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--text-primary);
+        }
+        
+        .logo-text .ai {
+            color: var(--accent-info);
+            font-weight: 900;
+        }
+        
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .theme-toggle {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 3px;
+        }
+        
+        .theme-toggle button {
+            background: none;
+            border: none;
+            padding: 6px 8px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+        }
+        
+        .theme-toggle button.active {
+            background: var(--accent-primary);
+            color: white;
+        }
+        
+        .language-selector {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .language-selector select {
+            padding: 6px 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 0.8rem;
+        }
+        
+        /* Chat Area */
+        .chat-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            background: var(--bg-primary);
+        }
+        
+        .message {
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 12px;
+            word-wrap: break-word;
+            animation: messageSlide 0.3s ease-out;
+        }
+        
+        .message.user {
+            background: var(--accent-primary);
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+        
+        .message.ai {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .message.system {
+            background: var(--accent-info);
+            color: white;
+            align-self: center;
+            text-align: center;
+            font-size: 0.9rem;
+            max-width: 60%;
+        }
+        
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 12px 16px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            border-bottom-left-radius: 4px;
+            align-self: flex-start;
+            max-width: 120px;
+        }
+        
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--text-muted);
+            border-radius: 50%;
+            animation: typing 1.4s infinite ease-in-out;
+        }
+        
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        
+        @keyframes typing {
+            0%, 60%, 100% {
+                transform: translateY(0);
+                opacity: 0.5;
+            }
+            30% {
+                transform: translateY(-10px);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes messageSlide {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Input Area */
+        .chat-input-area {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            padding: 20px;
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+        }
+        
+        .chat-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 1rem;
+            resize: none;
+            min-height: 44px;
+            max-height: 120px;
+        }
+        
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+        }
+        
+        .send-button {
+            background: var(--accent-primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .send-button:hover {
+            background: var(--accent-info);
+            transform: translateY(-1px);
+        }
+        
+        .send-button:disabled {
+            background: var(--text-muted);
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        /* Quick Actions */
+        .quick-actions {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .quick-action {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+        }
+        
+        .quick-action:hover {
+            background: var(--accent-primary);
+            color: white;
+        }
+        
+        /* Status indicator */
+        .status-indicator {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 15px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .status-indicator.show {
+            opacity: 1;
+        }
+        
+        .status-indicator.success {
+            background: var(--accent-secondary);
+            color: white;
+        }
+        
+        .status-indicator.error {
+            background: var(--accent-danger);
+            color: white;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .chat-header {
+                padding: 10px 15px;
+            }
+            
+            .header-left {
+                gap: 10px;
+            }
+            
+            .logo-text {
+                font-size: 1rem;
+            }
+            
+            .chat-messages {
+                padding: 15px;
+            }
+            
+            .chat-input-area {
+                padding: 15px;
+            }
+            
+            .message {
+                max-width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <!-- Header -->
+        <div class="chat-header">
+            <div class="header-left">
+                <a href="landing-enhanced.html" class="back-button">← Back</a>
+                <div class="logo-section">
+                    <div class="logo">
+                        <div class="logo-icon"></div>
+                    </div>
+                    <div class="logo-text">
+                        Immigr-Aid<span class="ai">.ai</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="header-right">
+                <div class="theme-toggle">
+                    <button onclick="setTheme('light')" id="lightBtn">☀️</button>
+                    <button onclick="setTheme('dark')" id="darkBtn">🌙</button>
+                </div>
+                
+                <div class="language-selector">
+                    <label for="languageSelect">🌍</label>
+                    <select id="languageSelect">
+                        <option value="en">English</option>
+                        <option value="es">Español</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Chat Area -->
+        <div class="chat-area">
+            <div class="chat-messages" id="chatMessages">
+                <div class="message system">
+                    <strong>Welcome to Immigr-Aid.ai AI Assistant!</strong>
+                </div>
+                <div class="message ai">
+                    <strong>AI Assistant:</strong> Hello! I'm your AI immigration assistant. I can help you with forms, answer questions about immigration processes, and provide guidance in your preferred language. How can I assist you today?
+                </div>
+            </div>
+            
+            <div class="chat-input-area">
+                <div style="width: 100%;">
+                    <div class="quick-actions">
+                        <div class="quick-action" onclick="sendQuickMessage('help')">Need Help?</div>
+                        <div class="quick-action" onclick="sendQuickMessage('forms')">Forms Help</div>
+                        <div class="quick-action" onclick="sendQuickMessage('status')">Check Status</div>
+                        <div class="quick-action" onclick="sendQuickMessage('documents')">Documents</div>
+                    </div>
+                    
+                    <div style="display: flex; gap: 10px;">
+                        <textarea id="chatInput" class="chat-input" placeholder="Ask me anything about immigration..."></textarea>
+                        <button id="sendButton" class="send-button" onclick="sendMessage()">Send</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Status Indicator -->
+    <div id="statusIndicator" class="status-indicator"></div>
+    
+    <script>
+        // Configuration
+        const OLLAMA_API_KEY = 'b4fcd325fca84349b433b28494e6ed3f.nzXs0J5KFSsKEuZQm9BJYKu7';
+        const OLLAMA_BASE_URL = 'https://api.ollama.com/v1';
+        
+        // State
+        let currentLanguage = 'en';
+        let currentTheme = 'light';
+        let chatHistory = [];
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeTheme();
+            initializeLanguageSelector();
+            initializeChat();
+            loadChatHistory();
+        });
+        
+        function initializeTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            setTheme(savedTheme);
+        }
+        
+        function setTheme(theme) {
+            currentTheme = theme;
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            
+            document.getElementById('lightBtn').classList.toggle('active', theme === 'light');
+            document.getElementById('darkBtn').classList.toggle('active', theme === 'dark');
+        }
+        
+        function initializeLanguageSelector() {
+            const languageSelect = document.getElementById('languageSelect');
+            languageSelect.addEventListener('change', function() {
+                currentLanguage = this.value;
+                showStatus('Language changed to ' + (currentLanguage === 'es' ? 'Spanish' : 'English'), 'success');
+            });
+        }
+        
+        function initializeChat() {
+            const chatInput = document.getElementById('chatInput');
+            const sendButton = document.getElementById('sendButton');
+            
+            chatInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+            
+            chatInput.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+            });
+        }
+        
+        function sendQuickMessage(type) {
+            const messages = {
+                help: currentLanguage === 'es' ? 'Necesito ayuda con mi proceso de inmigración' : 'I need help with my immigration process',
+                forms: currentLanguage === 'es' ? '¿Puedes ayudarme con los formularios de inmigración?' : 'Can you help me with immigration forms?',
+                status: currentLanguage === 'es' ? '¿Cómo puedo verificar el estado de mi aplicación?' : 'How can I check my application status?',
+                documents: currentLanguage === 'es' ? '¿Qué documentos necesito para mi aplicación?' : 'What documents do I need for my application?'
+            };
+            
+            document.getElementById('chatInput').value = messages[type];
+            sendMessage();
+        }
+        
+        async function sendMessage() {
+            const chatInput = document.getElementById('chatInput');
+            const sendButton = document.getElementById('sendButton');
+            const message = chatInput.value.trim();
+            
+            if (!message) return;
+            
+            // Disable input while processing
+            chatInput.disabled = true;
+            sendButton.disabled = true;
+            sendButton.textContent = currentLanguage === 'es' ? 'Enviando...' : 'Sending...';
+            
+            // Add user message to chat
+            addMessageToChat(message, 'user');
+            chatInput.value = '';
+            chatInput.style.height = 'auto';
+            
+            // Show typing indicator
+            showTypingIndicator();
+            
+            try {
+                // Get AI response
+                const aiResponse = await getAIResponse(message);
+                hideTypingIndicator();
+                addMessageToChat(aiResponse, 'ai');
+                
+                // Save to chat history
+                chatHistory.push({ user: message, ai: aiResponse, timestamp: new Date() });
+                saveChatHistory();
+                
+                showStatus('Response received successfully!', 'success');
+                
+            } catch (error) {
+                console.error('Error getting AI response:', error);
+                hideTypingIndicator();
+                
+                // Use fallback response
+                const fallbackResponse = getFallbackResponse(message);
+                addMessageToChat(fallbackResponse, 'ai');
+                
+                showStatus('Using fallback response', 'error');
+            } finally {
+                // Re-enable input
+                chatInput.disabled = false;
+                sendButton.disabled = false;
+                sendButton.textContent = currentLanguage === 'es' ? 'Enviar' : 'Send';
+            }
+        }
+        
+        async function getAIResponse(message) {
+            console.log('Getting AI response for:', message);
+            
+            try {
+                const response = await fetch(`${OLLAMA_BASE_URL}/chat/completions`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${OLLAMA_API_KEY}`
+                    },
+                    body: JSON.stringify({
+                        model: 'llama3.2:1b',
+                        messages: [
+                            {
+                                role: 'system',
+                                content: 'You are an AI immigration assistant. Be helpful, concise, and respond in the user\'s preferred language.'
+                            },
+                            {
+                                role: 'user',
+                                content: message
+                            }
+                        ],
+                        max_tokens: 200,
+                        temperature: 0.7
+                    })
+                });
+                
+                console.log('Response status:', response.status);
+                
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error('API Error:', response.status, errorText);
+                    throw new Error(`API request failed: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                console.log('Response data:', data);
+                
+                if (data.choices && data.choices[0] && data.choices[0].message) {
+                    return data.choices[0].message.content;
+                } else {
+                    throw new Error('Invalid response format');
+                }
+                
+            } catch (error) {
+                console.error('API request failed:', error);
+                throw error;
+            }
+        }
+        
+        function getFallbackResponse(message) {
+            const lowerMessage = message.toLowerCase();
+            const isSpanish = currentLanguage === 'es';
+            
+            if (lowerMessage.includes('form') || lowerMessage.includes('formulario')) {
+                return isSpanish 
+                    ? "Puedo ayudarte con varios formularios de inmigración como I-485 (Green Card), N-400 (Ciudadanía), I-130 (Petición Familiar). ¿Qué formulario específico necesitas ayuda?"
+                    : "I can help you with various immigration forms like I-485 (Green Card), N-400 (Citizenship), I-130 (Family Petition). What specific form do you need help with?";
+            }
+            
+            if (lowerMessage.includes('document') || lowerMessage.includes('documento')) {
+                return isSpanish
+                    ? "Los documentos comunes incluyen: pasaporte, certificado de nacimiento, certificados de matrimonio/divorcio, registros de empleo, y evidencia financiera. ¿Qué tipo de documento necesitas ayuda?"
+                    : "Common documents include: passport, birth certificate, marriage/divorce certificates, employment records, and financial evidence. What type of document do you need help with?";
+            }
+            
+            if (lowerMessage.includes('status') || lowerMessage.includes('estado')) {
+                return isSpanish
+                    ? "Para verificar el estado, usa el sitio web de USCIS con tu número de recibo, o llama al centro de servicio. ¿Tienes tu número de recibo?"
+                    : "To check status, use the USCIS website with your receipt number, or call the customer service center. Do you have your receipt number?";
+            }
+            
+            if (lowerMessage.includes('help') || lowerMessage.includes('ayuda')) {
+                return isSpanish
+                    ? "¡Estoy aquí para ayudarte! Puedo asistirte con formularios, documentos, verificación de estado, y procesos de inmigración. ¿En qué puedo ayudarte específicamente?"
+                    : "I'm here to help! I can assist you with forms, documents, status checking, and immigration processes. What can I help you with specifically?";
+            }
+            
+            return isSpanish
+                ? "Gracias por tu pregunta. Como asistente de IA de inmigración, puedo ayudarte con formularios, documentos, procesos de inmigración, y verificación de estado. ¿Podrías ser más específico?"
+                : "Thank you for your question. As an immigration AI assistant, I can help you with forms, documents, immigration processes, and status checking. Could you be more specific?";
+        }
+        
+        function addMessageToChat(message, sender) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            
+            if (sender === 'ai') {
+                messageDiv.innerHTML = `<strong>AI Assistant:</strong> ${message}`;
+            } else {
+                messageDiv.textContent = message;
+            }
+            
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        function showTypingIndicator() {
+            const chatMessages = document.getElementById('chatMessages');
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'typing-indicator';
+            typingDiv.id = 'typingIndicator';
+            typingDiv.innerHTML = `
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+            `;
+            chatMessages.appendChild(typingDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        function hideTypingIndicator() {
+            const typingIndicator = document.getElementById('typingIndicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+        }
+        
+        function showStatus(message, type) {
+            const statusIndicator = document.getElementById('statusIndicator');
+            statusIndicator.textContent = message;
+            statusIndicator.className = `status-indicator ${type} show`;
+            
+            setTimeout(() => {
+                statusIndicator.classList.remove('show');
+            }, 3000);
+        }
+        
+        function loadChatHistory() {
+            const savedHistory = localStorage.getItem('chatHistory');
+            if (savedHistory) {
+                chatHistory = JSON.parse(savedHistory);
+            }
+        }
+        
+        function saveChatHistory() {
+            localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
+        }
+    </script>
+</body>
+</html>

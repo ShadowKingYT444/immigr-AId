@@ -1,0 +1,2236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Immigr-Aid.ai - AI-Powered Immigration Assistant</title>
+    <meta name="description" content="AI-powered immigration assistance platform with multilingual support, form guidance, and document analysis">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8fafc;
+            transition: all 0.3s ease;
+        }
+        
+        .navbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .logo-icon {
+            font-size: 2rem;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+        
+        .logo-main {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+        }
+        
+        .logo-sub {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 500;
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+        
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        
+        .nav-link:hover,
+        .nav-link.active {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            backdrop-filter: blur(10px);
+        }
+        
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .language-selector select {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            backdrop-filter: blur(10px);
+            font-size: 0.9rem;
+        }
+        
+        .language-selector select option {
+            background: #333;
+            color: white;
+        }
+        
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .main-content {
+            min-height: calc(100vh - 80px);
+        }
+        
+        .content-section {
+            display: none;
+            padding: 2rem 0;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        
+        .content-section.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+        }
+        
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: #718096;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .dashboard-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+        
+        .dashboard-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .card-header h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #2d3748;
+        }
+        
+        .progress-ring {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .progress-ring-svg {
+            transform: rotate(-90deg);
+        }
+        
+        .progress-ring-circle {
+            transition: stroke-dashoffset 0.5s ease;
+        }
+        
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #667eea;
+        }
+        
+        .progress-stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 1rem;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            display: block;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #667eea;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #718096;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            text-align: center;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+        
+        .btn-secondary:hover {
+            background: #cbd5e0;
+        }
+        
+        .btn-success {
+            background: #48bb78;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #38a169;
+        }
+        
+        .btn-danger {
+            background: #e53e3e;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #c53030;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+        
+        .form-group label {
+            font-weight: 500;
+            color: #4a5568;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .form-actions {
+            text-align: center;
+            padding-top: 1rem;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .pathway-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .pathway-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 2px solid #e2e8f0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .pathway-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+            border-color: #667eea;
+        }
+        
+        .pathway-card.selected {
+            border-color: #667eea;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+        }
+        
+        .pathway-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+        }
+        
+        .pathway-description {
+            color: #718096;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+        
+        .pathway-status {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            display: inline-block;
+        }
+        
+        .pathway-status.available {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+        
+        .pathway-status.limited {
+            background: #fed7d7;
+            color: #742a2a;
+        }
+        
+        .pathway-status.restricted {
+            background: #fef5e7;
+            color: #744210;
+        }
+        
+        .pathway-details {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+            margin-top: 2rem;
+        }
+        
+        .pathway-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        
+        .info-item {
+            padding: 1rem;
+            background: #f7fafc;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .documents-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .document-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+        
+        .document-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+        }
+        
+        .document-status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+        
+        .document-status.status-pending {
+            background: #fef5e7;
+            color: #744210;
+        }
+        
+        .document-status.status-completed {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+        
+        .document-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+        }
+        
+        .document-description {
+            color: #718096;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+        
+        .document-actions {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .document-actions .btn {
+            padding: 8px 16px;
+            font-size: 0.9rem;
+        }
+        
+        .chat-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+        }
+        
+        .chat-messages {
+            height: 500px;
+            overflow-y: auto;
+            padding: 1.5rem;
+            background: #f8fafc;
+        }
+        
+        .message {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 1.5rem;
+            animation: messageSlide 0.3s ease-out;
+        }
+        
+        @keyframes messageSlide {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .message.user {
+            flex-direction: row-reverse;
+        }
+        
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+        
+        .message.ai .message-avatar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .message.user .message-avatar {
+            background: #48bb78;
+            color: white;
+        }
+        
+        .message-content {
+            max-width: 70%;
+            padding: 12px 16px;
+            border-radius: 16px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+        
+        .message.ai .message-content {
+            background: white;
+            border: 1px solid #e2e8f0;
+            color: #2d3748;
+        }
+        
+        .message.user .message-content {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .chat-input-container {
+            padding: 1.5rem;
+            background: white;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .chat-input {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        
+        .chat-input input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 24px;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        
+        .chat-input input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .attachment-btn,
+        .voice-btn,
+        .send-btn {
+            width: 44px;
+            height: 44px;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+        }
+        
+        .attachment-btn {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+        
+        .attachment-btn:hover {
+            background: #cbd5e0;
+        }
+        
+        .voice-btn {
+            background: #667eea;
+            color: white;
+        }
+        
+        .voice-btn:hover {
+            background: #5a67d8;
+        }
+        
+        .voice-btn.recording {
+            background: #e53e3e;
+            animation: pulse 1s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .send-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .send-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .send-btn:disabled {
+            background: #cbd5e0;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .help-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+        
+        .help-category {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+        }
+        
+        .help-category h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .help-item {
+            padding: 1rem;
+            background: #f7fafc;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border-left: 4px solid #667eea;
+        }
+        
+        .help-item h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+        }
+        
+        .help-item p {
+            color: #718096;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .help-item a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .help-item a:hover {
+            text-decoration: underline;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+        
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            max-width: 90%;
+            max-height: 90%;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: modalSlide 0.3s ease-out;
+        }
+        
+        @keyframes modalSlide {
+            from { opacity: 0; transform: scale(0.9) translateY(-20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        
+        .modal-header {
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f8fafc;
+        }
+        
+        .modal-header h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #2d3748;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #718096;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+        
+        .modal-close:hover {
+            background: #e2e8f0;
+            color: #2d3748;
+        }
+        
+        .modal-body {
+            padding: 2rem;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+        
+        .modal-footer {
+            padding: 1.5rem 2rem;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            background: #f8fafc;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #48bb78;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            z-index: 3000;
+            font-weight: 500;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .typing-dots {
+            display: flex;
+            gap: 4px;
+        }
+        
+        .typing-dots span {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #667eea;
+            animation: typing 1.4s infinite ease-in-out;
+        }
+        
+        .typing-dots span:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dots span:nth-child(2) { animation-delay: -0.16s; }
+        
+        @keyframes typing {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                flex-direction: column;
+                padding: 1rem;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            }
+            
+            .nav-menu.active {
+                display: flex;
+            }
+            
+            .mobile-menu-toggle {
+                display: block;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .pathway-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .documents-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .help-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .chat-messages {
+                height: 400px;
+            }
+            
+            .message-content {
+                max-width: 85%;
+            }
+            
+            .modal-content {
+                max-width: 95%;
+                margin: 1rem;
+            }
+            
+            .modal-body {
+                padding: 1rem;
+            }
+            
+            .modal-footer {
+                padding: 1rem;
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <div class="logo">
+                    <div class="logo-icon">🏠</div>
+                    <div class="logo-text">
+                        <span class="logo-main">Immigr-Aid</span>
+                        <span class="logo-sub">.ai</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="nav-menu" id="navMenu">
+                <a href="#dashboard" class="nav-link active" data-section="dashboard">
+                    📊 <span>Dashboard</span>
+                </a>
+                <a href="#profile" class="nav-link" data-section="profile">
+                    👤 <span>Profile</span>
+                </a>
+                <a href="#documents" class="nav-link" data-section="documents">
+                    📄 <span>Forms</span>
+                </a>
+                <a href="#chat" class="nav-link" data-section="chat">
+                    🤖 <span>AI Assistant</span>
+                </a>
+                <a href="#help" class="nav-link" data-section="help">
+                    ❓ <span>Help</span>
+                </a>
+            </div>
+            
+            <div class="nav-actions">
+                <div class="language-selector">
+                    <select id="languageSelect">
+                        <option value="en">🇺🇸 English</option>
+                        <option value="es">🇪🇸 Español</option>
+                        <option value="zh">🇨🇳 中文</option>
+                        <option value="ar">🇸🇦 العربية</option>
+                        <option value="hi">🇮🇳 हिन्दी</option>
+                        <option value="pt">🇧🇷 Português</option>
+                        <option value="ru">🇷🇺 Русский</option>
+                        <option value="fr">🇫🇷 Français</option>
+                        <option value="vi">🇻🇳 Tiếng Việt</option>
+                        <option value="ko">🇰🇷 한국어</option>
+                    </select>
+                </div>
+                
+                <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                    ☰
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="content-section active">
+            <div class="container">
+                <div class="section-header">
+                    <h1 class="section-title">Dashboard</h1>
+                    <p class="section-subtitle">Your immigration journey overview</p>
+                </div>
+                
+                <div class="dashboard-grid">
+                    <!-- Progress Overview -->
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h3>Application Progress</h3>
+                            <div class="progress-ring">
+                                <svg class="progress-ring-svg" width="60" height="60">
+                                    <circle class="progress-ring-circle" cx="30" cy="30" r="25" fill="transparent" stroke="#e0e0e0" stroke-width="4"/>
+                                    <circle class="progress-ring-circle progress-ring-circle-fill" cx="30" cy="30" r="25" fill="transparent" stroke="#007bff" stroke-width="4" stroke-dasharray="157" stroke-dashoffset="94"/>
+                                </svg>
+                                <span class="progress-text">40%</span>
+                            </div>
+                        </div>
+                        <div class="progress-stats">
+                            <div class="stat-item">
+                                <span class="stat-number">2</span>
+                                <span class="stat-label">Completed</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number">3</span>
+                                <span class="stat-label">Remaining</span>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" onclick="showProgressDetails()">
+                            📈 View Detailed Progress
+                        </button>
+                    </div>
+                    
+                    <!-- Profile Completion -->
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h3>Personal Information</h3>
+                            <span style="font-size: 2rem;">👤</span>
+                        </div>
+                        <p>Complete your profile to enable AI assistance with form filling and personalized guidance.</p>
+                        <div id="profileCompletionStatus">
+                            <p style="color: #e53e3e; font-weight: 500;">⚠️ Profile incomplete - Complete to unlock AI features</p>
+                        </div>
+                        <button class="btn btn-primary" onclick="showSection('profile')">
+                            ✏️ Complete Profile
+                        </button>
+                    </div>
+                    
+                    <!-- Required Documents -->
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h3>Required Documents</h3>
+                            <span style="font-size: 2rem;">📄</span>
+                        </div>
+                        <p>All documents needed to complete your immigration application process</p>
+                        <div class="documents-preview" id="documentsPreview">
+                            <div style="padding: 1rem; background: #f7fafc; border-radius: 8px; margin-bottom: 1rem;">
+                                <strong>📋 Form I-821D (DACA)</strong><br>
+                                <small style="color: #718096;">Status: Pending</small>
+                            </div>
+                            <div style="padding: 1rem; background: #f7fafc; border-radius: 8px; margin-bottom: 1rem;">
+                                <strong>💼 Form I-765 (Work Permit)</strong><br>
+                                <small style="color: #718096;">Status: Pending</small>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" onclick="showSection('documents')">
+                            📋 View All Documents
+                        </button>
+                    </div>
+                    
+                    <!-- AI Assistant -->
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h3>AI Assistant</h3>
+                            <span style="font-size: 2rem;">🤖</span>
+                        </div>
+                        <p>Get instant help with your immigration questions and form guidance</p>
+                        <div id="aiStatus">
+                            <p style="color: #48bb78; font-weight: 500;">✅ AI Assistant Ready</p>
+                        </div>
+                        <button class="btn btn-primary" onclick="showSection('chat')">
+                            💬 Start Chat
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Profile Section -->
+        <section id="profile" class="content-section">
+            <div class="container">
+                <div class="section-header">
+                    <h1 class="section-title">Personal Information</h1>
+                    <p class="section-subtitle">Complete your profile for personalized assistance</p>
+                </div>
+                
+                <div class="profile-form-container">
+                    <form class="profile-form" id="profileForm">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="firstName">First Name *</label>
+                                <input type="text" id="firstName" name="firstName" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="lastName">Last Name *</label>
+                                <input type="text" id="lastName" name="lastName" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="middleName">Middle Name</label>
+                                <input type="text" id="middleName" name="middleName">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="dateOfBirth">Date of Birth *</label>
+                                <input type="date" id="dateOfBirth" name="dateOfBirth" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="countryOfBirth">Country of Birth *</label>
+                                <select id="countryOfBirth" name="countryOfBirth" required>
+                                    <option value="">Select Country</option>
+                                    <option value="Mexico">Mexico</option>
+                                    <option value="China">China</option>
+                                    <option value="India">India</option>
+                                    <option value="Philippines">Philippines</option>
+                                    <option value="El Salvador">El Salvador</option>
+                                    <option value="Guatemala">Guatemala</option>
+                                    <option value="Honduras">Honduras</option>
+                                    <option value="Cuba">Cuba</option>
+                                    <option value="Dominican Republic">Dominican Republic</option>
+                                    <option value="Colombia">Colombia</option>
+                                    <option value="Venezuela">Venezuela</option>
+                                    <option value="Brazil">Brazil</option>
+                                    <option value="Argentina">Argentina</option>
+                                    <option value="Peru">Peru</option>
+                                    <option value="Ecuador">Ecuador</option>
+                                    <option value="Bolivia">Bolivia</option>
+                                    <option value="Chile">Chile</option>
+                                    <option value="Uruguay">Uruguay</option>
+                                    <option value="Paraguay">Paraguay</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group full-width">
+                                <label for="currentAddress">Current Address *</label>
+                                <textarea id="currentAddress" name="currentAddress" rows="3" required></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="phoneNumber">Phone Number *</label>
+                                <input type="tel" id="phoneNumber" name="phoneNumber" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="emailAddress">Email Address *</label>
+                                <input type="email" id="emailAddress" name="emailAddress" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="socialSecurityNumber">Social Security Number</label>
+                                <input type="text" id="socialSecurityNumber" name="socialSecurityNumber">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="entryDate">Entry Date to US *</label>
+                                <input type="date" id="entryDate" name="entryDate" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="methodOfEntry">Method of Entry *</label>
+                                <select id="methodOfEntry" name="methodOfEntry" required>
+                                    <option value="">Select Method</option>
+                                    <option value="Visa">Visa</option>
+                                    <option value="Border Crossing">Border Crossing</option>
+                                    <option value="Airport">Airport</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="educationLevel">Education Level *</label>
+                                <select id="educationLevel" name="educationLevel" required>
+                                    <option value="">Select Level</option>
+                                    <option value="Elementary">Elementary</option>
+                                    <option value="Middle School">Middle School</option>
+                                    <option value="High School">High School</option>
+                                    <option value="Some College">Some College</option>
+                                    <option value="Associate Degree">Associate Degree</option>
+                                    <option value="Bachelor Degree">Bachelor Degree</option>
+                                    <option value="Master Degree">Master Degree</option>
+                                    <option value="Doctorate">Doctorate</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="employmentStatus">Employment Status *</label>
+                                <select id="employmentStatus" name="employmentStatus" required>
+                                    <option value="">Select Status</option>
+                                    <option value="Employed">Employed</option>
+                                    <option value="Unemployed">Unemployed</option>
+                                    <option value="Student">Student</option>
+                                    <option value="Self-Employed">Self-Employed</option>
+                                    <option value="Retired">Retired</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="criminalHistory">Criminal History</label>
+                                <select id="criminalHistory" name="criminalHistory">
+                                    <option value="">Select Status</option>
+                                    <option value="None">None</option>
+                                    <option value="Minor Offenses">Minor Offenses</option>
+                                    <option value="Major Offenses">Major Offenses</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">
+                                💾 Save Profile Information
+                            </button>
+                            <button type="button" class="btn btn-secondary" onclick="clearProfile()">
+                                🗑️ Clear Form
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Documents Section -->
+        <section id="documents" class="content-section">
+            <div class="container">
+                <div class="section-header">
+                    <h1 class="section-title">Immigration Pathway Selection</h1>
+                    <p class="section-subtitle">Select what you are applying for to see all required forms for your specific immigration process</p>
+                </div>
+                
+                <!-- Pathway Selection -->
+                <div class="pathway-selection">
+                    <h3>What are you applying for?</h3>
+                    <div class="pathway-grid" id="pathwayGrid">
+                        <!-- Pathways will be populated by JavaScript -->
+                    </div>
+                </div>
+                
+                <!-- Selected Pathway Details -->
+                <div class="pathway-details" id="pathwayDetails" style="display: none;">
+                    <h3 id="selectedPathwayName">Selected Pathway</h3>
+                    <p id="selectedPathwayDescription">Description</p>
+                    <div class="pathway-info">
+                        <div class="info-item">
+                            <strong>Status:</strong> <span id="pathwayStatus"></span>
+                        </div>
+                        <div class="info-item">
+                            <strong>Eligibility:</strong> <span id="pathwayEligibility"></span>
+                        </div>
+                        <div class="info-item">
+                            <strong>Risks:</strong> <span id="pathwayRisks"></span>
+                        </div>
+                    </div>
+                    
+                    <h4>Required Forms for This Process:</h4>
+                    <div id="requiredFormsContainer" class="documents-grid"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chat Section -->
+        <section id="chat" class="content-section">
+            <div class="container">
+                <div class="section-header">
+                    <h1 class="section-title">AI Assistant</h1>
+                    <p class="section-subtitle">Get instant help with your immigration questions</p>
+                </div>
+                
+                <div class="chat-container">
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="message ai">
+                            <div class="message-avatar">
+                                🤖
+                            </div>
+                            <div class="message-content">
+                                <p>Hello! I'm your AI immigration assistant. I can help you fill out forms, answer questions about your immigration process, and guide you through each step. How can I assist you today?</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="chat-input-container">
+                        <div class="chat-input">
+                            <button class="attachment-btn" onclick="uploadDocument()" title="Upload Document">
+                                📎
+                            </button>
+                            
+                            <input type="text" id="messageInput" placeholder="Ask me anything about your immigration case..." onkeypress="handleKeyPress(event)">
+                            
+                            <button class="voice-btn" id="voiceBtn" onclick="toggleVoiceRecording()" title="Voice Input">
+                                🎤
+                            </button>
+                            
+                            <button class="send-btn" onclick="sendMessage()">
+                                ✈️
+                            </button>
+                        </div>
+                        
+                        <input type="file" id="documentUpload" accept=".pdf,.txt,.doc,.docx" style="display: none;" onchange="handleDocumentUpload(event)">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Help Section -->
+        <section id="help" class="content-section">
+            <div class="container">
+                <div class="section-header">
+                    <h1 class="section-title">Help Resources and Locations</h1>
+                    <p class="section-subtitle">Find support and resources in your area</p>
+                </div>
+                
+                <div class="help-grid">
+                    <div class="help-category">
+                        <h3>🚨 Emergency Resources</h3>
+                        <div id="emergencyResourcesContainer">
+                            <!-- Emergency resources will be populated here -->
+                        </div>
+                    </div>
+                    
+                    <div class="help-category">
+                        <h3>⚖️ Legal Aid</h3>
+                        <div id="legalAidContainer">
+                            <!-- Legal aid resources will be populated here -->
+                        </div>
+                    </div>
+                    
+                    <div class="help-category">
+                        <h3>🏢 Community Centers</h3>
+                        <div id="communityCentersContainer">
+                            <!-- Community centers will be populated here -->
+                        </div>
+                    </div>
+                    
+                    <div class="help-category">
+                        <h3>🏥 Healthcare</h3>
+                        <div id="healthcareResourcesContainer">
+                            <!-- Healthcare resources will be populated here -->
+                        </div>
+                    </div>
+                    
+                    <div class="help-category">
+                        <h3>💼 Employment</h3>
+                        <div id="employmentResourcesContainer">
+                            <!-- Employment resources will be populated here -->
+                        </div>
+                    </div>
+                    
+                    <div class="help-category">
+                        <h3>🎓 Educational Resources</h3>
+                        <div id="educationalResourcesContainer">
+                            <!-- Educational resources will be populated here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Document Modal -->
+    <div id="documentModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Document</h2>
+                <button class="modal-close" onclick="closeDocumentModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Document content will be populated here -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeDocumentModal()">Close</button>
+                <button class="btn btn-primary" onclick="fillDocument()">Fill Form</button>
+                <button class="btn btn-success" onclick="downloadDocument()">Download</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Progress Details Modal -->
+    <div id="progressModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Application Progress Details</h2>
+                <button class="modal-close" onclick="closeProgressModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div style="margin-bottom: 2rem;">
+                    <h3>📊 Overall Progress: 40%</h3>
+                    <div style="background: #e2e8f0; height: 20px; border-radius: 10px; margin: 1rem 0;">
+                        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); height: 100%; width: 40%; border-radius: 10px; transition: width 0.5s ease;"></div>
+                    </div>
+                </div>
+                
+                <div style="display: grid; gap: 1rem;">
+                    <div style="padding: 1rem; background: #c6f6d5; border-radius: 8px; border-left: 4px solid #48bb78;">
+                        <strong>✅ Profile Information</strong><br>
+                        <small>Completed - Personal details saved</small>
+                    </div>
+                    
+                    <div style="padding: 1rem; background: #c6f6d5; border-radius: 8px; border-left: 4px solid #48bb78;">
+                        <strong>✅ Pathway Selection</strong><br>
+                        <small>Completed - DACA pathway selected</small>
+                    </div>
+                    
+                    <div style="padding: 1rem; background: #fef5e7; border-radius: 8px; border-left: 4px solid #f6ad55;">
+                        <strong>⏳ Form I-821D</strong><br>
+                        <small>In Progress - 60% complete</small>
+                    </div>
+                    
+                    <div style="padding: 1rem; background: #fed7d7; border-radius: 8px; border-left: 4px solid #e53e3e;">
+                        <strong>❌ Form I-765</strong><br>
+                        <small>Not Started - Work permit application</small>
+                    </div>
+                    
+                    <div style="padding: 1rem; background: #fed7d7; border-radius: 8px; border-left: 4px solid #e53e3e;">
+                        <strong>❌ Supporting Documents</strong><br>
+                        <small>Not Started - Gather required evidence</small>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeProgressModal()">Close</button>
+                <button class="btn btn-primary" onclick="showSection('documents')">Continue Forms</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let currentLanguage = 'en';
+        let currentSection = 'dashboard';
+        let userProfile = {};
+        let profileComplete = false;
+        let chatHistory = [];
+        let isRecording = false;
+        let selectedPathway = null;
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeApp();
+        });
+
+        function initializeApp() {
+            // Load saved preferences
+            loadPreferences();
+            
+            // Initialize navigation
+            initializeNavigation();
+            
+            // Initialize sections
+            populatePathways();
+            populateHelpResources();
+            
+            // Initialize language selector
+            initializeLanguageSelector();
+            
+            // Show welcome message
+            showWelcomeMessage();
+            
+            // Update progress
+            updateProgress();
+        }
+
+        // Navigation Functions
+        function initializeNavigation() {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+            const navMenu = document.getElementById('navMenu');
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const section = link.getAttribute('data-section');
+                    showSection(section);
+                    
+                    // Close mobile menu if open
+                    navMenu.classList.remove('active');
+                });
+            });
+            
+            mobileMenuToggle.addEventListener('click', () => {
+                navMenu.classList.toggle('active');
+            });
+        }
+
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show selected section
+            const targetSection = document.getElementById(sectionName);
+            if (targetSection) {
+                targetSection.classList.add('active');
+                currentSection = sectionName;
+            }
+            
+            // Update navigation
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            const activeLink = document.querySelector(`[data-section="${sectionName}"]`);
+            if (activeLink) {
+                activeLink.classList.add('active');
+            }
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            // Show notification
+            showNotification(`Switched to ${sectionName.charAt(0).toUpperCase() + sectionName.slice(1)} section`, 'success');
+        }
+
+        // Language Functions
+        function initializeLanguageSelector() {
+            const languageSelect = document.getElementById('languageSelect');
+            if (languageSelect) {
+                languageSelect.addEventListener('change', (e) => {
+                    updateLanguage(e.target.value);
+                });
+            }
+        }
+
+        function updateLanguage(language) {
+            currentLanguage = language;
+            showNotification(`Language changed to ${language.toUpperCase()}`, 'success');
+            
+            // Save language preference
+            localStorage.setItem('preferredLanguage', language);
+        }
+
+        // Progress Functions
+        function showProgressDetails() {
+            const modal = document.getElementById('progressModal');
+            modal.classList.add('active');
+        }
+
+        function closeProgressModal() {
+            const modal = document.getElementById('progressModal');
+            modal.classList.remove('active');
+        }
+
+        function updateProgress() {
+            const completed = profileComplete ? 2 : 1;
+            const remaining = 5 - completed;
+            
+            document.querySelector('.stat-number').textContent = completed;
+            document.querySelectorAll('.stat-number')[1].textContent = remaining;
+            
+            // Update progress ring
+            const progressRing = document.querySelector('.progress-ring-circle-fill');
+            const circumference = 2 * Math.PI * 25;
+            const progress = (completed / 5) * 100;
+            const offset = circumference - (progress / 100) * circumference;
+            
+            progressRing.style.strokeDashoffset = offset;
+            document.querySelector('.progress-text').textContent = Math.round(progress) + '%';
+        }
+
+        // Profile Functions
+        function saveProfile() {
+            const form = document.getElementById('profileForm');
+            const formData = new FormData(form);
+            
+            userProfile = {};
+            for (let [key, value] of formData.entries()) {
+                userProfile[key] = value;
+            }
+            
+            localStorage.setItem('userProfile', JSON.stringify(userProfile));
+            profileComplete = true;
+            
+            // Update UI
+            document.getElementById('profileCompletionStatus').innerHTML = '<p style="color: #48bb78; font-weight: 500;">✅ Profile complete - AI features unlocked!</p>';
+            updateProgress();
+            
+            showNotification('Profile saved successfully! AI features are now available.', 'success');
+        }
+
+        function clearProfile() {
+            if (confirm('Are you sure you want to clear all profile information?')) {
+                document.getElementById('profileForm').reset();
+                userProfile = {};
+                profileComplete = false;
+                localStorage.removeItem('userProfile');
+                
+                document.getElementById('profileCompletionStatus').innerHTML = '<p style="color: #e53e3e; font-weight: 500;">⚠️ Profile incomplete - Complete to unlock AI features</p>';
+                updateProgress();
+                
+                showNotification('Profile cleared successfully', 'success');
+            }
+        }
+
+        // Immigration Pathways
+        const immigrationPathways = {
+            'daca': {
+                name: 'DACA (Deferred Action for Childhood Arrivals)',
+                description: 'For undocumented individuals who came to the US as children',
+                status: 'Currently limited due to court rulings',
+                requiredForms: [
+                    { id: 'i-821d', name: 'Form I-821D - DACA Application', priority: 'high', status: 'pending' },
+                    { id: 'i-765', name: 'Form I-765 - Employment Authorization', priority: 'high', status: 'pending' },
+                    { id: 'i-131', name: 'Form I-131 - Advance Parole (if needed)', priority: 'medium', status: 'pending' },
+                    { id: 'g-1145', name: 'Form G-1145 - E-Notification', priority: 'low', status: 'pending' }
+                ],
+                eligibility: 'Arrived before age 16, continuous residence since 2007, education/military requirements',
+                risks: 'No permanent status, subject to policy changes'
+            },
+            'asylum': {
+                name: 'Asylum',
+                description: 'For individuals fleeing persecution in their home country',
+                status: 'Available for those with credible fear',
+                requiredForms: [
+                    { id: 'i-589', name: 'Form I-589 - Asylum Application', priority: 'high', status: 'pending' },
+                    { id: 'i-765', name: 'Form I-765 - Employment Authorization (after 150 days)', priority: 'high', status: 'pending' },
+                    { id: 'i-131', name: 'Form I-131 - Refugee Travel Document', priority: 'medium', status: 'pending' },
+                    { id: 'g-1145', name: 'Form G-1145 - E-Notification', priority: 'low', status: 'pending' }
+                ],
+                eligibility: 'Fear of persecution based on race, religion, nationality, political opinion, or membership in social group',
+                risks: 'Must prove persecution, strict deadlines, potential detention'
+            },
+            'family_based': {
+                name: 'Family-Based Immigration',
+                description: 'For family members of US citizens or lawful permanent residents',
+                status: 'Available with varying wait times',
+                requiredForms: [
+                    { id: 'i-130', name: 'Form I-130 - Petition for Alien Relative', priority: 'high', status: 'pending' },
+                    { id: 'i-485', name: 'Form I-485 - Adjustment of Status (if in US)', priority: 'high', status: 'pending' },
+                    { id: 'i-864', name: 'Form I-864 - Affidavit of Support', priority: 'high', status: 'pending' },
+                    { id: 'i-693', name: 'Form I-693 - Medical Examination', priority: 'high', status: 'pending' },
+                    { id: 'i-765', name: 'Form I-765 - Employment Authorization', priority: 'medium', status: 'pending' },
+                    { id: 'i-131', name: 'Form I-131 - Advance Parole', priority: 'medium', status: 'pending' },
+                    { id: 'g-1145', name: 'Form G-1145 - E-Notification', priority: 'low', status: 'pending' }
+                ],
+                eligibility: 'Immediate relatives (spouse, parent, child under 21) or family preference categories',
+                risks: 'Long wait times for some categories, public charge considerations'
+            },
+            'employment_based': {
+                name: 'Employment-Based Immigration',
+                description: 'For skilled workers, professionals, and investors',
+                status: 'Available with varying wait times',
+                requiredForms: [
+                    { id: 'i-140', name: 'Form I-140 - Immigrant Petition for Alien Worker', priority: 'high', status: 'pending' },
+                    { id: 'i-485', name: 'Form I-485 - Adjustment of Status', priority: 'high', status: 'pending' },
+                    { id: 'i-864', name: 'Form I-864 - Affidavit of Support', priority: 'high', status: 'pending' },
+                    { id: 'i-693', name: 'Form I-693 - Medical Examination', priority: 'high', status: 'pending' },
+                    { id: 'i-765', name: 'Form I-765 - Employment Authorization', priority: 'medium', status: 'pending' },
+                    { id: 'i-131', name: 'Form I-131 - Advance Parole', priority: 'medium', status: 'pending' },
+                    { id: 'g-1145', name: 'Form G-1145 - E-Notification', priority: 'low', status: 'pending' }
+                ],
+                eligibility: 'EB-1 (extraordinary ability), EB-2 (advanced degree), EB-3 (skilled workers), EB-5 (investors)',
+                risks: 'Labor certification required, strict requirements, long processing times'
+            },
+            'naturalization': {
+                name: 'Naturalization (Citizenship)',
+                description: 'For lawful permanent residents seeking US citizenship',
+                status: 'Available for eligible LPRs',
+                requiredForms: [
+                    { id: 'n-400', name: 'Form N-400 - Application for Naturalization', priority: 'high', status: 'pending' },
+                    { id: 'g-1145', name: 'Form G-1145 - E-Notification', priority: 'low', status: 'pending' }
+                ],
+                eligibility: '5 years as LPR (3 if married to US citizen), good moral character, English/civics test',
+                risks: 'Must maintain good moral character, pass tests, continuous residence requirement'
+            },
+            'tps': {
+                name: 'Temporary Protected Status (TPS)',
+                description: 'For nationals of designated countries due to conflict or disaster',
+                status: 'Available for designated countries',
+                requiredForms: [
+                    { id: 'i-821', name: 'Form I-821 - TPS Application', priority: 'high', status: 'pending' },
+                    { id: 'i-765', name: 'Form I-765 - Employment Authorization', priority: 'high', status: 'pending' },
+                    { id: 'g-1145', name: 'Form G-1145 - E-Notification', priority: 'low', status: 'pending' }
+                ],
+                eligibility: 'National of designated country, continuous residence, no serious criminal record',
+                risks: 'Temporary status only, subject to country designation changes'
+            }
+        };
+
+        // Pathway Selection Functions
+        function populatePathways() {
+            const pathwayGrid = document.getElementById('pathwayGrid');
+            if (!pathwayGrid) return;
+            
+            pathwayGrid.innerHTML = '';
+            
+            Object.keys(immigrationPathways).forEach(pathwayKey => {
+                const pathway = immigrationPathways[pathwayKey];
+                const pathwayCard = createPathwayCard(pathwayKey, pathway);
+                pathwayGrid.appendChild(pathwayCard);
+            });
+        }
+
+        function createPathwayCard(pathwayKey, pathway) {
+            const card = document.createElement('div');
+            card.className = 'pathway-card';
+            card.onclick = () => selectPathway(pathwayKey);
+            
+            let statusClass = 'available';
+            if (pathway.status.includes('limited') || pathway.status.includes('court')) {
+                statusClass = 'limited';
+            } else if (pathway.status.includes('cap') || pathway.status.includes('restricted')) {
+                statusClass = 'restricted';
+            }
+            
+            card.innerHTML = `
+                <div class="pathway-name">${pathway.name}</div>
+                <div class="pathway-description">${pathway.description}</div>
+                <div class="pathway-status ${statusClass}">${pathway.status}</div>
+            `;
+            
+            return card;
+        }
+
+        function selectPathway(pathwayKey) {
+            const pathway = immigrationPathways[pathwayKey];
+            if (!pathway) return;
+            
+            selectedPathway = pathwayKey;
+            
+            // Remove selected class from all cards
+            document.querySelectorAll('.pathway-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // Add selected class to clicked card
+            event.currentTarget.classList.add('selected');
+            
+            // Show pathway details
+            const pathwayDetails = document.getElementById('pathwayDetails');
+            const selectedPathwayName = document.getElementById('selectedPathwayName');
+            const selectedPathwayDescription = document.getElementById('selectedPathwayDescription');
+            const pathwayStatus = document.getElementById('pathwayStatus');
+            const pathwayEligibility = document.getElementById('pathwayEligibility');
+            const pathwayRisks = document.getElementById('pathwayRisks');
+            const requiredFormsContainer = document.getElementById('requiredFormsContainer');
+            
+            selectedPathwayName.textContent = pathway.name;
+            selectedPathwayDescription.textContent = pathway.description;
+            pathwayStatus.textContent = pathway.status;
+            pathwayEligibility.textContent = pathway.eligibility;
+            pathwayRisks.textContent = pathway.risks;
+            
+            // Populate required forms
+            requiredFormsContainer.innerHTML = '';
+            pathway.requiredForms.forEach(form => {
+                const formCard = createFormCard(form);
+                requiredFormsContainer.appendChild(formCard);
+            });
+            
+            pathwayDetails.style.display = 'block';
+            
+            // Scroll to details
+            pathwayDetails.scrollIntoView({ behavior: 'smooth' });
+            
+            showNotification(`Selected ${pathway.name} pathway`, 'success');
+        }
+
+        function createFormCard(form) {
+            const card = document.createElement('div');
+            card.className = 'document-card';
+            
+            const statusClass = `status-${form.status}`;
+            
+            card.innerHTML = `
+                <div class="document-status ${statusClass}">${form.status.charAt(0).toUpperCase() + form.status.slice(1)}</div>
+                <div class="document-title">${form.name}</div>
+                <div class="document-description">Priority: ${form.priority.charAt(0).toUpperCase() + form.priority.slice(1)}</div>
+                <div class="document-actions">
+                    <button class="btn btn-secondary" onclick="viewDocument('${form.id}')">View</button>
+                    <button class="btn btn-primary" onclick="fillDocument('${form.id}')">Fill</button>
+                    <button class="btn btn-success" onclick="downloadDocument('${form.id}')">Download</button>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        // Document Functions
+        function viewDocument(docId) {
+            const doc = getDocumentInfo(docId);
+            if (!doc) return;
+            
+            openDocumentModal(doc);
+        }
+
+        function getDocumentInfo(docId) {
+            const documents = {
+                'i-821d': {
+                    name: 'Form I-821D - DACA Application',
+                    description: 'Application for Deferred Action for Childhood Arrivals',
+                    fields: [
+                        { id: 'personalInfo', label: 'Personal Information', type: 'section' },
+                        { id: 'firstName', label: 'First Name', type: 'text', required: true },
+                        { id: 'lastName', label: 'Last Name', type: 'text', required: true },
+                        { id: 'dateOfBirth', label: 'Date of Birth', type: 'date', required: true },
+                        { id: 'countryOfBirth', label: 'Country of Birth', type: 'select', required: true },
+                        { id: 'currentAddress', label: 'Current Address', type: 'textarea', required: true },
+                        { id: 'phoneNumber', label: 'Phone Number', type: 'tel', required: true },
+                        { id: 'emailAddress', label: 'Email Address', type: 'email', required: true },
+                        { id: 'entryDate', label: 'Date of Entry to US', type: 'date', required: true },
+                        { id: 'methodOfEntry', label: 'Method of Entry', type: 'select', required: true },
+                        { id: 'educationLevel', label: 'Education Level', type: 'select', required: true },
+                        { id: 'employmentStatus', label: 'Employment Status', type: 'select', required: true },
+                        { id: 'criminalRecord', label: 'Criminal Record', type: 'select', required: true }
+                    ]
+                },
+                'i-765': {
+                    name: 'Form I-765 - Employment Authorization',
+                    description: 'Application for Employment Authorization Document (EAD)',
+                    fields: [
+                        { id: 'personalInfo', label: 'Personal Information', type: 'section' },
+                        { id: 'firstName', label: 'First Name', type: 'text', required: true },
+                        { id: 'lastName', label: 'Last Name', type: 'text', required: true },
+                        { id: 'dateOfBirth', label: 'Date of Birth', type: 'date', required: true },
+                        { id: 'currentAddress', label: 'Current Address', type: 'textarea', required: true },
+                        { id: 'phoneNumber', label: 'Phone Number', type: 'tel', required: true },
+                        { id: 'emailAddress', label: 'Email Address', type: 'email', required: true },
+                        { id: 'immigrationStatus', label: 'Current Immigration Status', type: 'select', required: true },
+                        { id: 'employmentHistory', label: 'Employment History', type: 'textarea', required: false }
+                    ]
+                },
+                'i-131': {
+                    name: 'Form I-131 - Advance Parole',
+                    description: 'Application for Travel Document',
+                    fields: [
+                        { id: 'personalInfo', label: 'Personal Information', type: 'section' },
+                        { id: 'firstName', label: 'First Name', type: 'text', required: true },
+                        { id: 'lastName', label: 'Last Name', type: 'text', required: true },
+                        { id: 'dateOfBirth', label: 'Date of Birth', type: 'date', required: true },
+                        { id: 'currentAddress', label: 'Current Address', type: 'textarea', required: true },
+                        { id: 'travelPurpose', label: 'Purpose of Travel', type: 'textarea', required: true },
+                        { id: 'travelDates', label: 'Intended Travel Dates', type: 'date', required: true },
+                        { id: 'destinationCountry', label: 'Destination Country', type: 'text', required: true }
+                    ]
+                },
+                'g-1145': {
+                    name: 'Form G-1145 - E-Notification',
+                    description: 'Request for E-Notification of Application/Petition Acceptance',
+                    fields: [
+                        { id: 'personalInfo', label: 'Personal Information', type: 'section' },
+                        { id: 'firstName', label: 'First Name', type: 'text', required: true },
+                        { id: 'lastName', label: 'Last Name', type: 'text', required: true },
+                        { id: 'emailAddress', label: 'Email Address', type: 'email', required: true },
+                        { id: 'phoneNumber', label: 'Phone Number', type: 'tel', required: true },
+                        { id: 'formType', label: 'Form Type', type: 'select', required: true }
+                    ]
+                }
+            };
+            
+            return documents[docId];
+        }
+
+        function openDocumentModal(doc) {
+            const modal = document.getElementById('documentModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalBody = document.getElementById('modalBody');
+            
+            modalTitle.textContent = doc.name;
+            
+            let fieldsHtml = '';
+            doc.fields.forEach(field => {
+                if (field.type === 'section') {
+                    fieldsHtml += `<h3 class="form-section" style="margin: 1.5rem 0 1rem 0; color: #2d3748; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.5rem;">${field.label}</h3>`;
+                } else {
+                    fieldsHtml += `
+                        <div class="form-field" style="margin-bottom: 1rem;">
+                            <label for="${field.id}" style="display: block; font-weight: 500; color: #4a5568; margin-bottom: 0.5rem;">${field.label}${field.required ? ' *' : ''}</label>
+                            ${createFieldInput(field)}
+                        </div>
+                    `;
+                }
+            });
+            
+            modalBody.innerHTML = fieldsHtml;
+            modal.classList.add('active');
+        }
+
+        function createFieldInput(field) {
+            switch (field.type) {
+                case 'text':
+                case 'email':
+                case 'tel':
+                case 'date':
+                    return `<input type="${field.type}" id="${field.id}" name="${field.id}" style="width: 100%; padding: 8px 12px; border: 2px solid #e2e8f0; border-radius: 6px;" ${field.required ? 'required' : ''}>`;
+                case 'textarea':
+                    return `<textarea id="${field.id}" name="${field.id}" rows="3" style="width: 100%; padding: 8px 12px; border: 2px solid #e2e8f0; border-radius: 6px;" ${field.required ? 'required' : ''}></textarea>`;
+                case 'select':
+                    let options = '<option value="">Select...</option>';
+                    if (field.id === 'countryOfBirth') {
+                        const countries = ['Mexico', 'China', 'India', 'Philippines', 'El Salvador', 'Guatemala', 'Honduras', 'Cuba', 'Dominican Republic', 'Colombia', 'Venezuela', 'Brazil', 'Argentina', 'Peru', 'Ecuador', 'Bolivia', 'Chile', 'Uruguay', 'Paraguay', 'Other'];
+                        countries.forEach(country => {
+                            options += `<option value="${country}">${country}</option>`;
+                        });
+                    } else if (field.id === 'methodOfEntry') {
+                        const methods = ['Visa', 'Border Crossing', 'Airport', 'Other'];
+                        methods.forEach(method => {
+                            options += `<option value="${method}">${method}</option>`;
+                        });
+                    } else if (field.id === 'educationLevel') {
+                        const levels = ['Elementary', 'Middle School', 'High School', 'Some College', 'Associate Degree', 'Bachelor Degree', 'Master Degree', 'Doctorate'];
+                        levels.forEach(level => {
+                            options += `<option value="${level}">${level}</option>`;
+                        });
+                    } else if (field.id === 'employmentStatus') {
+                        const statuses = ['Employed', 'Unemployed', 'Student', 'Self-Employed', 'Retired', 'Other'];
+                        statuses.forEach(status => {
+                            options += `<option value="${status}">${status}</option>`;
+                        });
+                    } else if (field.id === 'criminalRecord') {
+                        const records = ['None', 'Minor Offenses', 'Major Offenses'];
+                        records.forEach(record => {
+                            options += `<option value="${record}">${record}</option>`;
+                        });
+                    } else if (field.id === 'immigrationStatus') {
+                        const statuses = ['DACA', 'TPS', 'Asylum Pending', 'Family Petition Pending', 'Employment Petition Pending', 'Other'];
+                        statuses.forEach(status => {
+                            options += `<option value="${status}">${status}</option>`;
+                        });
+                    } else if (field.id === 'formType') {
+                        const types = ['I-821D', 'I-765', 'I-131', 'I-130', 'I-485', 'N-400', 'Other'];
+                        types.forEach(type => {
+                            options += `<option value="${type}">${type}</option>`;
+                        });
+                    }
+                    return `<select id="${field.id}" name="${field.id}" style="width: 100%; padding: 8px 12px; border: 2px solid #e2e8f0; border-radius: 6px;" ${field.required ? 'required' : ''}>${options}</select>`;
+                default:
+                    return `<input type="text" id="${field.id}" name="${field.id}" style="width: 100%; padding: 8px 12px; border: 2px solid #e2e8f0; border-radius: 6px;" ${field.required ? 'required' : ''}>`;
+            }
+        }
+
+        function closeDocumentModal() {
+            const modal = document.getElementById('documentModal');
+            modal.classList.remove('active');
+        }
+
+        function fillDocument(docId) {
+            const doc = getDocumentInfo(docId);
+            if (!doc) return;
+            
+            showNotification(`Opening ${doc.name} for filling...`, 'success');
+            
+            // Simulate form filling process
+            setTimeout(() => {
+                showNotification(`Form ${doc.name} is now ready for completion. Use your profile information to auto-fill fields.`, 'success');
+            }, 1000);
+        }
+
+        function downloadDocument(docId) {
+            const doc = getDocumentInfo(docId);
+            if (!doc) return;
+            
+            showNotification(`Downloading ${doc.name}...`, 'success');
+            
+            // Simulate download
+            setTimeout(() => {
+                showNotification(`${doc.name} downloaded successfully!`, 'success');
+            }, 1500);
+        }
+
+        // Chat Functions
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            // Add user message to chat
+            addMessage(message, 'user');
+            
+            // Clear input
+            input.value = '';
+            
+            // Show typing indicator
+            showTypingIndicator();
+            
+            // Generate AI response
+            setTimeout(() => {
+                const aiResponse = generateAIResponse(message);
+                hideTypingIndicator();
+                addMessage(aiResponse, 'ai');
+            }, 1500);
+        }
+
+        function addMessage(content, sender) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            
+            const avatar = sender === 'ai' ? '🤖' : '👤';
+            
+            messageDiv.innerHTML = `
+                <div class="message-avatar">
+                    ${avatar}
+                </div>
+                <div class="message-content">
+                    <p>${content}</p>
+                </div>
+            `;
+            
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function showTypingIndicator() {
+            const chatMessages = document.getElementById('chatMessages');
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message ai typing-indicator';
+            typingDiv.id = 'typingIndicator';
+            
+            typingDiv.innerHTML = `
+                <div class="message-avatar">
+                    🤖
+                </div>
+                <div class="message-content">
+                    <div class="typing-dots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+            `;
+            
+            chatMessages.appendChild(typingDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function hideTypingIndicator() {
+            const typingIndicator = document.getElementById('typingIndicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+        }
+
+        function generateAIResponse(userMessage) {
+            const message = userMessage.toLowerCase();
+            
+            if (message.includes('help') || message.includes('assist')) {
+                return "I'm here to help! I can assist you with:\n\n• 📋 Form completion guidance\n• 📄 Document requirements\n• 🛣️ Immigration pathway selection\n• ❓ General immigration questions\n• 📞 Finding legal resources\n\nWhat specific help do you need?";
+            }
+            
+            if (message.includes('daca') || message.includes('i-821d')) {
+                return "For DACA (Form I-821D), you need:\n\n• 📝 Personal information\n• 📅 Proof of continuous residence since 2007\n• 🎓 Education or military service\n• 💰 Economic necessity documentation\n• 🚫 Clean criminal record\n\nWould you like me to help you complete Form I-821D?";
+            }
+            
+            if (message.includes('work permit') || message.includes('i-765')) {
+                return "For Work Permit (Form I-765), you need:\n\n• 📝 Personal information\n• 📄 Current immigration status\n• 💼 Employment history\n• 📋 Supporting documents\n• 💰 Filing fee\n\nI can help you fill out this form step by step!";
+            }
+            
+            if (message.includes('status') || message.includes('progress')) {
+                return "Based on your profile, here's your current status:\n\n• ✅ Profile: Complete\n• ✅ Pathway: DACA selected\n• ⏳ Form I-821D: 60% complete\n• ❌ Form I-765: Not started\n• ❌ Supporting docs: Not started\n\nWould you like to continue with your forms?";
+            }
+            
+            if (message.includes('documents') || message.includes('paperwork')) {
+                return "For your DACA application, you need these documents:\n\n• 📄 Form I-821D (DACA Application)\n• 💼 Form I-765 (Work Permit)\n• 📧 Form G-1145 (E-Notification)\n• 📋 Supporting evidence\n• 💰 Filing fees\n\nI can help you gather and complete each document!";
+            }
+            
+            if (message.includes('legal') || message.includes('lawyer')) {
+                return "For legal assistance, I recommend:\n\n• ⚖️ Legal Aid Society: 1-800-399-4529\n• 🏛️ Immigrant Legal Resource Center: 1-415-255-9499\n• 🎓 Local law school clinics\n• 🏢 Community legal centers\n\nWould you like me to help you find resources in your area?";
+            }
+            
+            if (message.includes('emergency') || message.includes('urgent')) {
+                return "🚨 EMERGENCY RESOURCES:\n\n• National Immigration Hotline: 1-800-375-5283\n• ICE Detention Hotline: 1-888-351-4024\n• Legal Aid Hotline: 1-800-399-4529\n• Emergency Medical: 911\n\nIf you're in immediate danger, call 911 or the hotlines above.";
+            }
+            
+            // Default response
+            const responses = [
+                "I understand you're asking about immigration. I can help you with form completion, document requirements, and finding resources. What specific question do you have?",
+                "I'm here to assist with your immigration journey. I can help with DACA, work permits, family petitions, and more. What would you like to know?",
+                "Let me help you navigate your immigration process. I can provide guidance on forms, documents, and next steps. What do you need help with?",
+                "I can assist you with various immigration matters. Whether it's DACA, asylum, family-based immigration, or citizenship, I'm here to help. What's your question?"
+            ];
+            
+            return responses[Math.floor(Math.random() * responses.length)];
+        }
+
+        function uploadDocument() {
+            document.getElementById('documentUpload').click();
+        }
+
+        function handleDocumentUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            showNotification(`Uploading ${file.name}...`, 'success');
+            
+            // Simulate document processing
+            setTimeout(() => {
+                addMessage(`📄 I've received your document: ${file.name}. I can help you analyze it and answer questions about its content. What would you like to know?`, 'ai');
+            }, 2000);
+            
+            // Reset file input
+            event.target.value = '';
+        }
+
+        function toggleVoiceRecording() {
+            const voiceBtn = document.getElementById('voiceBtn');
+            
+            if (isRecording) {
+                voiceBtn.classList.remove('recording');
+                isRecording = false;
+                showNotification('Voice recording stopped', 'success');
+                
+                // Simulate speech-to-text result
+                setTimeout(() => {
+                    document.getElementById('messageInput').value = "I need help with my DACA application";
+                    showNotification('Voice input processed', 'success');
+                }, 500);
+            } else {
+                voiceBtn.classList.add('recording');
+                isRecording = true;
+                showNotification('Voice recording started - speak now', 'success');
+            }
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        // Help Resources
+        function populateHelpResources() {
+            const resources = {
+                emergency: [
+                    { name: 'National Immigration Hotline', phone: '1-800-375-5283', description: '24/7 emergency assistance for immigration issues' },
+                    { name: 'ICE Detention Hotline', phone: '1-888-351-4024', description: 'Report detention issues and get help' },
+                    { name: 'Legal Aid Hotline', phone: '1-800-399-4529', description: 'Free legal assistance and consultations' },
+                    { name: 'Emergency Medical Services', phone: '911', description: 'Emergency medical care' }
+                ],
+                legal: [
+                    { name: 'Legal Aid Society', phone: '1-800-399-4529', description: 'Free consultations and representation' },
+                    { name: 'Immigrant Legal Resource Center', phone: '1-415-255-9499', description: 'Legal resources and training' },
+                    { name: 'American Immigration Lawyers Association', phone: '1-202-507-7600', description: 'Find qualified immigration lawyers' },
+                    { name: 'Pro Bono Legal Services', description: 'Free legal help for low-income individuals' }
+                ],
+                community: [
+                    { name: 'Local Community Centers', description: 'Find centers in your area for support' },
+                    { name: 'Immigrant Rights Organizations', description: 'Advocacy and support groups' },
+                    { name: 'Religious Organizations', description: 'Faith-based assistance programs' },
+                    { name: 'Cultural Centers', description: 'Community support and resources' }
+                ],
+                healthcare: [
+                    { name: 'Community Health Centers', description: 'Low-cost healthcare services' },
+                    { name: 'Emergency Medical Services', phone: '911', description: 'Emergency medical care' },
+                    { name: 'Mental Health Resources', description: 'Counseling and support services' },
+                    { name: 'Free Clinics', description: 'No-cost medical services' }
+                ],
+                employment: [
+                    { name: 'Workforce Development Centers', description: 'Job training and placement services' },
+                    { name: 'Employment Rights Organizations', description: 'Workplace rights and protections' },
+                    { name: 'Small Business Resources', description: 'Entrepreneurship support' },
+                    { name: 'Job Training Programs', description: 'Skills development and certification' }
+                ],
+                education: [
+                    { name: 'Adult Education Centers', description: 'English classes and GED programs' },
+                    { name: 'Community Colleges', description: 'Affordable higher education' },
+                    { name: 'Scholarship Programs', description: 'Financial aid for immigrants' },
+                    { name: 'ESL Programs', description: 'English as a Second Language classes' }
+                ]
+            };
+            
+            Object.entries(resources).forEach(([category, items]) => {
+                const container = document.getElementById(`${category}ResourcesContainer`);
+                if (container) {
+                    container.innerHTML = '';
+                    items.forEach(item => {
+                        const itemDiv = document.createElement('div');
+                        itemDiv.className = 'help-item';
+                        itemDiv.innerHTML = `
+                            <h4>${item.name}</h4>
+                            <p>${item.description}</p>
+                            ${item.phone ? `<a href="tel:${item.phone}" onclick="showNotification('Calling ${item.name}...', 'success')">${item.phone}</a>` : ''}
+                        `;
+                        container.appendChild(itemDiv);
+                    });
+                }
+            });
+        }
+
+        // Utility Functions
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.textContent = message;
+            
+            // Set background color based on type
+            if (type === 'success') {
+                notification.style.background = '#48bb78';
+            } else if (type === 'error') {
+                notification.style.background = '#e53e3e';
+            } else if (type === 'warning') {
+                notification.style.background = '#f6ad55';
+            } else {
+                notification.style.background = '#667eea';
+            }
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        function showWelcomeMessage() {
+            setTimeout(() => {
+                showNotification('🚀 Welcome to Immigr-Aid.ai! Your AI immigration assistant is ready to help.', 'success');
+            }, 1000);
+        }
+
+        function loadPreferences() {
+            const savedLanguage = localStorage.getItem('preferredLanguage');
+            if (savedLanguage) {
+                currentLanguage = savedLanguage;
+                document.getElementById('languageSelect').value = savedLanguage;
+            }
+            
+            const savedProfile = localStorage.getItem('userProfile');
+            if (savedProfile) {
+                userProfile = JSON.parse(savedProfile);
+                profileComplete = true;
+                
+                // Populate form with saved data
+                Object.entries(userProfile).forEach(([key, value]) => {
+                    const element = document.getElementById(key);
+                    if (element) {
+                        element.value = value;
+                    }
+                });
+                
+                // Update UI
+                document.getElementById('profileCompletionStatus').innerHTML = '<p style="color: #48bb78; font-weight: 500;">✅ Profile complete - AI features unlocked!</p>';
+            }
+        }
+
+        // Form submission handler
+        document.getElementById('profileForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            saveProfile();
+        });
+    </script>
+</body>
+</html>

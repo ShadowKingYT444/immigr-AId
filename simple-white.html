@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Immigr-Aid.ai - Simple Immigration Helper</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: white;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px 0;
+            background: white;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #666;
+            font-size: 1.1rem;
+        }
+        
+        .language-selector {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .language-selector select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background: white;
+            font-size: 14px;
+        }
+        
+        .step-container {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border: 1px solid #f0f0f0;
+        }
+        
+        .step-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .step-number {
+            background: #007bff;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+        
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .option-card {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .option-card:hover {
+            border-color: #007bff;
+            background: #f0f8ff;
+            transform: translateY(-2px);
+        }
+        
+        .option-card.selected {
+            border-color: #007bff;
+            background: #e3f2fd;
+        }
+        
+        .option-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        
+        .option-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .option-desc {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .form-section {
+            margin-bottom: 25px;
+        }
+        
+        .form-section h3 {
+            font-size: 1.2rem;
+            color: #333;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+        
+        .form-group label {
+            font-weight: 500;
+            color: #555;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+        
+        .btn-primary {
+            background: #007bff;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #0056b3;
+            transform: translateY(-1px);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #545b62;
+        }
+        
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #1e7e34;
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: #007bff;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background: #28a745;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1000;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .chat-container {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .chat-messages {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+        }
+        
+        .message {
+            background: white;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 4px solid #007bff;
+        }
+        
+        .message.user {
+            background: #e3f2fd;
+            border-left-color: #2196f3;
+        }
+        
+        .chat-input {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .chat-input input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+        }
+        
+        .chat-input button {
+            padding: 10px 20px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .btn-group {
+                flex-direction: column;
+            }
+            
+            .language-selector {
+                position: static;
+                text-align: center;
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="language-selector">
+        <select id="languageSelect">
+            <option value="en">🇺🇸 English</option>
+            <option value="es">🇪🇸 Español</option>
+            <option value="zh">🇨🇳 中文</option>
+            <option value="ar">🇸🇦 العربية</option>
+            <option value="hi">🇮🇳 हिन्दी</option>
+            <option value="pt">🇧🇷 Português</option>
+            <option value="ru">🇷🇺 Русский</option>
+            <option value="fr">🇫🇷 Français</option>
+            <option value="vi">🇻🇳 Tiếng Việt</option>
+            <option value="ko">🇰🇷 한국어</option>
+        </select>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <div class="logo">🏠 Immigr-Aid.ai</div>
+            <div class="subtitle" data-translate="subtitle">Simple Immigration Helper</div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill" style="width: 20%"></div>
+        </div>
+
+        <!-- Step 1: Choose What You Want to Do -->
+        <div class="step-container" id="step1">
+            <div class="step-title">
+                <div class="step-number">1</div>
+                <span data-translate="step1Title">Choose What You Want to Do</span>
+            </div>
+            <div class="options-grid">
+                <div class="option-card" onclick="selectOption('daca')">
+                    <div class="option-icon">📋</div>
+                    <div class="option-title" data-translate="dacaTitle">DACA Application</div>
+                    <div class="option-desc" data-translate="dacaDesc">Apply for Deferred Action for Childhood Arrivals</div>
+                </div>
+                <div class="option-card" onclick="selectOption('work')">
+                    <div class="option-icon">💼</div>
+                    <div class="option-title" data-translate="workTitle">Work Permit</div>
+                    <div class="option-desc" data-translate="workDesc">Get authorization to work legally</div>
+                </div>
+                <div class="option-card" onclick="selectOption('travel')">
+                    <div class="option-icon">✈️</div>
+                    <div class="option-title" data-translate="travelTitle">Travel Document</div>
+                    <div class="option-desc" data-translate="travelDesc">Apply for advance parole to travel</div>
+                </div>
+                <div class="option-card" onclick="selectOption('citizenship')">
+                    <div class="option-icon">🇺🇸</div>
+                    <div class="option-title" data-translate="citizenshipTitle">Citizenship</div>
+                    <div class="option-desc" data-translate="citizenshipDesc">Apply for US citizenship</div>
+                </div>
+                <div class="option-card" onclick="selectOption('family')">
+                    <div class="option-icon">👨‍👩‍👧‍👦</div>
+                    <div class="option-title" data-translate="familyTitle">Family Petition</div>
+                    <div class="option-desc" data-translate="familyDesc">Petition for family members</div>
+                </div>
+                <div class="option-card" onclick="selectOption('help')">
+                    <div class="option-icon">❓</div>
+                    <div class="option-title" data-translate="helpTitle">Get Help</div>
+                    <div class="option-desc" data-translate="helpDesc">Find legal assistance and resources</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 2: Fill Out Your Information -->
+        <div class="step-container hidden" id="step2">
+            <div class="step-title">
+                <div class="step-number">2</div>
+                <span data-translate="step2Title">Fill Out Your Information</span>
+            </div>
+            
+            <div class="form-section">
+                <h3 data-translate="personalInfo">Personal Information</h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label data-translate="firstName">First Name *</label>
+                        <input type="text" id="firstName" required>
+                    </div>
+                    <div class="form-group">
+                        <label data-translate="lastName">Last Name *</label>
+                        <input type="text" id="lastName" required>
+                    </div>
+                    <div class="form-group">
+                        <label data-translate="dateOfBirth">Date of Birth *</label>
+                        <input type="date" id="dateOfBirth" required>
+                    </div>
+                    <div class="form-group">
+                        <label data-translate="countryOfBirth">Country of Birth *</label>
+                        <select id="countryOfBirth" required>
+                            <option value="" data-translate="selectCountry">Select Country</option>
+                            <option value="Mexico">Mexico</option>
+                            <option value="China">China</option>
+                            <option value="India">India</option>
+                            <option value="Philippines">Philippines</option>
+                            <option value="El Salvador">El Salvador</option>
+                            <option value="Guatemala">Guatemala</option>
+                            <option value="Honduras">Honduras</option>
+                            <option value="Cuba">Cuba</option>
+                            <option value="Dominican Republic">Dominican Republic</option>
+                            <option value="Colombia">Colombia</option>
+                            <option value="Venezuela">Venezuela</option>
+                            <option value="Brazil">Brazil</option>
+                            <option value="Argentina">Argentina</option>
+                            <option value="Peru">Peru</option>
+                            <option value="Ecuador">Ecuador</option>
+                            <option value="Bolivia">Bolivia</option>
+                            <option value="Chile">Chile</option>
+                            <option value="Uruguay">Uruguay</option>
+                            <option value="Paraguay">Paraguay</option>
+                            <option value="Other" data-translate="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group full-width">
+                        <label data-translate="currentAddress">Current Address *</label>
+                        <textarea id="currentAddress" rows="3" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label data-translate="phoneNumber">Phone Number *</label>
+                        <input type="tel" id="phoneNumber" required>
+                    </div>
+                    <div class="form-group">
+                        <label data-translate="emailAddress">Email Address *</label>
+                        <input type="email" id="emailAddress" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3 data-translate="immigrationInfo">Immigration Information</h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label data-translate="entryDate">Entry Date to US *</label>
+                        <input type="date" id="entryDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label data-translate="methodOfEntry">Method of Entry *</label>
+                        <select id="methodOfEntry" required>
+                            <option value="" data-translate="selectMethod">Select Method</option>
+                            <option value="Visa">Visa</option>
+                            <option value="Border Crossing">Border Crossing</option>
+                            <option value="Airport">Airport</option>
+                            <option value="Other" data-translate="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label data-translate="educationLevel">Education Level *</label>
+                        <select id="educationLevel" required>
+                            <option value="" data-translate="selectLevel">Select Level</option>
+                            <option value="Elementary">Elementary</option>
+                            <option value="Middle School">Middle School</option>
+                            <option value="High School">High School</option>
+                            <option value="Some College">Some College</option>
+                            <option value="Associate Degree">Associate Degree</option>
+                            <option value="Bachelor Degree">Bachelor Degree</option>
+                            <option value="Master Degree">Master Degree</option>
+                            <option value="Doctorate">Doctorate</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label data-translate="employmentStatus">Employment Status *</label>
+                        <select id="employmentStatus" required>
+                            <option value="" data-translate="selectStatus">Select Status</option>
+                            <option value="Employed">Employed</option>
+                            <option value="Unemployed">Unemployed</option>
+                            <option value="Student">Student</option>
+                            <option value="Self-Employed">Self-Employed</option>
+                            <option value="Retired">Retired</option>
+                            <option value="Other" data-translate="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-secondary" onclick="goBack()" data-translate="back">Back</button>
+                <button class="btn btn-primary" onclick="saveInfo()" data-translate="saveContinue">Save & Continue</button>
+            </div>
+        </div>
+
+        <!-- Step 3: Complete Your Application -->
+        <div class="step-container hidden" id="step3">
+            <div class="step-title">
+                <div class="step-number">3</div>
+                <span data-translate="step3Title">Complete Your Application</span>
+            </div>
+            
+            <div id="applicationContent">
+                <!-- Content will be populated based on selection -->
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-secondary" onclick="goBack()" data-translate="back">Back</button>
+                <button class="btn btn-success" onclick="submitApplication()" data-translate="submit">Submit Application</button>
+            </div>
+        </div>
+
+        <!-- Step 4: Get Help -->
+        <div class="step-container hidden" id="step4">
+            <div class="step-title">
+                <div class="step-number">4</div>
+                <span data-translate="step4Title">Get Help & Resources</span>
+            </div>
+            
+            <div id="helpContent">
+                <!-- Help content will be populated -->
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-secondary" onclick="goBack()" data-translate="back">Back</button>
+                <button class="btn btn-primary" onclick="startOver()" data-translate="startOver">Start Over</button>
+            </div>
+        </div>
+
+        <!-- AI Assistant -->
+        <div class="step-container hidden" id="aiAssistant">
+            <div class="step-title">
+                <div class="step-number">🤖</div>
+                <span data-translate="aiAssistant">AI Assistant</span>
+            </div>
+            
+            <div class="chat-container">
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message">
+                        <strong data-translate="aiWelcome">AI Assistant:</strong> <span data-translate="aiWelcomeMsg">Hello! I'm here to help you with your immigration questions. Ask me anything!</span>
+                    </div>
+                </div>
+                <div class="chat-input">
+                    <input type="text" id="messageInput" placeholder="Ask me anything..." onkeypress="handleKeyPress(event)">
+                    <button onclick="sendMessage()" data-translate="send">Send</button>
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-secondary" onclick="goBack()" data-translate="back">Back</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 1;
+        let selectedOption = null;
+        let userInfo = {};
+
+        // Translations
+        const translations = {
+            en: {
+                subtitle: "Simple Immigration Helper",
+                step1Title: "Choose What You Want to Do",
+                step2Title: "Fill Out Your Information",
+                step3Title: "Complete Your Application",
+                step4Title: "Get Help & Resources",
+                aiAssistant: "AI Assistant",
+                dacaTitle: "DACA Application",
+                dacaDesc: "Apply for Deferred Action for Childhood Arrivals",
+                workTitle: "Work Permit",
+                workDesc: "Get authorization to work legally",
+                travelTitle: "Travel Document",
+                travelDesc: "Apply for advance parole to travel",
+                citizenshipTitle: "Citizenship",
+                citizenshipDesc: "Apply for US citizenship",
+                familyTitle: "Family Petition",
+                familyDesc: "Petition for family members",
+                helpTitle: "Get Help",
+                helpDesc: "Find legal assistance and resources",
+                personalInfo: "Personal Information",
+                immigrationInfo: "Immigration Information",
+                firstName: "First Name",
+                lastName: "Last Name",
+                dateOfBirth: "Date of Birth",
+                countryOfBirth: "Country of Birth",
+                currentAddress: "Current Address",
+                phoneNumber: "Phone Number",
+                emailAddress: "Email Address",
+                entryDate: "Entry Date to US",
+                methodOfEntry: "Method of Entry",
+                educationLevel: "Education Level",
+                employmentStatus: "Employment Status",
+                selectCountry: "Select Country",
+                selectMethod: "Select Method",
+                selectLevel: "Select Level",
+                selectStatus: "Select Status",
+                other: "Other",
+                back: "Back",
+                saveContinue: "Save & Continue",
+                submit: "Submit Application",
+                startOver: "Start Over",
+                send: "Send",
+                aiWelcome: "AI Assistant:",
+                aiWelcomeMsg: "Hello! I'm here to help you with your immigration questions. Ask me anything!"
+            },
+            es: {
+                subtitle: "Ayudante de Inmigración Simple",
+                step1Title: "Elige Lo Que Quieres Hacer",
+                step2Title: "Completa Tu Información",
+                step3Title: "Completa Tu Solicitud",
+                step4Title: "Obtén Ayuda y Recursos",
+                aiAssistant: "Asistente IA",
+                dacaTitle: "Solicitud DACA",
+                dacaDesc: "Solicitar Acción Diferida para Llegadas de la Infancia",
+                workTitle: "Permiso de Trabajo",
+                workDesc: "Obtener autorización para trabajar legalmente",
+                travelTitle: "Documento de Viaje",
+                travelDesc: "Solicitar libertad condicional anticipada para viajar",
+                citizenshipTitle: "Ciudadanía",
+                citizenshipDesc: "Solicitar ciudadanía estadounidense",
+                familyTitle: "Petición Familiar",
+                familyDesc: "Peticionar por miembros de la familia",
+                helpTitle: "Obtener Ayuda",
+                helpDesc: "Encontrar asistencia legal y recursos",
+                personalInfo: "Información Personal",
+                immigrationInfo: "Información de Inmigración",
+                firstName: "Nombre",
+                lastName: "Apellido",
+                dateOfBirth: "Fecha de Nacimiento",
+                countryOfBirth: "País de Nacimiento",
+                currentAddress: "Dirección Actual",
+                phoneNumber: "Número de Teléfono",
+                emailAddress: "Dirección de Correo",
+                entryDate: "Fecha de Entrada a EE.UU.",
+                methodOfEntry: "Método de Entrada",
+                educationLevel: "Nivel de Educación",
+                employmentStatus: "Estado de Empleo",
+                selectCountry: "Seleccionar País",
+                selectMethod: "Seleccionar Método",
+                selectLevel: "Seleccionar Nivel",
+                selectStatus: "Seleccionar Estado",
+                other: "Otro",
+                back: "Atrás",
+                saveContinue: "Guardar y Continuar",
+                submit: "Enviar Solicitud",
+                startOver: "Empezar de Nuevo",
+                send: "Enviar",
+                aiWelcome: "Asistente IA:",
+                aiWelcomeMsg: "¡Hola! Estoy aquí para ayudarte con tus preguntas de inmigración. ¡Pregúntame cualquier cosa!"
+            },
+            zh: {
+                subtitle: "简单移民助手",
+                step1Title: "选择您想要做什么",
+                step2Title: "填写您的信息",
+                step3Title: "完成您的申请",
+                step4Title: "获取帮助和资源",
+                aiAssistant: "AI助手",
+                dacaTitle: "DACA申请",
+                dacaDesc: "申请童年入境暂缓遣返",
+                workTitle: "工作许可",
+                workDesc: "获得合法工作授权",
+                travelTitle: "旅行证件",
+                travelDesc: "申请提前假释旅行",
+                citizenshipTitle: "公民身份",
+                citizenshipDesc: "申请美国公民身份",
+                familyTitle: "家庭申请",
+                familyDesc: "为家庭成员申请",
+                helpTitle: "获取帮助",
+                helpDesc: "寻找法律帮助和资源",
+                personalInfo: "个人信息",
+                immigrationInfo: "移民信息",
+                firstName: "名字",
+                lastName: "姓氏",
+                dateOfBirth: "出生日期",
+                countryOfBirth: "出生国家",
+                currentAddress: "当前地址",
+                phoneNumber: "电话号码",
+                emailAddress: "电子邮件地址",
+                entryDate: "入境美国日期",
+                methodOfEntry: "入境方式",
+                educationLevel: "教育水平",
+                employmentStatus: "就业状况",
+                selectCountry: "选择国家",
+                selectMethod: "选择方式",
+                selectLevel: "选择水平",
+                selectStatus: "选择状况",
+                other: "其他",
+                back: "返回",
+                saveContinue: "保存并继续",
+                submit: "提交申请",
+                startOver: "重新开始",
+                send: "发送",
+                aiWelcome: "AI助手：",
+                aiWelcomeMsg: "您好！我在这里帮助您解决移民问题。请随时提问！"
+            }
+        };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeLanguageSelector();
+            updateProgress();
+        });
+
+        function initializeLanguageSelector() {
+            const languageSelect = document.getElementById('languageSelect');
+            languageSelect.addEventListener('change', function() {
+                updateLanguage(this.value);
+            });
+        }
+
+        function updateLanguage(language) {
+            const t = translations[language] || translations.en;
+            
+            // Update all elements with data-translate attribute
+            document.querySelectorAll('[data-translate]').forEach(element => {
+                const key = element.getAttribute('data-translate');
+                if (t[key]) {
+                    element.textContent = t[key];
+                }
+            });
+            
+            // Update placeholders
+            const messageInput = document.getElementById('messageInput');
+            if (messageInput) {
+                messageInput.placeholder = language === 'es' ? 'Pregúntame cualquier cosa...' : 
+                                         language === 'zh' ? '问我任何问题...' : 'Ask me anything...';
+            }
+            
+            showNotification(`Language changed to ${language.toUpperCase()}`, 'success');
+        }
+
+        function selectOption(option) {
+            selectedOption = option;
+            
+            // Remove previous selections
+            document.querySelectorAll('.option-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // Add selection to clicked card
+            event.currentTarget.classList.add('selected');
+            
+            // Move to next step
+            setTimeout(() => {
+                if (option === 'help') {
+                    showHelpStep();
+                } else {
+                    showStep(2);
+                }
+            }, 500);
+        }
+
+        function showStep(step) {
+            // Hide all steps
+            document.querySelectorAll('.step-container').forEach(container => {
+                container.classList.add('hidden');
+            });
+            
+            // Show current step
+            document.getElementById(`step${step}`).classList.remove('hidden');
+            currentStep = step;
+            updateProgress();
+        }
+
+        function showHelpStep() {
+            document.querySelectorAll('.step-container').forEach(container => {
+                container.classList.add('hidden');
+            });
+            
+            document.getElementById('step4').classList.remove('hidden');
+            currentStep = 4;
+            updateProgress();
+            
+            populateHelpContent();
+        }
+
+        function populateHelpContent() {
+            const helpContent = document.getElementById('helpContent');
+            helpContent.innerHTML = `
+                <div style="display: grid; gap: 20px;">
+                    <div style="padding: 20px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #dc3545;">
+                        <h3>🚨 Emergency Resources</h3>
+                        <p><strong>National Immigration Hotline:</strong> <a href="tel:1-800-375-5283" onclick="showNotification('Calling National Immigration Hotline...', 'success')">1-800-375-5283</a></p>
+                        <p><strong>ICE Detention Hotline:</strong> <a href="tel:1-888-351-4024" onclick="showNotification('Calling ICE Detention Hotline...', 'success')">1-888-351-4024</a></p>
+                        <p><strong>Legal Aid Hotline:</strong> <a href="tel:1-800-399-4529" onclick="showNotification('Calling Legal Aid Hotline...', 'success')">1-800-399-4529</a></p>
+                    </div>
+                    
+                    <div style="padding: 20px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #007bff;">
+                        <h3>⚖️ Legal Aid</h3>
+                        <p><strong>Legal Aid Society:</strong> <a href="tel:1-800-399-4529" onclick="showNotification('Calling Legal Aid Society...', 'success')">1-800-399-4529</a></p>
+                        <p><strong>Immigrant Legal Resource Center:</strong> <a href="tel:1-415-255-9499" onclick="showNotification('Calling ILRC...', 'success')">1-415-255-9499</a></p>
+                        <p><strong>American Immigration Lawyers Association:</strong> <a href="tel:1-202-507-7600" onclick="showNotification('Calling AILA...', 'success')">1-202-507-7600</a></p>
+                    </div>
+                    
+                    <div style="padding: 20px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #28a745;">
+                        <h3>🏢 Community Centers</h3>
+                        <p>Find local community centers in your area that provide immigration assistance, English classes, and support services.</p>
+                        <p><strong>Search for:</strong> "immigration help near me" or "community center [your city]"</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function saveInfo() {
+            // Collect form data
+            const formData = {
+                firstName: document.getElementById('firstName').value,
+                lastName: document.getElementById('lastName').value,
+                dateOfBirth: document.getElementById('dateOfBirth').value,
+                countryOfBirth: document.getElementById('countryOfBirth').value,
+                currentAddress: document.getElementById('currentAddress').value,
+                phoneNumber: document.getElementById('phoneNumber').value,
+                emailAddress: document.getElementById('emailAddress').value,
+                entryDate: document.getElementById('entryDate').value,
+                methodOfEntry: document.getElementById('methodOfEntry').value,
+                educationLevel: document.getElementById('educationLevel').value,
+                employmentStatus: document.getElementById('employmentStatus').value
+            };
+            
+            // Validate required fields
+            const requiredFields = ['firstName', 'lastName', 'dateOfBirth', 'countryOfBirth', 'currentAddress', 'phoneNumber', 'emailAddress', 'entryDate', 'methodOfEntry', 'educationLevel', 'employmentStatus'];
+            const missingFields = requiredFields.filter(field => !formData[field]);
+            
+            if (missingFields.length > 0) {
+                showNotification('Please fill in all required fields', 'error');
+                return;
+            }
+            
+            userInfo = formData;
+            localStorage.setItem('userInfo', JSON.stringify(userInfo));
+            
+            showNotification('Information saved successfully!', 'success');
+            showStep(3);
+            populateApplicationContent();
+        }
+
+        function populateApplicationContent() {
+            const applicationContent = document.getElementById('applicationContent');
+            
+            let content = '';
+            
+            switch(selectedOption) {
+                case 'daca':
+                    content = `
+                        <h3>📋 DACA Application (Form I-821D)</h3>
+                        <p>Based on your information, here's what you need for your DACA application:</p>
+                        <div style="margin: 20px 0;">
+                            <h4>Required Documents:</h4>
+                            <ul style="margin: 10px 0; padding-left: 20px;">
+                                <li>✅ Form I-821D (DACA Application)</li>
+                                <li>✅ Form I-765 (Work Permit)</li>
+                                <li>✅ Form G-1145 (E-Notification)</li>
+                                <li>✅ Proof of continuous residence since 2007</li>
+                                <li>✅ Education or military service records</li>
+                                <li>✅ Economic necessity documentation</li>
+                                <li>✅ Passport photos</li>
+                            </ul>
+                        </div>
+                        <div style="background: #e3f2fd; padding: 15px; border-radius: 8px; margin: 20px 0;">
+                            <h4>Your Information Summary:</h4>
+                            <p><strong>Name:</strong> ${userInfo.firstName} ${userInfo.lastName}</p>
+                            <p><strong>Born:</strong> ${userInfo.dateOfBirth} in ${userInfo.countryOfBirth}</p>
+                            <p><strong>Entry:</strong> ${userInfo.entryDate} via ${userInfo.methodOfEntry}</p>
+                            <p><strong>Education:</strong> ${userInfo.educationLevel}</p>
+                            <p><strong>Employment:</strong> ${userInfo.employmentStatus}</p>
+                        </div>
+                        <div style="text-align: center; margin: 20px 0;">
+                            <button class="btn btn-primary" onclick="downloadForm('i-821d')">📄 Download Form I-821D</button>
+                            <button class="btn btn-primary" onclick="downloadForm('i-765')">💼 Download Form I-765</button>
+                        </div>
+                    `;
+                    break;
+                case 'work':
+                    content = `
+                        <h3>💼 Work Permit Application (Form I-765)</h3>
+                        <p>Based on your information, here's what you need for your work permit:</p>
+                        <div style="margin: 20px 0;">
+                            <h4>Required Documents:</h4>
+                            <ul style="margin: 10px 0; padding-left: 20px;">
+                                <li>✅ Form I-765 (Employment Authorization)</li>
+                                <li>✅ Form G-1145 (E-Notification)</li>
+                                <li>✅ Current immigration status documentation</li>
+                                <li>✅ Employment history</li>
+                                <li>✅ Passport photos</li>
+                                <li>✅ Filing fee ($410)</li>
+                            </ul>
+                        </div>
+                        <div style="background: #e8f5e8; padding: 15px; border-radius: 8px; margin: 20px 0;">
+                            <h4>Eligibility Check:</h4>
+                            <p>✅ You appear to be eligible for work authorization based on your profile.</p>
+                            <p>✅ Processing time: 3-6 months</p>
+                        </div>
+                        <div style="text-align: center; margin: 20px 0;">
+                            <button class="btn btn-primary" onclick="downloadForm('i-765')">📄 Download Form I-765</button>
+                        </div>
+                    `;
+                    break;
+                case 'travel':
+                    content = `
+                        <h3>✈️ Travel Document Application (Form I-131)</h3>
+                        <p>Based on your information, here's what you need for advance parole:</p>
+                        <div style="margin: 20px 0;">
+                            <h4>Required Documents:</h4>
+                            <ul style="margin: 10px 0; padding-left: 20px;">
+                                <li>✅ Form I-131 (Application for Travel Document)</li>
+                                <li>✅ Form G-1145 (E-Notification)</li>
+                                <li>✅ Evidence of urgent need to travel</li>
+                                <li>✅ Supporting documentation</li>
+                                <li>✅ Passport photos</li>
+                                <li>✅ Filing fee ($575)</li>
+                            </ul>
+                        </div>
+                        <div style="background: #fff3cd; padding: 15px; border-radius: 8px; margin: 20px 0;">
+                            <h4>Important Notes:</h4>
+                            <p>⚠️ Advance parole allows you to travel and return to the US</p>
+                            <p>⚠️ You must have a valid reason for travel</p>
+                            <p>⚠️ Processing time: 3-6 months</p>
+                        </div>
+                        <div style="text-align: center; margin: 20px 0;">
+                            <button class="btn btn-primary" onclick="downloadForm('i-131')">📄 Download Form I-131</button>
+                        </div>
+                    `;
+                    break;
+                case 'citizenship':
+                    content = `
+                        <h3>🇺🇸 Citizenship Application (Form N-400)</h3>
+                        <p>Based on your information, here's what you need for citizenship:</p>
+                        <div style="margin: 20px 0;">
+                            <h4>Required Documents:</h4>
+                            <ul style="margin: 10px 0; padding-left: 20px;">
+                                <li>✅ Form N-400 (Application for Naturalization)</li>
+                                <li>✅ Form G-1145 (E-Notification)</li>
+                                <li>✅ Green card (Permanent Resident Card)</li>
+                                <li>✅ Proof of continuous residence</li>
+                                <li>✅ English and civics test preparation</li>
+                                <li>✅ Passport photos</li>
+                                <li>✅ Filing fee ($640 + $85 biometrics)</li>
+                            </ul>
+                        </div>
+                        <div style="background: #d4edda; padding: 15px; border-radius: 8px; margin: 20px 0;">
+                            <h4>Requirements Check:</h4>
+                            <p>✅ You need to be a lawful permanent resident for 5 years (3 if married to US citizen)</p>
+                            <p>✅ You must pass English and civics tests</p>
+                            <p>✅ Processing time: 6-12 months</p>
+                        </div>
+                        <div style="text-align: center; margin: 20px 0;">
+                            <button class="btn btn-primary" onclick="downloadForm('n-400')">📄 Download Form N-400</button>
+                        </div>
+                    `;
+                    break;
+                case 'family':
+                    content = `
+                        <h3>👨‍👩‍👧‍👦 Family Petition (Form I-130)</h3>
+                        <p>Based on your information, here's what you need for family petition:</p>
+                        <div style="margin: 20px 0;">
+                            <h4>Required Documents:</h4>
+                            <ul style="margin: 10px 0; padding-left: 20px;">
+                                <li>✅ Form I-130 (Petition for Alien Relative)</li>
+                                <li>✅ Form G-1145 (E-Notification)</li>
+                                <li>✅ Proof of relationship</li>
+                                <li>✅ Birth certificates</li>
+                                <li>✅ Marriage certificates (if applicable)</li>
+                                <li>✅ Passport photos</li>
+                                <li>✅ Filing fee ($535)</li>
+                            </ul>
+                        </div>
+                        <div style="background: #e3f2fd; padding: 15px; border-radius: 8px; margin: 20px 0;">
+                            <h4>Family Categories:</h4>
+                            <p>• Immediate relatives (spouse, parent, child under 21)</p>
+                            <p>• Family preference categories (adult children, siblings)</p>
+                            <p>• Processing times vary by category</p>
+                        </div>
+                        <div style="text-align: center; margin: 20px 0;">
+                            <button class="btn btn-primary" onclick="downloadForm('i-130')">📄 Download Form I-130</button>
+                        </div>
+                    `;
+                    break;
+            }
+            
+            applicationContent.innerHTML = content;
+        }
+
+        function downloadForm(formType) {
+            showNotification(`Downloading ${formType.toUpperCase()} form...`, 'success');
+            
+            // Simulate download
+            setTimeout(() => {
+                showNotification(`${formType.toUpperCase()} form downloaded successfully!`, 'success');
+            }, 1500);
+        }
+
+        function submitApplication() {
+            showNotification('Submitting your application...', 'success');
+            
+            // Simulate submission
+            setTimeout(() => {
+                showNotification('Application submitted successfully! You will receive confirmation via email.', 'success');
+                
+                // Show AI assistant
+                setTimeout(() => {
+                    showAIAssistant();
+                }, 2000);
+            }, 2000);
+        }
+
+        function showAIAssistant() {
+            document.querySelectorAll('.step-container').forEach(container => {
+                container.classList.add('hidden');
+            });
+            
+            document.getElementById('aiAssistant').classList.remove('hidden');
+            currentStep = 'ai';
+            updateProgress();
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            // Add user message
+            const chatMessages = document.getElementById('chatMessages');
+            const userMessage = document.createElement('div');
+            userMessage.className = 'message user';
+            userMessage.innerHTML = `<strong>You:</strong> ${message}`;
+            chatMessages.appendChild(userMessage);
+            
+            // Clear input
+            input.value = '';
+            
+            // Generate AI response
+            setTimeout(() => {
+                const aiResponse = generateAIResponse(message);
+                const aiMessage = document.createElement('div');
+                aiMessage.className = 'message';
+                aiMessage.innerHTML = `<strong>AI Assistant:</strong> ${aiResponse}`;
+                chatMessages.appendChild(aiMessage);
+                
+                // Scroll to bottom
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }, 1000);
+        }
+
+        function generateAIResponse(message) {
+            const msg = message.toLowerCase();
+            
+            if (msg.includes('help') || msg.includes('assist')) {
+                return "I'm here to help! I can assist you with form questions, document requirements, and immigration guidance. What specific help do you need?";
+            }
+            
+            if (msg.includes('status') || msg.includes('progress')) {
+                return "Your application has been submitted successfully! You should receive a receipt notice within 2-3 weeks. Check your email for updates.";
+            }
+            
+            if (msg.includes('time') || msg.includes('how long')) {
+                return "Processing times vary by form type: DACA (3-6 months), Work Permit (3-6 months), Travel Document (3-6 months), Citizenship (6-12 months).";
+            }
+            
+            if (msg.includes('documents') || msg.includes('paperwork')) {
+                return "Make sure you have all required documents ready. I can help you create a checklist based on your specific application type.";
+            }
+            
+            if (msg.includes('legal') || msg.includes('lawyer')) {
+                return "For legal assistance, contact: Legal Aid Society (1-800-399-4529), Immigrant Legal Resource Center (1-415-255-9499), or find a qualified immigration lawyer in your area.";
+            }
+            
+            return "I understand you're asking about immigration. I can help with form questions, document requirements, processing times, and finding resources. What would you like to know more about?";
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function goBack() {
+            if (currentStep === 2) {
+                showStep(1);
+            } else if (currentStep === 3) {
+                showStep(2);
+            } else if (currentStep === 4) {
+                showStep(1);
+            } else if (currentStep === 'ai') {
+                showStep(3);
+            }
+        }
+
+        function startOver() {
+            // Clear selections and data
+            selectedOption = null;
+            userInfo = {};
+            localStorage.removeItem('userInfo');
+            
+            // Reset form
+            document.getElementById('step2').querySelectorAll('input, select, textarea').forEach(field => {
+                field.value = '';
+            });
+            
+            // Remove selections
+            document.querySelectorAll('.option-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            showStep(1);
+        }
+
+        function updateProgress() {
+            let progress = 0;
+            if (currentStep === 1) progress = 20;
+            else if (currentStep === 2) progress = 40;
+            else if (currentStep === 3) progress = 70;
+            else if (currentStep === 4) progress = 90;
+            else if (currentStep === 'ai') progress = 100;
+            
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.textContent = message;
+            
+            if (type === 'error') {
+                notification.style.background = '#dc3545';
+            } else if (type === 'warning') {
+                notification.style.background = '#ffc107';
+                notification.style.color = '#000';
+            }
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

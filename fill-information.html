@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fill Out Your Information - Immigr-Aid.ai</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+        
+        .logo {
+            width: 40px;
+            height: 40px;
+            background: #8B4513;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: white;
+        }
+        
+        .brand-name {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+        
+        .tagline {
+            font-size: 1rem;
+            color: #7f8c8d;
+            margin-bottom: 20px;
+        }
+        
+        /* Language Selector */
+        .language-selector {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .language-selector select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background: white;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        
+        .translate-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s ease;
+        }
+        
+        .translate-btn:hover {
+            background: #2980b9;
+        }
+        
+        /* Progress Bar */
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #ecf0f1;
+            border-radius: 4px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: #3498db;
+            width: 66.66%;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+        
+        /* Main Card */
+        .main-card {
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #e9ecef;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: #3498db;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .step-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        /* Form Sections */
+        .form-section {
+            margin-bottom: 30px;
+        }
+        
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+        
+        .form-group label {
+            font-weight: 500;
+            color: #555;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+            background: white;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+        
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        
+        /* Navigation Buttons */
+        .navigation-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+        
+        .btn-secondary {
+            background: #95a5a6;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #7f8c8d;
+        }
+        
+        .btn-primary {
+            background: #3498db;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #2980b9;
+            transform: translateY(-1px);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .main-card {
+                padding: 20px;
+            }
+            
+            .navigation-buttons {
+                flex-direction: column;
+            }
+        }
+        
+        /* AI Helper */
+        .ai-helper {
+            background: #e8f4fd;
+            border: 1px solid #3498db;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .ai-helper-title {
+            font-weight: 600;
+            color: #2980b9;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .ai-helper-text {
+            color: #2c3e50;
+            font-size: 0.9rem;
+        }
+        
+        /* Field Help */
+        .field-help {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            padding: 12px;
+            margin-top: 8px;
+            font-size: 0.85rem;
+            color: #6c757d;
+            display: none;
+        }
+        
+        .field-help.show {
+            display: block;
+            animation: slideDown 0.3s ease-out;
+        }
+        
+        .help-trigger {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            font-size: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .form-group {
+            position: relative;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding-right: 40px;
+        }
+        
+        /* Document Support Panel */
+        .document-support {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .document-support-title {
+            font-weight: 600;
+            color: #856404;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .document-support-content {
+            color: #856404;
+            font-size: 0.9rem;
+        }
+        
+        .support-checklist {
+            list-style: none;
+            margin-top: 10px;
+        }
+        
+        .support-checklist li {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 5px;
+            font-size: 0.85rem;
+        }
+        
+        .support-checklist li::before {
+            content: "✓";
+            color: #27ae60;
+            font-weight: bold;
+        }
+        
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo-container">
+                <div class="logo">🏠</div>
+                <div class="brand-name">Immigr-Aid.ai</div>
+            </div>
+            <div class="tagline">Simple Immigration Helper</div>
+            
+            <!-- Language Selector -->
+            <div class="language-selector">
+                <span>🌍</span>
+                <select id="languageSelect">
+                    <option value="en">English</option>
+                    <option value="es">Español</option>
+                    <option value="zh">中文</option>
+                    <option value="ar">العربية</option>
+                    <option value="hi">हिन्दी</option>
+                    <option value="pt">Português</option>
+                    <option value="ru">Русский</option>
+                    <option value="fr">Français</option>
+                    <option value="vi">Tiếng Việt</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button class="translate-btn" onclick="translatePage()">Translate</button>
+            </div>
+        </div>
+        
+        <!-- Progress Bar -->
+        <div class="progress-bar">
+            <div class="progress-fill"></div>
+        </div>
+        
+        <!-- Main Card -->
+        <div class="main-card">
+            <div class="step-header">
+                <div class="step-number">2</div>
+                <div class="step-title">Fill Out Your Information</div>
+            </div>
+            
+            <!-- AI Helper -->
+            <div class="ai-helper">
+                <div class="ai-helper-title">
+                    🤖 AI Assistant
+                </div>
+                <div class="ai-helper-text" id="aiHelperText">
+                    I'll help you fill out this form accurately. Make sure to use your legal name exactly as it appears on your birth certificate or passport.
+                </div>
+            </div>
+            
+            <!-- Document Support Panel -->
+            <div class="document-support" id="documentSupport">
+                <div class="document-support-title">
+                    📋 Document Support
+                </div>
+                <div class="document-support-content" id="documentSupportContent">
+                    <p>I'll guide you through each field with specific help and requirements.</p>
+                    <ul class="support-checklist" id="supportChecklist">
+                        <li>Click the ? button next to any field for detailed help</li>
+                        <li>All required fields are marked with *</li>
+                        <li>I'll validate your information as you type</li>
+                        <li>Your progress is saved automatically</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Personal Information Section -->
+            <div class="form-section">
+                <div class="section-title">Personal Information</div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="firstName">First Name *</label>
+                        <input type="text" id="firstName" name="firstName" required>
+                        <button class="help-trigger" onclick="showFieldHelp('firstName')">?</button>
+                        <div class="field-help" id="firstName-help">
+                            <strong>Help:</strong> Enter your legal first name exactly as it appears on your birth certificate or passport. Don't use nicknames or shortened versions.
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="lastName">Last Name *</label>
+                        <input type="text" id="lastName" name="lastName" required>
+                        <button class="help-trigger" onclick="showFieldHelp('lastName')">?</button>
+                        <div class="field-help" id="lastName-help">
+                            <strong>Help:</strong> Enter your legal last name (surname) exactly as it appears on your birth certificate or passport. Include any hyphens or spaces.
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="dateOfBirth">Date of Birth *</label>
+                        <input type="date" id="dateOfBirth" name="dateOfBirth" required>
+                        <button class="help-trigger" onclick="showFieldHelp('dateOfBirth')">?</button>
+                        <div class="field-help" id="dateOfBirth-help">
+                            <strong>Help:</strong> Enter your exact date of birth as shown on your birth certificate. Use MM/DD/YYYY format.
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="countryOfBirth">Country of Birth *</label>
+                        <select id="countryOfBirth" name="countryOfBirth" required>
+                            <option value="">Select Country</option>
+                            <option value="Mexico">Mexico</option>
+                            <option value="China">China</option>
+                            <option value="India">India</option>
+                            <option value="Philippines">Philippines</option>
+                            <option value="El Salvador">El Salvador</option>
+                            <option value="Guatemala">Guatemala</option>
+                            <option value="Honduras">Honduras</option>
+                            <option value="Cuba">Cuba</option>
+                            <option value="Dominican Republic">Dominican Republic</option>
+                            <option value="Colombia">Colombia</option>
+                            <option value="Venezuela">Venezuela</option>
+                            <option value="Brazil">Brazil</option>
+                            <option value="Argentina">Argentina</option>
+                            <option value="Peru">Peru</option>
+                            <option value="Ecuador">Ecuador</option>
+                            <option value="Bolivia">Bolivia</option>
+                            <option value="Chile">Chile</option>
+                            <option value="Uruguay">Uruguay</option>
+                            <option value="Paraguay">Paraguay</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        <button class="help-trigger" onclick="showFieldHelp('countryOfBirth')">?</button>
+                        <div class="field-help" id="countryOfBirth-help">
+                            <strong>Help:</strong> Select the country where you were born. This should match your birth certificate exactly.
+                        </div>
+                    </div>
+                    
+                    <div class="form-group full-width">
+                        <label for="currentAddress">Current Address *</label>
+                        <textarea id="currentAddress" name="currentAddress" required placeholder="Enter your complete address including street, city, state, and ZIP code"></textarea>
+                        <button class="help-trigger" onclick="showFieldHelp('currentAddress')">?</button>
+                        <div class="field-help" id="currentAddress-help">
+                            <strong>Help:</strong> Enter your complete current address including:<br>
+                            • Street number and name<br>
+                            • Apartment/unit number (if applicable)<br>
+                            • City, State, ZIP code<br>
+                            • Country (if outside US)
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phoneNumber">Phone Number *</label>
+                        <input type="tel" id="phoneNumber" name="phoneNumber" required placeholder="(555) 123-4567">
+                        <button class="help-trigger" onclick="showFieldHelp('phoneNumber')">?</button>
+                        <div class="field-help" id="phoneNumber-help">
+                            <strong>Help:</strong> Enter your current phone number where USCIS can reach you. Include area code and use US format: (555) 123-4567
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="emailAddress">Email Address *</label>
+                        <input type="email" id="emailAddress" name="emailAddress" required placeholder="your.email@example.com">
+                        <button class="help-trigger" onclick="showFieldHelp('emailAddress')">?</button>
+                        <div class="field-help" id="emailAddress-help">
+                            <strong>Help:</strong> Enter a valid email address where USCIS can send you updates about your case. Check this email regularly.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Immigration Information Section -->
+            <div class="form-section">
+                <div class="section-title">Immigration Information</div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="entryDate">Entry Date to US *</label>
+                        <input type="date" id="entryDate" name="entryDate" required>
+                        <button class="help-trigger" onclick="showFieldHelp('entryDate')">?</button>
+                        <div class="field-help" id="entryDate-help">
+                            <strong>Help:</strong> Enter the date you first entered the United States. This is important for determining eligibility for certain immigration benefits.
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="methodOfEntry">Method of Entry *</label>
+                        <select id="methodOfEntry" name="methodOfEntry" required>
+                            <option value="">Select Method</option>
+                            <option value="Visa">Visa</option>
+                            <option value="Border Crossing">Border Crossing</option>
+                            <option value="Airport">Airport</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        <button class="help-trigger" onclick="showFieldHelp('methodOfEntry')">?</button>
+                        <div class="field-help" id="methodOfEntry-help">
+                            <strong>Help:</strong> Select how you entered the United States. This helps determine your immigration status and eligibility.
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="educationLevel">Education Level *</label>
+                        <select id="educationLevel" name="educationLevel" required>
+                            <option value="">Select Level</option>
+                            <option value="High School">High School</option>
+                            <option value="Associate Degree">Associate Degree</option>
+                            <option value="Bachelor Degree">Bachelor Degree</option>
+                            <option value="Master Degree">Master Degree</option>
+                            <option value="Doctorate">Doctorate</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        <button class="help-trigger" onclick="showFieldHelp('educationLevel')">?</button>
+                        <div class="field-help" id="educationLevel-help">
+                            <strong>Help:</strong> Select your highest level of education completed. This information helps USCIS understand your background.
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="employmentStatus">Employment Status *</label>
+                        <select id="employmentStatus" name="employmentStatus" required>
+                            <option value="">Select Status</option>
+                            <option value="Employed">Employed</option>
+                            <option value="Self-Employed">Self-Employed</option>
+                            <option value="Unemployed">Unemployed</option>
+                            <option value="Student">Student</option>
+                            <option value="Retired">Retired</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        <button class="help-trigger" onclick="showFieldHelp('employmentStatus')">?</button>
+                        <div class="field-help" id="employmentStatus-help">
+                            <strong>Help:</strong> Select your current employment status. This helps determine your financial situation and eligibility for certain benefits.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Navigation Buttons -->
+            <div class="navigation-buttons">
+                <button class="btn btn-secondary" onclick="goBack()">Back</button>
+                <button class="btn btn-primary" onclick="saveAndContinue()">Save & Continue</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentLanguage = 'en';
+        let backendAPI = 'http://localhost:8000';
+        
+        // Translation data
+        const translations = {
+            en: {
+                stepTitle: "Fill Out Your Information",
+                personalInfo: "Personal Information",
+                immigrationInfo: "Immigration Information",
+                firstName: "First Name *",
+                lastName: "Last Name *",
+                dateOfBirth: "Date of Birth *",
+                countryOfBirth: "Country of Birth *",
+                currentAddress: "Current Address *",
+                phoneNumber: "Phone Number *",
+                emailAddress: "Email Address *",
+                entryDate: "Entry Date to US *",
+                methodOfEntry: "Method of Entry *",
+                educationLevel: "Education Level *",
+                employmentStatus: "Employment Status *",
+                back: "Back",
+                saveContinue: "Save & Continue",
+                aiHelper: "I'll help you fill out this form accurately. Make sure to use your legal name exactly as it appears on your birth certificate or passport."
+            },
+            es: {
+                stepTitle: "Complete Su Información",
+                personalInfo: "Información Personal",
+                immigrationInfo: "Información de Inmigración",
+                firstName: "Nombre *",
+                lastName: "Apellido *",
+                dateOfBirth: "Fecha de Nacimiento *",
+                countryOfBirth: "País de Nacimiento *",
+                currentAddress: "Dirección Actual *",
+                phoneNumber: "Número de Teléfono *",
+                emailAddress: "Dirección de Correo *",
+                entryDate: "Fecha de Entrada a EE.UU. *",
+                methodOfEntry: "Método de Entrada *",
+                educationLevel: "Nivel de Educación *",
+                employmentStatus: "Estado de Empleo *",
+                back: "Atrás",
+                saveContinue: "Guardar y Continuar",
+                aiHelper: "Te ayudo a completar este formulario con precisión. Asegúrate de usar tu nombre legal exactamente como aparece en tu certificado de nacimiento o pasaporte."
+            },
+            zh: {
+                stepTitle: "填写您的信息",
+                personalInfo: "个人信息",
+                immigrationInfo: "移民信息",
+                firstName: "名字 *",
+                lastName: "姓氏 *",
+                dateOfBirth: "出生日期 *",
+                countryOfBirth: "出生国家 *",
+                currentAddress: "当前地址 *",
+                phoneNumber: "电话号码 *",
+                emailAddress: "电子邮件地址 *",
+                entryDate: "入境美国日期 *",
+                methodOfEntry: "入境方式 *",
+                educationLevel: "教育水平 *",
+                employmentStatus: "就业状况 *",
+                back: "返回",
+                saveContinue: "保存并继续",
+                aiHelper: "我会帮您准确填写此表格。请确保使用您出生证明或护照上的确切法定姓名。"
+            }
+        };
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeLanguageSelector();
+            initializeFormValidation();
+            loadSavedData();
+            detectFormType();
+        });
+        
+        function initializeLanguageSelector() {
+            const languageSelect = document.getElementById('languageSelect');
+            languageSelect.addEventListener('change', function() {
+                currentLanguage = this.value;
+                translatePage();
+            });
+        }
+        
+        function initializeFormValidation() {
+            const inputs = document.querySelectorAll('input, select, textarea');
+            inputs.forEach(input => {
+                input.addEventListener('blur', validateField);
+                input.addEventListener('input', clearValidation);
+            });
+        }
+        
+        function validateField(event) {
+            const field = event.target;
+            const value = field.value.trim();
+            
+            if (field.hasAttribute('required') && !value) {
+                showFieldError(field, 'This field is required');
+                return false;
+            }
+            
+            if (field.type === 'email' && value && !isValidEmail(value)) {
+                showFieldError(field, 'Please enter a valid email address');
+                return false;
+            }
+            
+            if (field.type === 'tel' && value && !isValidPhone(value)) {
+                showFieldError(field, 'Please enter a valid phone number');
+                return false;
+            }
+            
+            clearFieldError(field);
+            return true;
+        }
+        
+        function clearValidation(event) {
+            clearFieldError(event.target);
+        }
+        
+        function showFieldError(field, message) {
+            clearFieldError(field);
+            field.style.borderColor = '#e74c3c';
+            
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'field-error';
+            errorDiv.style.cssText = 'color: #e74c3c; font-size: 0.8rem; margin-top: 4px;';
+            errorDiv.textContent = message;
+            
+            field.parentNode.appendChild(errorDiv);
+        }
+        
+        function clearFieldError(field) {
+            field.style.borderColor = '#ddd';
+            const errorDiv = field.parentNode.querySelector('.field-error');
+            if (errorDiv) {
+                errorDiv.remove();
+            }
+        }
+        
+        function isValidEmail(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        }
+        
+        function isValidPhone(phone) {
+            return /^[\d\s\(\)\-\+]+$/.test(phone) && phone.replace(/\D/g, '').length >= 10;
+        }
+        
+        function translatePage() {
+            const targetLanguage = document.getElementById('languageSelect').value;
+            currentLanguage = targetLanguage;
+            
+            if (targetLanguage === 'en') {
+                return; // Already in English
+            }
+            
+            const translation = translations[targetLanguage];
+            if (!translation) {
+                console.log('Translation not available for', targetLanguage);
+                return;
+            }
+            
+            // Update step title
+            document.querySelector('.step-title').textContent = translation.stepTitle;
+            
+            // Update section titles
+            const sections = document.querySelectorAll('.section-title');
+            sections[0].textContent = translation.personalInfo;
+            sections[1].textContent = translation.immigrationInfo;
+            
+            // Update labels
+            document.querySelector('label[for="firstName"]').textContent = translation.firstName;
+            document.querySelector('label[for="lastName"]').textContent = translation.lastName;
+            document.querySelector('label[for="dateOfBirth"]').textContent = translation.dateOfBirth;
+            document.querySelector('label[for="countryOfBirth"]').textContent = translation.countryOfBirth;
+            document.querySelector('label[for="currentAddress"]').textContent = translation.currentAddress;
+            document.querySelector('label[for="phoneNumber"]').textContent = translation.phoneNumber;
+            document.querySelector('label[for="emailAddress"]').textContent = translation.emailAddress;
+            document.querySelector('label[for="entryDate"]').textContent = translation.entryDate;
+            document.querySelector('label[for="methodOfEntry"]').textContent = translation.methodOfEntry;
+            document.querySelector('label[for="educationLevel"]').textContent = translation.educationLevel;
+            document.querySelector('label[for="employmentStatus"]').textContent = translation.employmentStatus;
+            
+            // Update buttons
+            document.querySelector('.btn-secondary').textContent = translation.back;
+            document.querySelector('.btn-primary').textContent = translation.saveContinue;
+            
+            // Update AI helper text
+            document.getElementById('aiHelperText').textContent = translation.aiHelper;
+            
+            showNotification(`Page translated to ${targetLanguage.toUpperCase()}`, 'success');
+        }
+        
+        function detectFormType() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const formType = urlParams.get('form');
+            
+            if (formType) {
+                updateFormForType(formType);
+                localStorage.setItem('selectedFormType', formType);
+            }
+        }
+        
+        function updateFormForType(formType) {
+            const aiHelperText = document.getElementById('aiHelperText');
+            const documentSupportContent = document.getElementById('documentSupportContent');
+            const supportChecklist = document.getElementById('supportChecklist');
+            
+            switch(formType) {
+                case 'daca':
+                    aiHelperText.textContent = "I'll help you fill out the DACA application accurately. Make sure to provide detailed information about your entry to the US and continuous residence since 2007.";
+                    documentSupportContent.innerHTML = `
+                        <p>DACA Application Support - I'll guide you through each field with specific help and requirements.</p>
+                        <ul class="support-checklist">
+                            <li>Click the ? button next to any field for detailed help</li>
+                            <li>All required fields are marked with *</li>
+                            <li>I'll validate your information as you type</li>
+                            <li>Your progress is saved automatically</li>
+                            <li>DACA requires continuous residence since June 15, 2007</li>
+                            <li>You must have arrived before age 16</li>
+                        </ul>
+                    `;
+                    break;
+                case 'work':
+                    aiHelperText.textContent = "I'll help you fill out the work permit application. You'll need to provide your current immigration status and employment information.";
+                    documentSupportContent.innerHTML = `
+                        <p>Work Permit Application Support - I'll guide you through each field with specific help and requirements.</p>
+                        <ul class="support-checklist">
+                            <li>Click the ? button next to any field for detailed help</li>
+                            <li>All required fields are marked with *</li>
+                            <li>I'll validate your information as you type</li>
+                            <li>Your progress is saved automatically</li>
+                            <li>You need a valid immigration status</li>
+                            <li>Employment authorization may be required</li>
+                        </ul>
+                    `;
+                    break;
+                case 'travel':
+                    aiHelperText.textContent = "I'll help you fill out the travel document application. You'll need to explain your travel purpose and provide supporting evidence.";
+                    documentSupportContent.innerHTML = `
+                        <p>Travel Document Application Support - I'll guide you through each field with specific help and requirements.</p>
+                        <ul class="support-checklist">
+                            <li>Click the ? button next to any field for detailed help</li>
+                            <li>All required fields are marked with *</li>
+                            <li>I'll validate your information as you type</li>
+                            <li>Your progress is saved automatically</li>
+                            <li>You need a valid reason for travel</li>
+                            <li>Supporting evidence is required</li>
+                        </ul>
+                    `;
+                    break;
+                case 'citizenship':
+                    aiHelperText.textContent = "I'll help you fill out the citizenship application. Make sure to provide accurate information about your residence and immigration history.";
+                    documentSupportContent.innerHTML = `
+                        <p>Citizenship Application Support - I'll guide you through each field with specific help and requirements.</p>
+                        <ul class="support-checklist">
+                            <li>Click the ? button next to any field for detailed help</li>
+                            <li>All required fields are marked with *</li>
+                            <li>I'll validate your information as you type</li>
+                            <li>Your progress is saved automatically</li>
+                            <li>You must be a permanent resident for 5 years (or 3 if married to US citizen)</li>
+                            <li>Continuous residence and physical presence required</li>
+                        </ul>
+                    `;
+                    break;
+                case 'family':
+                    aiHelperText.textContent = "I'll help you fill out the family petition. You'll need to provide detailed information about your relationship and supporting evidence.";
+                    documentSupportContent.innerHTML = `
+                        <p>Family Petition Support - I'll guide you through each field with specific help and requirements.</p>
+                        <ul class="support-checklist">
+                            <li>Click the ? button next to any field for detailed help</li>
+                            <li>All required fields are marked with *</li>
+                            <li>I'll validate your information as you type</li>
+                            <li>Your progress is saved automatically</li>
+                            <li>You must be a US citizen or permanent resident</li>
+                            <li>Relationship evidence is required</li>
+                        </ul>
+                    `;
+                    break;
+                default:
+                    aiHelperText.textContent = "I'll help you fill out this form accurately. Make sure to use your legal name exactly as it appears on your birth certificate or passport.";
+                    documentSupportContent.innerHTML = `
+                        <p>I'll guide you through each field with specific help and requirements.</p>
+                        <ul class="support-checklist">
+                            <li>Click the ? button next to any field for detailed help</li>
+                            <li>All required fields are marked with *</li>
+                            <li>I'll validate your information as you type</li>
+                            <li>Your progress is saved automatically</li>
+                        </ul>
+                    `;
+            }
+        }
+        
+        function showFieldHelp(fieldId) {
+            const helpElement = document.getElementById(fieldId + '-help');
+            const allHelpElements = document.querySelectorAll('.field-help');
+            
+            // Hide all other help elements
+            allHelpElements.forEach(help => {
+                if (help !== helpElement) {
+                    help.classList.remove('show');
+                }
+            });
+            
+            // Toggle current help element
+            if (helpElement) {
+                helpElement.classList.toggle('show');
+            }
+        }
+        
+        function loadSavedData() {
+            const savedData = localStorage.getItem('formData');
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                Object.entries(data).forEach(([key, value]) => {
+                    const field = document.getElementById(key);
+                    if (field) {
+                        field.value = value;
+                    }
+                });
+            }
+        }
+        
+        function saveData() {
+            const formData = {};
+            const inputs = document.querySelectorAll('input, select, textarea');
+            inputs.forEach(input => {
+                formData[input.id] = input.value;
+            });
+            localStorage.setItem('formData', JSON.stringify(formData));
+        }
+        
+        function goBack() {
+            window.location.href = 'index.html';
+        }
+        
+        function saveAndContinue() {
+            // Validate all fields
+            const inputs = document.querySelectorAll('input[required], select[required], textarea[required]');
+            let isValid = true;
+            
+            inputs.forEach(input => {
+                if (!validateField({ target: input })) {
+                    isValid = false;
+                }
+            });
+            
+            if (!isValid) {
+                showNotification('Please fill in all required fields', 'error');
+                return;
+            }
+            
+            // Save data
+            saveData();
+            
+            // Show success message
+            showNotification('Information saved successfully!', 'success');
+            
+            // Redirect to next page
+            setTimeout(() => {
+                window.location.href = 'complete-application.html';
+            }, 1000);
+        }
+        
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'success' ? '#27ae60' : '#e74c3c'};
+                color: white;
+                padding: 12px 20px;
+                border-radius: 6px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                z-index: 3000;
+                animation: slideIn 0.3s ease-out;
+            `;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+        
+        // Add CSS for notification animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

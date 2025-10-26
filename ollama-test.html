@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ollama API Test - Immigr-Aid.ai</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .test-container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        
+        .test-button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        
+        .test-button:hover {
+            background: #0056b3;
+        }
+        
+        .result {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 15px;
+            border-left: 4px solid #007bff;
+        }
+        
+        .error {
+            border-left-color: #dc3545;
+            background: #f8d7da;
+        }
+        
+        .success {
+            border-left-color: #28a745;
+            background: #d4edda;
+        }
+        
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin: 5px 0;
+        }
+        
+        textarea {
+            height: 100px;
+            resize: vertical;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🤖 Ollama API Test - Immigr-Aid.ai</h1>
+        <p>This page tests the Ollama API connection and provides debugging information.</p>
+        
+        <div class="test-section">
+            <h3>API Configuration</h3>
+            <p><strong>API Key:</strong> b4fcd325fca84349b433b28494e6ed3f.nzXs0J5KFSsKEuZQm9BJYKu7</p>
+            <p><strong>Base URL:</strong> https://api.ollama.com/v1</p>
+            <p><strong>Model:</strong> llama3.1</p>
+        </div>
+        
+        <div class="test-section">
+            <h3>Test API Connection</h3>
+            <button class="test-button" onclick="testConnection()">Test Connection</button>
+            <div id="connectionResult" class="result" style="display: none;"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>Test Chat Completion</h3>
+            <textarea id="testMessage" placeholder="Enter a test message...">Hello, can you help me with immigration forms?</textarea>
+            <br>
+            <button class="test-button" onclick="testChatCompletion()">Test Chat</button>
+            <div id="chatResult" class="result" style="display: none;"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>Test Fast Models (Speed Optimized)</h3>
+            <button class="test-button" onclick="testModel('llama3.2:1b')">Test llama3.2:1b (Fastest)</button>
+            <button class="test-button" onclick="testModel('llama3.2:3b')">Test llama3.2:3b (Fast)</button>
+            <button class="test-button" onclick="testModel('llama3.1:8b')">Test llama3.1:8b (Balanced)</button>
+            <button class="test-button" onclick="testModel('llama3.1')">Test llama3.1 (Default)</button>
+            <button class="test-button" onclick="testModel('llama2:7b')">Test llama2:7b (Fallback)</button>
+            <div id="modelResult" class="result" style="display: none;"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>Speed Test</h3>
+            <button class="test-button" onclick="speedTest()">Run Speed Test</button>
+            <div id="speedResult" class="result" style="display: none;"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>Debug Information</h3>
+            <button class="test-button" onclick="showDebugInfo()">Show Debug Info</button>
+            <div id="debugResult" class="result" style="display: none;"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>Fallback System Test</h3>
+            <input type="text" id="fallbackMessage" placeholder="Test fallback responses..." value="I need help with forms">
+            <br>
+            <button class="test-button" onclick="testFallback()">Test Fallback</button>
+            <div id="fallbackResult" class="result" style="display: none;"></div>
+        </div>
+    </div>
+    
+    <script>
+        const OLLAMA_API_KEY = 'b4fcd325fca84349b433b28494e6ed3f.nzXs0J5KFSsKEuZQm9BJYKu7';
+        const OLLAMA_BASE_URL = 'https://api.ollama.com/v1';
+        
+        function showResult(elementId, message, isError = false) {
+            const element = document.getElementById(elementId);
+            element.style.display = 'block';
+            element.className = `result ${isError ? 'error' : 'success'}`;
+            element.innerHTML = message;
+        }
+        
+        async function testConnection() {
+            showResult('connectionResult', 'Testing connection...', false);
+            
+            try {
+                const response = await fetch(`${OLLAMA_BASE_URL}/models`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${OLLAMA_API_KEY}`
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    showResult('connectionResult', `✅ Connection successful!<br><strong>Available models:</strong><br>${JSON.stringify(data, null, 2)}`, false);
+                } else {
+                    showResult('connectionResult', `❌ Connection failed: ${response.status} ${response.statusText}`, true);
+                }
+            } catch (error) {
+                showResult('connectionResult', `❌ Connection error: ${error.message}`, true);
+            }
+        }
+        
+        async function testChatCompletion() {
+            const message = document.getElementById('testMessage').value;
+            showResult('chatResult', 'Testing chat completion...', false);
+            
+            try {
+                const response = await fetch(`${OLLAMA_BASE_URL}/chat/completions`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${OLLAMA_API_KEY}`
+                    },
+                    body: JSON.stringify({
+                        model: 'llama3.1',
+                        messages: [
+                            {
+                                role: 'system',
+                                content: 'You are an AI immigration assistant for Immigr-Aid.ai. Be helpful and concise.'
+                            },
+                            {
+                                role: 'user',
+                                content: message
+                            }
+                        ],
+                        max_tokens: 200,
+                        temperature: 0.7
+                    })
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    const aiResponse = data.choices[0].message.content;
+                    showResult('chatResult', `✅ Chat successful!<br><strong>AI Response:</strong><br>${aiResponse}`, false);
+                } else {
+                    const errorText = await response.text();
+                    showResult('chatResult', `❌ Chat failed: ${response.status} ${response.statusText}<br><strong>Error:</strong><br>${errorText}`, true);
+                }
+            } catch (error) {
+                showResult('chatResult', `❌ Chat error: ${error.message}`, true);
+            }
+        }
+        
+        async function testModel(modelName) {
+            const startTime = Date.now();
+            showResult('modelResult', `Testing model: ${modelName}...`, false);
+            
+            try {
+                const response = await fetch(`${OLLAMA_BASE_URL}/chat/completions`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${OLLAMA_API_KEY}`
+                    },
+                    body: JSON.stringify({
+                        model: modelName,
+                        messages: [
+                            {
+                                role: 'system',
+                                content: 'You are an AI immigration assistant. Be concise.'
+                            },
+                            {
+                                role: 'user',
+                                content: 'Hello, can you help with immigration forms?'
+                            }
+                        ],
+                        max_tokens: 100,
+                        temperature: 0.6,
+                        stream: false
+                    })
+                });
+                
+                const endTime = Date.now();
+                const responseTime = endTime - startTime;
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    const aiResponse = data.choices[0].message.content;
+                    showResult('modelResult', `✅ Model ${modelName} working!<br><strong>Response Time:</strong> ${responseTime}ms<br><strong>Response:</strong><br>${aiResponse}`, false);
+                } else {
+                    const errorText = await response.text();
+                    showResult('modelResult', `❌ Model ${modelName} failed: ${response.status}<br><strong>Error:</strong><br>${errorText}`, true);
+                }
+            } catch (error) {
+                showResult('modelResult', `❌ Model ${modelName} error: ${error.message}`, true);
+            }
+        }
+        
+        async function speedTest() {
+            showResult('speedResult', 'Running speed test on all models...', false);
+            
+            const models = ['llama3.2:1b', 'llama3.2:3b', 'llama3.1:8b', 'llama3.1', 'llama2:7b'];
+            const results = [];
+            
+            for (const model of models) {
+                try {
+                    const startTime = Date.now();
+                    const response = await fetch(`${OLLAMA_BASE_URL}/chat/completions`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${OLLAMA_API_KEY}`
+                        },
+                        body: JSON.stringify({
+                            model: model,
+                            messages: [
+                                {
+                                    role: 'user',
+                                    content: 'Hi'
+                                }
+                            ],
+                            max_tokens: 50,
+                            temperature: 0.6
+                        })
+                    });
+                    
+                    const endTime = Date.now();
+                    const responseTime = endTime - startTime;
+                    
+                    if (response.ok) {
+                        results.push(`✅ ${model}: ${responseTime}ms`);
+                    } else {
+                        results.push(`❌ ${model}: Failed`);
+                    }
+                } catch (error) {
+                    results.push(`❌ ${model}: Error`);
+                }
+            }
+            
+            showResult('speedResult', `<strong>Speed Test Results:</strong><br>${results.join('<br>')}`, false);
+        }
+        
+        function showDebugInfo() {
+            const debugInfo = `
+                <strong>Browser Info:</strong><br>
+                User Agent: ${navigator.userAgent}<br>
+                Language: ${navigator.language}<br>
+                Online: ${navigator.onLine}<br><br>
+                
+                <strong>API Configuration:</strong><br>
+                API Key: ${OLLAMA_API_KEY.substring(0, 20)}...<br>
+                Base URL: ${OLLAMA_BASE_URL}<br><br>
+                
+                <strong>Test URLs:</strong><br>
+                Models: ${OLLAMA_BASE_URL}/models<br>
+                Chat: ${OLLAMA_BASE_URL}/chat/completions<br><br>
+                
+                <strong>Possible Issues:</strong><br>
+                1. CORS policy blocking requests<br>
+                2. Invalid API key<br>
+                3. Model not available<br>
+                4. Network connectivity issues<br>
+                5. API rate limiting
+            `;
+            
+            showResult('debugResult', debugInfo, false);
+        }
+        
+        function testFallback() {
+            const message = document.getElementById('fallbackMessage').value;
+            const response = getFallbackAIResponse(message);
+            showResult('fallbackResult', `✅ Fallback system working!<br><strong>Input:</strong> ${message}<br><strong>Response:</strong><br>${response}`, false);
+        }
+        
+        function getFallbackAIResponse(message) {
+            const lowerMessage = message.toLowerCase();
+            
+            // Immigration form help
+            if (lowerMessage.includes('form') || lowerMessage.includes('formulario')) {
+                return "I can help you with various immigration forms like I-485 (Green Card), N-400 (Citizenship), I-130 (Family Petition), and more. What specific form do you need help with?";
+            }
+            
+            // Document help
+            if (lowerMessage.includes('document') || lowerMessage.includes('documento')) {
+                return "Common documents needed include: passport, birth certificate, marriage/divorce certificates, employment records, and financial evidence. What type of document do you need help with?";
+            }
+            
+            // Status check
+            if (lowerMessage.includes('status') || lowerMessage.includes('estado') || lowerMessage.includes('check')) {
+                return "To check your application status, you can use the USCIS website with your receipt number, or call the customer service center. Do you have your receipt number?";
+            }
+            
+            // General help
+            if (lowerMessage.includes('help') || lowerMessage.includes('ayuda')) {
+                return "I'm here to help! I can assist you with immigration forms, required documents, status checking, and immigration processes. What can I help you with specifically?";
+            }
+            
+            // Default response
+            return "Thank you for your question. As an immigration AI assistant, I can help you with forms, documents, immigration processes, and status checking. Could you be more specific about what you need help with?";
+        }
+    </script>
+</body>
+</html>

@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Immigr-Aid.ai - Your Personal AI Immigration Assistant</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             /* Light Mode Colors */
@@ -46,11 +49,13 @@
         }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             background: var(--bg-primary);
             color: var(--text-primary);
-            line-height: 1.6;
+            line-height: 1.7;
             transition: all 0.3s ease;
+            font-weight: 400;
+            letter-spacing: -0.01em;
         }
         
         .container {
@@ -76,16 +81,22 @@
         }
         
         .logo {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-info) 100%);
-            border-radius: 12px;
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 4px 15px var(--shadow);
+            box-shadow: 0 8px 25px rgba(30, 60, 114, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .logo:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(30, 60, 114, 0.4);
         }
         
         .logo::before {
@@ -96,40 +107,104 @@
             width: 200%;
             height: 200%;
             background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-            animation: shimmer 3s ease-in-out infinite;
+            animation: shimmer 4s ease-in-out infinite;
         }
         
         .logo-icon {
-            width: 30px;
-            height: 30px;
-            background: white;
-            border-radius: 4px;
+            width: 50px;
+            height: 50px;
             position: relative;
             z-index: 2;
         }
         
+        /* House Structure */
         .logo-icon::before {
             content: '';
             position: absolute;
-            top: 50%;
+            top: 0;
             left: 50%;
-            transform: translate(-50%, -50%);
-            width: 12px;
-            height: 12px;
-            background: var(--accent-primary);
-            border-radius: 2px;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-bottom: 12px solid white;
         }
         
+        /* House Body */
         .logo-icon::after {
             content: '';
             position: absolute;
-            top: 50%;
+            top: 12px;
             left: 50%;
-            transform: translate(-50%, -50%);
-            width: 4px;
-            height: 4px;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 20px;
             background: white;
-            border-radius: 50%;
+            border-radius: 2px;
+        }
+        
+        /* Radiating Light */
+        .logo-light {
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 3px;
+            height: 8px;
+            background: #64ffda;
+            border-radius: 1px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        .logo-light:nth-child(2) {
+            left: 35%;
+            animation-delay: 0.2s;
+        }
+        
+        .logo-light:nth-child(3) {
+            left: 65%;
+            animation-delay: 0.4s;
+        }
+        
+        .logo-light:nth-child(4) {
+            left: 25%;
+            animation-delay: 0.6s;
+        }
+        
+        .logo-light:nth-child(5) {
+            left: 75%;
+            animation-delay: 0.8s;
+        }
+        
+        /* Winding Path */
+        .logo-path {
+            position: absolute;
+            bottom: 8px;
+            left: 10px;
+            width: 60px;
+            height: 8px;
+            background: linear-gradient(90deg, #64ffda 0%, #00bcd4 100%);
+            border-radius: 4px;
+            transform: rotate(-5deg);
+            opacity: 0.8;
+        }
+        
+        .logo-path::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: 15px;
+            width: 30px;
+            height: 12px;
+            background: linear-gradient(90deg, #00bcd4 0%, #1e3c72 100%);
+            border-radius: 6px;
+            transform: rotate(10deg);
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; transform: translateX(-50%) scale(1); }
+            50% { opacity: 1; transform: translateX(-50%) scale(1.1); }
         }
         
         .logo-text {
@@ -201,10 +276,12 @@
         }
         
         .hero h1 {
-            font-size: 3.5rem;
-            font-weight: 800;
+            font-size: 3.8rem;
+            font-weight: 700;
             color: var(--text-primary);
-            margin-bottom: 20px;
+            margin-bottom: 24px;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
         }
         
         .hero .ai-emphasis {
@@ -213,12 +290,14 @@
         }
         
         .hero p {
-            font-size: 1.3rem;
+            font-size: 1.25rem;
             color: var(--text-secondary);
-            margin-bottom: 30px;
-            max-width: 800px;
+            margin-bottom: 36px;
+            max-width: 720px;
             margin-left: auto;
             margin-right: auto;
+            font-weight: 400;
+            line-height: 1.6;
         }
         
         .cta-button {
@@ -252,32 +331,84 @@
         .feature-card {
             background: var(--bg-secondary);
             border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 30px;
+            border-radius: 20px;
+            padding: 35px;
             text-align: center;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px var(--shadow);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.6s ease;
+        }
+        
+        .feature-card:hover::before {
+            left: 100%;
         }
         
         .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px var(--shadow);
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            border-color: var(--accent-primary);
+        }
+        
+        .feature-card:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+        
+        .feature-card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .feature-card:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+        
+        .feature-card:nth-child(4) {
+            animation-delay: 0.4s;
         }
         
         .feature-icon {
-            font-size: 3rem;
-            margin-bottom: 20px;
+            font-size: 3.5rem;
+            margin-bottom: 25px;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        
+        .feature-card:hover .feature-icon {
+            transform: scale(1.1) rotate(5deg);
         }
         
         .feature-card h3 {
             color: var(--text-primary);
-            font-size: 1.4rem;
-            margin-bottom: 15px;
+            font-size: 1.5rem;
+            margin-bottom: 18px;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+        
+        .feature-card:hover h3 {
+            color: var(--accent-primary);
         }
         
         .feature-card p {
             color: var(--text-secondary);
             font-size: 1rem;
+            line-height: 1.6;
+            transition: color 0.3s ease;
+        }
+        
+        .feature-card:hover p {
+            color: var(--text-primary);
         }
         
         /* Profile Section */
@@ -595,6 +726,12 @@
             <div class="logo-section">
                 <div class="logo">
                     <div class="logo-icon"></div>
+                    <div class="logo-light"></div>
+                    <div class="logo-light"></div>
+                    <div class="logo-light"></div>
+                    <div class="logo-light"></div>
+                    <div class="logo-light"></div>
+                    <div class="logo-path"></div>
                 </div>
                 <div class="logo-text">
                     Immigr-Aid<span class="ai">.ai</span>
@@ -673,10 +810,6 @@
                 <div class="stat-item">
                     <div class="stat-number">12</div>
                     <div class="stat-label" data-translate="aiRecommendations">AI Recommendations</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">5</div>
-                    <div class="stat-label" data-translate="daysRemaining">Days Remaining</div>
                 </div>
             </div>
         </div>
@@ -787,7 +920,6 @@
                 formsCompleted: "Forms Completed",
                 progressComplete: "Progress Complete",
                 aiRecommendations: "AI Recommendations",
-                daysRemaining: "Days Remaining",
                 aiWelcome: "AI Assistant:",
                 aiWelcomeMessage: "Hello! I'm your AI immigration assistant. I can help you with forms, answer questions about immigration processes, and provide guidance in your preferred language. How can I assist you today?",
                 chatPlaceholder: "Ask me anything about immigration...",
